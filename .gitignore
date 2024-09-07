@@ -11,4 +11,10 @@
 # i.e. objects that should not be put into the repository.
 #
 
+# === Gradle intermediates ====================================================
+.gradle/
+
+# === JVM classes and JARs ====================================================
+build/
+
 # vim:set nu et ts=4 sw=4:
