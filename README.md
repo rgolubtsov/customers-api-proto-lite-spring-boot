@@ -1,8 +1,7 @@
 # Customers API Lite microservice prototype :small_blue_diamond: :coffee:
 
 **A Spring Boot-based application, designed and intended to be run as a microservice,
-<br />implementing a special Customers API prototype
-<br />with a smart yet simplified data scheme**
+<br />implementing a special Customers API prototype with a smart yet simplified data scheme**
 
 :cd:
 
@@ -34,7 +33,7 @@ Since Gradle package is somehow outdated in the stock Ubuntu package repository,
 ```
 $ curl -s https://get.sdkman.io | bash
 ...
-$ . /home/radic/.sdkman/bin/sdkman-init.sh
+$ . /home/<username>/.sdkman/bin/sdkman-init.sh
 ```
 
 Then install latest stable version of Gradle via SDKMAN!:
