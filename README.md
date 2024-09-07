@@ -43,6 +43,19 @@ $ sdk install gradle
 ...
 ```
 
+**Build** the microservice using **Gradle Wrapper**:
+
+```
+$ ./gradlew clean
+...
+$ ./gradlew compileJava
+...
+$ ./gradlew build
+...
+```
+
+Or **build** the microservice using **GNU Make** (optional, but for convenience &mdash; it covers the same **Gradle Wrapper** build workflow under the hood):
+
 :cd:
 
 ## Running
