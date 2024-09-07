@@ -69,4 +69,18 @@ $ make all  # <== Assembling JAR bundles of the microservice.
 
 **Run** the microservice using **Gradle Wrapper** (generally for development and debugging purposes):
 
+```
+$ ./gradlew -q bootRun; echo $?
+...
+```
+
+**Run** the microservice using its all-in-one JAR bundle, built previously by the `build` or `all` targets:
+
+```
+$ java -jar build/libs/liteapi-0.0.1.jar; echo $?
+...
+```
+
+---
+
 :dvd:
