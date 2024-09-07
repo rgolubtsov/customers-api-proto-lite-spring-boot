@@ -56,7 +56,14 @@ $ ./gradlew build
 
 Or **build** the microservice using **GNU Make** (optional, but for convenience &mdash; it covers the same **Gradle Wrapper** build workflow under the hood):
 
-:cd:
+```
+$ make clean
+...
+$ make      # <== Compilation phase.
+...
+$ make all  # <== Assembling JAR bundles of the microservice.
+...
+```
 
 ## Running
 
