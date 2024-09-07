@@ -1,7 +1,8 @@
 # Customers API Lite microservice prototype :small_blue_diamond: :coffee:
 
 **A Spring Boot-based application, designed and intended to be run as a microservice,
-<br />implementing a special Customers API prototype with a smart yet simplified data scheme**
+<br />implementing a special Customers API prototype
+<br />with a smart yet simplified data scheme**
 
 :cd:
 
@@ -21,6 +22,27 @@ One may consider this project to be suitable for a wide variety of applied areas
 ## Building
 
 The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 22.04.4 LTS x86-64)**. Install the necessary dependencies (`openjdk-17-jre-headless`, `gradle`, `make`, `docker.io`):
+
+```
+$ sudo apt-get update && \
+  sudo apt-get install openjdk-17-jre-headless make docker.io -y
+...
+```
+
+Since Gradle package is somehow outdated in the stock Ubuntu package repository, it is preferred to be installed through the SDKMAN! toolkit. For that, first it needs to install SDKMAN! and to `source` its initialization script:
+
+```
+$ curl -s https://get.sdkman.io | bash
+...
+$ . /home/radic/.sdkman/bin/sdkman-init.sh
+```
+
+Then install latest stable version of Gradle via SDKMAN!:
+
+```
+$ sdk install gradle
+...
+```
 
 :cd:
 
