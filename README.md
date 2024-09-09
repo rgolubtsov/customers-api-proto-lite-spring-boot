@@ -3,7 +3,7 @@
 **A Spring Boot-based application, designed and intended to be run as a microservice,
 <br />implementing a special Customers API prototype with a smart yet simplified data scheme**
 
-:cd:
+*Preamble is to be written later on* &mdash; **TBD** :cd:
 
 Since the microservice architecture for building independent backend modules of a composite system are very prevalent nowadays, this seems to be natural for creating a microservice, which is containerized and run as a daemon, serving a continuous flow of HTTP requests.
 
