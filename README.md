@@ -77,7 +77,7 @@ $ ./gradlew -q bootRun; echo $?
 **Run** the microservice using its all-in-one JAR bundle, built previously by the `build` or `all` targets:
 
 ```
-$ java -jar build/libs/liteapi-0.0.1.jar; echo $?
+$ java -jar build/libs/customers-api-lite-0.0.1.jar; echo $?
 ...
 ```
 
