@@ -1,5 +1,5 @@
 /*
- * src/main/java/com/customers/proto/liteapi/LiteApiApplication.java
+ * src/main/java/com/customers/proto/liteapi/CustomersApiLiteApp.java
  * ============================================================================
  * Customers API Lite microservice prototype. Version 0.0.1
  * ============================================================================
@@ -22,7 +22,7 @@ import org.springframework.boot.SpringApplication;
  * @since   0.0.1
  */
 @SpringBootApplication
-public class LiteApiApplication {
+public class CustomersApiLiteApp {
     /**
      * The microservice entry point.
      *
@@ -30,7 +30,7 @@ public class LiteApiApplication {
      */
     public static void main(final String[] args) {
         // Starting up the bundled web server.
-        SpringApplication.run(LiteApiApplication.class, args);
+        SpringApplication.run(CustomersApiLiteApp.class, args);
     }
 }
 
