@@ -14,6 +14,7 @@ package com.customers.proto.liteapi;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
@@ -25,7 +26,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
  * @since   0.0.1
  */
 @SpringBootApplication
-public class CustomersApiLiteApp {
+public class CustomersApiLiteApp implements DisposableBean {
     /**
      * The microservice entry point.
      *
@@ -40,6 +41,12 @@ public class CustomersApiLiteApp {
         String server_port = ctx.getEnvironment().getProperty(SERVER_PORT);
 
         l.info(MSG_SERVER_STARTED + server_port);
+    }
+
+    /** Gets called when the server is about to be stopped. */
+    @Override
+    public void destroy() throws Exception {
+        l.info(MSG_SERVER_STOPPED);
     }
 }
 
