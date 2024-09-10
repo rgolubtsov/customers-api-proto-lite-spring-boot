@@ -36,7 +36,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
     // Spring Boot Starter Undertow - to startup and run Undertow web server.
-    implementation 'org.springframework.boot:spring-boot-starter-undertow'
+    implementation('org.springframework.boot:spring-boot-starter-undertow') {
+        // Exclude Undertow WebSockets JSR356 Impl to suppress warning
+        // regarding not setting the WebSockets buffer pool.
+        exclude group:  'io.undertow',
+                module: 'undertow-websockets-jsr'
+    }
 
     // SQLite JDBC - to utilize JDBC driver and library for SQLite database.
     implementation 'org.xerial:sqlite-jdbc:3.46.1.0'
