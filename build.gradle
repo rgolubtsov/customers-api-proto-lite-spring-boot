@@ -24,6 +24,13 @@ repositories {
     mavenCentral()
 }
 
+configurations.implementation {
+    // Exclude Logback Classic Module globally due to utilizing
+    // the SLF4J Reload4j Provider instead.
+    exclude group:  'ch.qos.logback',
+            module: 'logback-classic'
+}
+
 dependencies {
     // Spring Boot Starter Web - to run a RESTful web service.
     implementation('org.springframework.boot:spring-boot-starter-web') {
@@ -32,9 +39,6 @@ dependencies {
                 module: 'spring-boot-starter-tomcat'
     }
 
-    // Spring Boot Starter JDBC - to establish HikariCP JDBC connection pool.
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-
     // Spring Boot Starter Undertow - to startup and run Undertow web server.
     implementation('org.springframework.boot:spring-boot-starter-undertow') {
         // Exclude Undertow WebSockets JSR356 Impl to suppress warning
@@ -42,6 +46,12 @@ dependencies {
         exclude group:  'io.undertow',
                 module: 'undertow-websockets-jsr'
     }
+
+    // SLF4J Reload4j Provider - to utilize SLF4J logger using Log4j.
+    implementation 'org.slf4j:slf4j-reload4j:2.0.16'
+
+    // Spring Boot Starter JDBC - to establish HikariCP JDBC connection pool.
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
     // SQLite JDBC - to utilize JDBC driver and library for SQLite database.
     implementation 'org.xerial:sqlite-jdbc:3.46.1.0'
