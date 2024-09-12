@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 
+import org.graylog2.syslog4j.impl.unix.UnixSyslog;
+
 /**
  * The helper class for the microservice.
  *
@@ -44,6 +46,9 @@ public class CustomersApiLiteHelper {
     /** The SLF4J logger. */
     public static final Logger l = LoggerFactory.getLogger(
         MethodHandles.lookup().lookupClass());
+
+    /** The Unix system logger. */
+    public static UnixSyslog s;
 }
 
 // vim:set nu et ts=4 sw=4:
