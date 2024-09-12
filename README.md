@@ -89,20 +89,29 @@ $ java -jar build/libs/customers-api-lite-0.0.5.jar; echo $?
 
 ### Logging
 
-The microservice has the ability to log messages to a logfile. When running under Ubuntu Server (not in a Docker container), logs can be seen and analyzed in an ordinary fashion, by `tail`ing the `log/customers-api-lite.log` logfile:
+The microservice has the ability to log messages to a logfile and to the Unix syslog facility. When running under Ubuntu Server (not in a Docker container), logs can be seen and analyzed in an ordinary fashion, by `tail`ing the `log/customers-api-lite.log` logfile:
 
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2024-09-12][15:55:22][INFO ]  Undertow started on port 8765 (http) with context path '/'
-[2024-09-12][15:55:22][INFO ]  Started CustomersApiLiteApp in 2.674 seconds (process running for 3.187)
-[2024-09-12][15:55:22][DEBUG]  [Customers API Lite]
-[2024-09-12][15:55:22][INFO ]  Server started on port 8765
+[2024-09-12][23:20:44][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2024-09-12][23:20:44][INFO ]  Started CustomersApiLiteApp in 5.345 seconds (process running for 6.609)
+[2024-09-12][23:20:44][DEBUG]  [Customers API Lite]
+[2024-09-12][23:20:44][INFO ]  Server started on port 8765
+[2024-09-12][23:25:07][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2024-09-12][23:25:07][INFO ]  Graceful shutdown complete
+[2024-09-12][23:25:07][INFO ]  stopping server: Undertow - 2.3.13.Final
+[2024-09-12][23:25:07][INFO ]  Server stopped
+```
+
+Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
+
+```
+$ journalctl -f
 ...
-[2024-09-12][16:00:16][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
-[2024-09-12][16:00:16][INFO ]  Graceful shutdown complete
-[2024-09-12][16:00:16][INFO ]  stopping server: Undertow - 2.3.13.Final
-[2024-09-12][16:00:16][INFO ]  Server stopped
+Sep 12 23:20:44 <hostname> java[<pid>]: [Customers API Lite]
+Sep 12 23:20:44 <hostname> java[<pid>]: Server started on port 8765
+Sep 12 23:25:07 <hostname> java[<pid>]: Server stopped
 ```
 
 ---
