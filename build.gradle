@@ -50,6 +50,12 @@ dependencies {
     // SLF4J Reload4j Provider - to utilize SLF4J logger using Log4j.
     implementation 'org.slf4j:slf4j-reload4j:2.0.16'
 
+    // Syslog4j Graylog2 - to log messages through the Unix system logger.
+    implementation 'org.graylog2:syslog4j:0.9.61'
+
+    // JNA (Java Native Access) - as a runtime dependency to Syslog4j.
+    implementation 'net.java.dev.jna:jna:5.14.0'
+
     // Spring Boot Starter JDBC - to establish HikariCP JDBC connection pool.
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
