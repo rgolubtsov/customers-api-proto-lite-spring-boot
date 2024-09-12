@@ -18,6 +18,10 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import org.graylog2.syslog4j.impl.unix.UnixSyslogConfig;
+import org.graylog2.syslog4j.impl.unix.UnixSyslog;
+import org.graylog2.syslog4j.SyslogIF;
+
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
 /**
@@ -38,25 +42,40 @@ public class CustomersApiLiteApp implements DisposableBean {
         ConfigurableApplicationContext ctx
             = SpringApplication.run(CustomersApiLiteApp.class, args);
 
+        // Opening the system logger.
+        // Calling <syslog.h> openlog(NULL, LOG_CONS | LOG_PID, LOG_DAEMON);
+        UnixSyslogConfig cfg = new UnixSyslogConfig();
+        cfg.setIdent(null); cfg.setFacility(SyslogIF.FACILITY_DAEMON);
+        s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
+
         ConfigurableEnvironment env = ctx.getEnvironment();
 
         boolean debug_log_enabled
             = Boolean.parseBoolean(env.getProperty(DBG_LOG_ENBLR));
 
         if (debug_log_enabled) {
-            l.debug(O_BRACKET + env.getProperty(APP_NAME) + C_BRACKET);
+            String app_name = env.getProperty(APP_NAME);
+
+            l.debug(O_BRACKET + app_name + C_BRACKET);
+            s.debug(O_BRACKET + app_name + C_BRACKET);
         }
 
         // Getting the port number used to run the bundled web server.
         String server_port = env.getProperty(SERVER_PORT);
 
         l.info(MSG_SERVER_STARTED + server_port);
+        s.info(MSG_SERVER_STARTED + server_port);
     }
 
     /** Gets called when the server is about to be stopped. */
     @Override
     public void destroy() throws Exception {
         l.info(MSG_SERVER_STOPPED);
+        s.info(MSG_SERVER_STOPPED);
+
+        // Closing the system logger.
+        // Calling <syslog.h> closelog();
+        s.shutdown();
     }
 }
 
