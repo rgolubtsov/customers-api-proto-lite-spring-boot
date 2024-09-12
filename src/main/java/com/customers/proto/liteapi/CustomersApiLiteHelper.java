@@ -24,9 +24,19 @@ import java.lang.invoke.MethodHandles;
  * @since   0.0.1
  */
 public class CustomersApiLiteHelper {
+    // Helper constants.
+    public static final String O_BRACKET = "[";
+    public static final String C_BRACKET = "]";
+
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
     public static final String MSG_SERVER_STOPPED = "Server stopped";
+
+    // Application properties key for the debug logger enabler.
+    public static final String DBG_LOG_ENBLR = "logger.debug.enabled";
+
+    // Application properties key for the microservice application name.
+    public static final String APP_NAME = "spring.application.name";
 
     // Application properties key for the server port number.
     public static final String SERVER_PORT = "server.port";
