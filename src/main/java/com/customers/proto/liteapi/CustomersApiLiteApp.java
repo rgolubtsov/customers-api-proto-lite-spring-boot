@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
@@ -37,8 +38,17 @@ public class CustomersApiLiteApp implements DisposableBean {
         ConfigurableApplicationContext ctx
             = SpringApplication.run(CustomersApiLiteApp.class, args);
 
+        ConfigurableEnvironment env = ctx.getEnvironment();
+
+        boolean debug_log_enabled
+            = Boolean.parseBoolean(env.getProperty(DBG_LOG_ENBLR));
+
+        if (debug_log_enabled) {
+            l.debug(O_BRACKET + env.getProperty(APP_NAME) + C_BRACKET);
+        }
+
         // Getting the port number used to run the bundled web server.
-        String server_port = ctx.getEnvironment().getProperty(SERVER_PORT);
+        String server_port = env.getProperty(SERVER_PORT);
 
         l.info(MSG_SERVER_STARTED + server_port);
     }
