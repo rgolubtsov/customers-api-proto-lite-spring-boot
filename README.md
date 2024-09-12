@@ -94,14 +94,15 @@ The microservice has the ability to log messages to a logfile. When running unde
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2024-09-11][17:20:53][INFO ]  Undertow started on port 8765 (http) with context path '/'
-[2024-09-11][17:20:53][INFO ]  Started CustomersApiLiteApp in 2.606 seconds (process running for 3.134)
-[2024-09-11][17:20:53][INFO ]  Server started on port 8765
+[2024-09-12][15:55:22][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2024-09-12][15:55:22][INFO ]  Started CustomersApiLiteApp in 2.674 seconds (process running for 3.187)
+[2024-09-12][15:55:22][DEBUG]  [Customers API Lite]
+[2024-09-12][15:55:22][INFO ]  Server started on port 8765
 ...
-[2024-09-11][17:25:17][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
-[2024-09-11][17:25:17][INFO ]  Graceful shutdown complete
-[2024-09-11][17:25:17][INFO ]  stopping server: Undertow - 2.3.13.Final
-[2024-09-11][17:25:17][INFO ]  Server stopped
+[2024-09-12][16:00:16][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2024-09-12][16:00:16][INFO ]  Graceful shutdown complete
+[2024-09-12][16:00:16][INFO ]  stopping server: Undertow - 2.3.13.Final
+[2024-09-12][16:00:16][INFO ]  Server stopped
 ```
 
 ---
