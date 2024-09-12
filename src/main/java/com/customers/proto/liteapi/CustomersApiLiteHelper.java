@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteHelper.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.0.5
+ * Customers API Lite microservice prototype. Version 0.0.9
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -17,10 +17,12 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 
+import org.graylog2.syslog4j.impl.unix.UnixSyslog;
+
 /**
  * The helper class for the microservice.
  *
- * @version 0.0.5
+ * @version 0.0.9
  * @since   0.0.1
  */
 public class CustomersApiLiteHelper {
@@ -44,6 +46,9 @@ public class CustomersApiLiteHelper {
     /** The SLF4J logger. */
     public static final Logger l = LoggerFactory.getLogger(
         MethodHandles.lookup().lookupClass());
+
+    /** The Unix system logger. */
+    public static UnixSyslog s;
 }
 
 // vim:set nu et ts=4 sw=4:
