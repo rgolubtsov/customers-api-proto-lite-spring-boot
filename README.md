@@ -22,7 +22,7 @@ One may consider this project to be suitable for a wide variety of applied areas
 
 ## Building
 
-The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 22.04.5 LTS x86-64)**. Install the necessary dependencies (`openjdk-17-jdk-headless`, `gradle`, `make`, `sqlite3`, `docker.io`):
+The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 22.04.5 LTS x86-64)**. Install the necessary dependencies (`openjdk-17-jdk-headless`, ~~`gradle`~~, `make`, `sqlite3`, `docker.io`):
 
 ```
 $ sudo apt-get update && \
@@ -30,17 +30,19 @@ $ sudo apt-get update && \
 ...
 ```
 
-Since Gradle package is somehow outdated in the stock Ubuntu package repository, it is preferred to be installed through the SDKMAN! toolkit. For that, first it needs to install SDKMAN! and to `source` its initialization script:
+**Note:** A system-wide Gradle installation is not needed to build the microservice, since it is intended to use Gradle Wrapper for that, already stored in the current repository. Hence, commands given in the following two paragraphs can be simply ignored &mdash; they are kept here just for reference.
 
-```
+> Since Gradle package is somehow outdated in the stock Ubuntu package repository, it is preferred to be installed through the SDKMAN! toolkit. For that, first it needs to install SDKMAN! and to `source` its initialization script:
+
+> ```
 $ curl -s https://get.sdkman.io | bash
 ...
 $ . /home/<username>/.sdkman/bin/sdkman-init.sh
 ```
 
-Then install latest stable version of Gradle via SDKMAN!:
+> Then install latest stable version of Gradle via SDKMAN!:
 
-```
+> ```
 $ sdk install gradle
 ...
 ```
