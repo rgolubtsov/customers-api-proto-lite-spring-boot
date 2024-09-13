@@ -34,7 +34,7 @@ $ sudo apt-get update && \
 
 > Since Gradle package is somehow outdated in the stock Ubuntu package repository, it is preferred to be installed through the SDKMAN! toolkit. For that, first it needs to install SDKMAN! and to `source` its initialization script:
 
-> ```
+```
 $ curl -s https://get.sdkman.io | bash
 ...
 $ . /home/<username>/.sdkman/bin/sdkman-init.sh
@@ -42,10 +42,12 @@ $ . /home/<username>/.sdkman/bin/sdkman-init.sh
 
 > Then install latest stable version of Gradle via SDKMAN!:
 
-> ```
+```
 $ sdk install gradle
 ...
 ```
+
+---
 
 **Build** the microservice using **Gradle Wrapper**:
 
