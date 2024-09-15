@@ -39,29 +39,28 @@ public class CustomersApiLiteApp implements DisposableBean {
      */
     public static void main(final String[] args) {
         // Starting up the bundled web server.
-        ConfigurableApplicationContext ctx
-            = SpringApplication.run(CustomersApiLiteApp.class, args);
+        var ctx = SpringApplication.run(CustomersApiLiteApp.class, args);
 
         // Opening the system logger.
         // Calling <syslog.h> openlog(NULL, LOG_CONS | LOG_PID, LOG_DAEMON);
-        UnixSyslogConfig cfg = new UnixSyslogConfig();
+        var cfg = new UnixSyslogConfig();
         cfg.setIdent(null); cfg.setFacility(SyslogIF.FACILITY_DAEMON);
         s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
 
-        ConfigurableEnvironment env = ctx.getEnvironment();
+        var env = ctx.getEnvironment();
 
-        boolean debug_log_enabled
+        var debug_log_enabled
             = Boolean.parseBoolean(env.getProperty(DBG_LOG_ENBLR));
 
         if (debug_log_enabled) {
-            String app_name = env.getProperty(APP_NAME);
+            var app_name = env.getProperty(APP_NAME);
 
             l.debug(O_BRACKET + app_name + C_BRACKET);
             s.debug(O_BRACKET + app_name + C_BRACKET);
         }
 
         // Getting the port number used to run the bundled web server.
-        String server_port = env.getProperty(SERVER_PORT);
+        var server_port = env.getProperty(SERVER_PORT);
 
         l.info(MSG_SERVER_STARTED + server_port);
         s.info(MSG_SERVER_STARTED + server_port);
