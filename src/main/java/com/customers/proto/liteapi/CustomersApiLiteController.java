@@ -12,7 +12,11 @@
 
 package com.customers.proto.liteapi;
 
-import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
+import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
 /**
  * The controller class of the microservice.
@@ -20,9 +24,25 @@ import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
  * @version 0.0.9
  * @since   0.0.9
  */
-@WebEndpoint(id="info")
+@RestController
+@RequestMapping(SLASH + REST_PREFIX)
 public class CustomersApiLiteController {
-    // TODO: Populate controller with REST endpoints.
+    /**
+     * The &quot;<code>/customers/new</code>&quot; <b>PUT</b> endpoint.
+     * <br />
+     * <br />Creates a new customer (puts customer's data to the database
+     * for their search and retrieval).
+     *
+     * @return The ResponseEntity object with a specific HTTP status code
+     *         provided (and the response body in JSON representation
+     *         in case of the request payload is not valid).
+     */
+    @PutMapping(SLASH + REST_NEW)
+    public String add_customer() {
+        // TODO: Implement creating a new customer.
+
+        return (SLASH + REST_NEW);
+    }
 }
 
 // vim:set nu et ts=4 sw=4:
