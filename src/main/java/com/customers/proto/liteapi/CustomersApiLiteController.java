@@ -25,7 +25,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
  * @since   0.0.9
  */
 @RestController
-@RequestMapping(SLASH + REST_PREFIX)
+@RequestMapping(SLASH + REST_PREFIX) // <method> /customers -------------------
 public class CustomersApiLiteController {
     /**
      * The &quot;<code>/customers/new</code>&quot; <b>PUT</b> endpoint.
@@ -33,15 +33,33 @@ public class CustomersApiLiteController {
      * <br />Creates a new customer (puts customer's data to the database
      * for their search and retrieval).
      *
-     * @return The ResponseEntity object with a specific HTTP status code
-     *         provided (and the response body in JSON representation
-     *         in case of the request payload is not valid).
+     * @return The <code>ResponseEntity</code> object with a specific
+     *         HTTP status code provided (and the response body
+     *         in JSON representation in case of request payload is not valid).
      */
-    @PutMapping(SLASH + REST_NEW)
+    @PutMapping(SLASH + REST_NEW) // PUT /customers/new -----------------------
     public String add_customer() {
         // TODO: Implement creating a new customer.
 
         return (SLASH + REST_NEW);
+    }
+
+    /**
+     * The &quot;<code>/customers/new-contact</code>&quot; <b>PUT</b> endpoint.
+     * <br />
+     * <br />Creates a new contact for a given customer (puts a contact,
+     * regarding a given customer, to the database
+     * for its search and retrieval).
+     *
+     * @return The <code>ResponseEntity</code> object with a specific
+     *         HTTP status code provided (and the response body
+     *         in JSON representation in case of request payload is not valid).
+     */
+    @PutMapping(SLASH + REST_NEW_CONTACT) // PUT /customers/new-contact -------
+    public String add_contact() {
+        // TODO: Implement creating a new contact.
+
+        return (SLASH + REST_NEW_CONTACT);
     }
 }
 
