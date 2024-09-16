@@ -56,9 +56,6 @@ dependencies {
     // JNA (Java Native Access) - as a runtime dependency to Syslog4j.
     implementation 'net.java.dev.jna:jna:5.14.0'
 
-    // Spring Boot Starter Actuator - to define and utilize REST endpoints.
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
     // Spring Boot Starter JDBC - to establish HikariCP JDBC connection pool.
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
