@@ -15,6 +15,7 @@ package com.customers.proto.liteapi;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
@@ -60,6 +61,22 @@ public class CustomersApiLiteController {
         // TODO: Implement creating a new contact.
 
         return (SLASH + REST_NEW_CONTACT);
+    }
+
+    /**
+     * The &quot;<code>/customers</code>&quot; <b>GET</b> endpoint.
+     * <br />
+     * <br />Retrieves from the database and lists all customer profiles.
+     *
+     * @return The <code>ResponseEntity</code> object with a specific
+     *         HTTP status code provided, containing a list of all customer
+     *         profiles (in the response body in JSON representation).
+     */
+    @GetMapping // GET /customers ---------------------------------------------
+    public String list_customers() {
+        // TODO: Implement retrieving and listing all customer profiles.
+
+        return (SLASH);
     }
 }
 
