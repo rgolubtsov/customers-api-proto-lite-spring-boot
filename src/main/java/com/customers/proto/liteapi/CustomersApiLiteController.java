@@ -114,7 +114,7 @@ public class CustomersApiLiteController {
         // TODO: Implement retrieving and listing all contacts
         //       for a given customer.
 
-        return (SLASH + REST_GET + SLASH + REST_CONTACTS)
+        return (SLASH + REST_GET + SLASH + REST_CONTACTS);
     }
 }
 
