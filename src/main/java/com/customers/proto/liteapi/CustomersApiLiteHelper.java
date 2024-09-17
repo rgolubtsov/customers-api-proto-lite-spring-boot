@@ -49,6 +49,7 @@ public class CustomersApiLiteHelper {
     public static final String REST_NEW         = "new";
     public static final String REST_NEW_CONTACT = "new-contact";
     public static final String REST_GET         = "{customer_id}";
+    public static final String REST_CONTACTS    = "contacts";
 
     /** The SLF4J logger. */
     public static final Logger l = LoggerFactory.getLogger(

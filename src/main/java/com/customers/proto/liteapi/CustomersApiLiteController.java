@@ -80,7 +80,8 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The &quot;<code>/customers</code>&quot; <b>GET</b> endpoint.
+     * The &quot;<code>/customers/{customer_id}</code>&quot;
+     * <b>GET</b> endpoint.
      * <br />
      * <br />Retrieves profile details for a single customer from the database.
      *
@@ -94,6 +95,26 @@ public class CustomersApiLiteController {
         // TODO: Implement retrieving profile details for a customer.
 
         return (SLASH + REST_GET);
+    }
+
+    /**
+     * The &quot;<code>/customers/{customer_id}/contacts</code>&quot;
+     * <b>GET</b> endpoint.
+     * <br />
+     * <br />Retrieves from the database and lists all contacts
+     * associated with a given customer.
+     *
+     * @return The <code>ResponseEntity</code> object with a specific
+     *         HTTP status code provided, containing a list of all contacts
+     *         associated with a given customer (in the response body
+     *         in JSON representation).
+     */ // GET /customers/{customer_id}/contacts ------------------------------
+    @GetMapping(SLASH + REST_GET + SLASH + REST_CONTACTS)
+    public String list_contacts() {
+        // TODO: Implement retrieving and listing all contacts
+        //       for a given customer.
+
+        return (SLASH + REST_GET + SLASH + REST_CONTACTS)
     }
 }
 
