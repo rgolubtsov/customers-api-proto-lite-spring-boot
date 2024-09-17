@@ -78,6 +78,23 @@ public class CustomersApiLiteController {
 
         return (SLASH);
     }
+
+    /**
+     * The &quot;<code>/customers</code>&quot; <b>GET</b> endpoint.
+     * <br />
+     * <br />Retrieves profile details for a single customer from the database.
+     *
+     * @return The <code>ResponseEntity</code> object with a specific
+     *         HTTP status code provided, containing profile details
+     *         for a single customer (in the response body
+     *         in JSON representation).
+     */
+    @GetMapping(SLASH + REST_GET) // GET /customers/{customer_id} -------------
+    public String get_customer() {
+        // TODO: Implement retrieving profile details for a customer.
+
+        return (SLASH + REST_GET);
+    }
 }
 
 // vim:set nu et ts=4 sw=4:
