@@ -45,10 +45,11 @@ public class CustomersApiLiteHelper {
     public static final String SERVER_PORT = "server.port";
 
     // REST URI path-related constants.
-    public static final String REST_PREFIX   =  "customers";
-    public static final String REST_CUST_ID  = "{customer_id}";
-    public static final String REST_CONTACT  =  "contact";
-    public static final String REST_CONTACTS =  "contacts";
+    public static final String REST_PREFIX    =  "customers";
+    public static final String REST_CUST_ID   = "{customer_id}";
+    public static final String REST_CONTACT   =  "contact";
+    public static final String REST_CONTACTS  =  "contacts";
+    public static final String REST_CONT_TYPE = "{contact_type}";
 
     /** The SLF4J logger. */
     public static final Logger l = LoggerFactory.getLogger(
