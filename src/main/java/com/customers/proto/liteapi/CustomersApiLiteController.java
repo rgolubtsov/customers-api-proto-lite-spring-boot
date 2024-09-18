@@ -25,11 +25,11 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
  * @version 0.0.9
  * @since   0.0.9
  */
-@RestController
-@RequestMapping(SLASH + REST_PREFIX) // <method> /customers -------------------
+@RestController // <method> /customers ----------------------------------------
+@RequestMapping(SLASH + REST_PREFIX)
 public class CustomersApiLiteController {
     /**
-     * The &quot;<code>/customers</code>&quot; <b>PUT</b> endpoint.
+     * The <code>PUT /customers</code> endpoint.
      * <br />
      * <br />Creates a new customer (puts customer's data to the database
      * for their further search and retrieval).
@@ -37,8 +37,9 @@ public class CustomersApiLiteController {
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
      *         in JSON representation in case of request payload is not valid).
-     */
-    @PutMapping // PUT /customers ---------------------------------------------
+     *
+     */ // PUT /customers -----------------------------------------------------
+    @PutMapping
     public String add_customer() {
         // TODO: Implement creating a new customer.
 
@@ -46,7 +47,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The &quot;<code>/customers/{customer_id}/contact</code>&quot; <b>PUT</b> endpoint.
+     * The <code>PUT /customers/{customer_id}/contact</code> endpoint.
      * <br />
      * <br />Creates a new contact for a given customer (puts a contact,
      * regarding a given customer, to the database
@@ -55,6 +56,7 @@ public class CustomersApiLiteController {
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
      *         in JSON representation in case of request payload is not valid).
+     *
      */ // PUT /customers/{customer_id}/contact -------------------------------
     @PutMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACT)
     public String add_contact() {
@@ -64,15 +66,16 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The &quot;<code>/customers</code>&quot; <b>GET</b> endpoint.
+     * The <code>GET /customers</code> endpoint.
      * <br />
      * <br />Retrieves from the database and lists all customer profiles.
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided, containing a list of all customer
      *         profiles (in the response body in JSON representation).
-     */
-    @GetMapping // GET /customers ---------------------------------------------
+     *
+     */ // GET /customers -----------------------------------------------------
+    @GetMapping
     public String list_customers() {
         // TODO: Implement retrieving and listing all customer profiles.
 
@@ -80,8 +83,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The &quot;<code>/customers/{customer_id}</code>&quot;
-     * <b>GET</b> endpoint.
+     * The <code>GET /customers/{customer_id}</code> endpoint.
      * <br />
      * <br />Retrieves profile details for a single customer from the database.
      *
@@ -89,8 +91,9 @@ public class CustomersApiLiteController {
      *         HTTP status code provided, containing profile details
      *         for a single customer (in the response body
      *         in JSON representation).
-     */
-    @GetMapping(SLASH + REST_CUST_ID) // GET /customers/{customer_id} ---------
+     *
+     */ // GET /customers/{customer_id} ---------------------------------------
+    @GetMapping(SLASH + REST_CUST_ID)
     public String get_customer() {
         // TODO: Implement retrieving profile details for a customer.
 
@@ -98,8 +101,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The &quot;<code>/customers/{customer_id}/contacts</code>&quot;
-     * <b>GET</b> endpoint.
+     * The <code>GET /customers/{customer_id}/contacts</code> endpoint.
      * <br />
      * <br />Retrieves from the database and lists all contacts
      * associated with a given customer.
@@ -108,6 +110,7 @@ public class CustomersApiLiteController {
      *         HTTP status code provided, containing a list of all contacts
      *         associated with a given customer (in the response body
      *         in JSON representation).
+     *
      */ // GET /customers/{customer_id}/contacts ------------------------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
     public String list_contacts() {
