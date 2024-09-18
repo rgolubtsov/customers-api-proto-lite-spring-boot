@@ -85,17 +85,17 @@ public class CustomersApiLiteController {
     /**
      * The <code>GET /customers/{customer_id}</code> endpoint.
      * <br />
-     * <br />Retrieves profile details for a single customer from the database.
+     * <br />Retrieves profile details for a given customer from the database.
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided, containing profile details
-     *         for a single customer (in the response body
+     *         for a given customer (in the response body
      *         in JSON representation).
      *
      */ // GET /customers/{customer_id} ---------------------------------------
     @GetMapping(SLASH + REST_CUST_ID)
     public String get_customer() {
-        // TODO: Implement retrieving profile details for a customer.
+        // TODO: Implement retrieving profile details for a given customer.
 
         return (SLASH + REST_CUST_ID);
     }
@@ -118,6 +118,29 @@ public class CustomersApiLiteController {
         //       for a given customer.
 
         return (SLASH + REST_CUST_ID + SLASH + REST_CONTACTS);
+    }
+
+    /**
+     * The <code>GET /customers/{customer_id}/contacts/{contact_type}</code>
+     * endpoint.
+     * <br />
+     * <br />Retrieves from the database and lists all contacts of a given type
+     * associated with a given customer.
+     *
+     * @return The <code>ResponseEntity</code> object with a specific
+     *         HTTP status code provided, containing a list of all contacts
+     *         of a given type associated with a given customer
+     *         (in the response body in JSON representation).
+     *
+     */ // GET /customers/{customer_id}/contacts/{contact_type} ---------------
+    @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
+                                     + SLASH + REST_CONT_TYPE)
+    public String list_contacts_by_type() {
+        // TODO: Implement retrieving and listing all contacts of a given type
+        //       for a given customer.
+
+        return (SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
+                                     + SLASH + REST_CONT_TYPE);
     }
 }
 
