@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteHelper.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.0.9
+ * Customers API Lite microservice prototype. Version 0.1.0
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -22,13 +22,14 @@ import org.graylog2.syslog4j.impl.unix.UnixSyslog;
 /**
  * The helper class for the microservice.
  *
- * @version 0.0.9
+ * @version 0.1.0
  * @since   0.0.1
  */
 public class CustomersApiLiteHelper {
     // Helper constants.
-    public static final String O_BRACKET = "[";
-    public static final String C_BRACKET = "]";
+    public static final String SLASH        = "/";
+    public static final String O_BRACKET    = "[";
+    public static final String C_BRACKET    = "]";
 
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
@@ -42,6 +43,13 @@ public class CustomersApiLiteHelper {
 
     // Application properties key for the server port number.
     public static final String SERVER_PORT = "server.port";
+
+    // REST URI path-related constants.
+    public static final String REST_PREFIX    =  "customers";
+    public static final String REST_CUST_ID   = "{customer_id}";
+    public static final String REST_CONTACT   =  "contact";
+    public static final String REST_CONTACTS  =  "contacts";
+    public static final String REST_CONT_TYPE = "{contact_type}";
 
     /** The SLF4J logger. */
     public static final Logger l = LoggerFactory.getLogger(
