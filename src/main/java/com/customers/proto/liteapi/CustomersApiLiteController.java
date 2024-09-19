@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
 /**
@@ -40,10 +43,20 @@ public class CustomersApiLiteController {
      *
      */ // PUT /customers -----------------------------------------------------
     @PutMapping
-    public String add_customer() {
+    public ResponseEntity<String> add_customer() {
         // TODO: Implement creating a new customer.
 
-        return (O_BRACKET + SLASH + C_BRACKET);
+        var resp = new ResponseEntity<String>(
+            O_BRACKET + SLASH + C_BRACKET, HttpStatus.CREATED);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -59,10 +72,20 @@ public class CustomersApiLiteController {
      *
      */ // PUT /customers/{customer_id}/contact -------------------------------
     @PutMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACT)
-    public String add_contact() {
+    public ResponseEntity<String> add_contact() {
         // TODO: Implement creating a new contact.
 
-        return (SLASH + REST_CUST_ID + SLASH + REST_CONTACT);
+        var resp = new ResponseEntity<String>(
+            SLASH + REST_CUST_ID + SLASH + REST_CONTACT, HttpStatus.CREATED);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -76,10 +99,19 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers -----------------------------------------------------
     @GetMapping
-    public String list_customers() {
+    public ResponseEntity<String> list_customers() {
         // TODO: Implement retrieving and listing all customer profiles.
 
-        return (SLASH);
+        var resp = new ResponseEntity<String>(SLASH, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -94,10 +126,20 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers/{customer_id} ---------------------------------------
     @GetMapping(SLASH + REST_CUST_ID)
-    public String get_customer() {
+    public ResponseEntity<String> get_customer() {
         // TODO: Implement retrieving profile details for a given customer.
 
-        return (SLASH + REST_CUST_ID);
+        var resp = new ResponseEntity<String>(
+            SLASH + REST_CUST_ID, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -113,11 +155,21 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers/{customer_id}/contacts ------------------------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
-    public String list_contacts() {
+    public ResponseEntity<String> list_contacts() {
         // TODO: Implement retrieving and listing all contacts
         //       for a given customer.
 
-        return (SLASH + REST_CUST_ID + SLASH + REST_CONTACTS);
+        var resp = new ResponseEntity<String>(
+            SLASH + REST_CUST_ID + SLASH + REST_CONTACTS, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -135,12 +187,22 @@ public class CustomersApiLiteController {
      */ // GET /customers/{customer_id}/contacts/{contact_type} ---------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
                                      + SLASH + REST_CONT_TYPE)
-    public String list_contacts_by_type() {
+    public ResponseEntity<String> list_contacts_by_type() {
         // TODO: Implement retrieving and listing all contacts of a given type
         //       for a given customer.
 
-        return (SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
-                                     + SLASH + REST_CONT_TYPE);
+        var resp = new ResponseEntity<String>(
+            SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
+                                 + SLASH + REST_CONT_TYPE, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 }
 
