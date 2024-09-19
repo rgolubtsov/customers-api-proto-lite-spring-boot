@@ -27,7 +27,10 @@ import org.graylog2.syslog4j.impl.unix.UnixSyslog;
  */
 public class CustomersApiLiteHelper {
     // Helper constants.
+    public static final String SPACE        = " ";
     public static final String SLASH        = "/";
+    public static final String EQUALS       = "=";
+    public static final String V_BAR        = "|";
     public static final String O_BRACKET    = "[";
     public static final String C_BRACKET    = "]";
 
@@ -50,6 +53,10 @@ public class CustomersApiLiteHelper {
     public static final String REST_CONTACT   =  "contact";
     public static final String REST_CONTACTS  =  "contacts";
     public static final String REST_CONT_TYPE = "{contact_type}";
+
+    // HTTP request path variable names.
+    public static final String CUST_ID   = "customer_id";
+    public static final String CONT_TYPE = "contact_type";
 
     /** The debug logging enabler. */
     public static boolean dbg = false;
