@@ -35,7 +35,7 @@ public class CustomersApiLiteHelper {
     public static final String MSG_SERVER_STARTED = "Server started on port ";
     public static final String MSG_SERVER_STOPPED = "Server stopped";
 
-    // Application properties key for the debug logger enabler.
+    // Application properties key for the debug logging enabler.
     public static final String DBG_LOG_ENBLR = "logger.debug.enabled";
 
     // Application properties key for the microservice application name.
@@ -50,6 +50,9 @@ public class CustomersApiLiteHelper {
     public static final String REST_CONTACT   =  "contact";
     public static final String REST_CONTACTS  =  "contacts";
     public static final String REST_CONT_TYPE = "{contact_type}";
+
+    /** The debug logging enabler. */
+    public static boolean dbg = false;
 
     /** The SLF4J logger. */
     public static final Logger l = LoggerFactory.getLogger(
