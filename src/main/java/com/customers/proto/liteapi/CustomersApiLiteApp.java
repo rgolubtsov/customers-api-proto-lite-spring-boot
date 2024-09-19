@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteApp.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.1.0
+ * Customers API Lite microservice prototype. Version 0.1.1
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -27,7 +27,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 /**
  * The startup class of the microservice.
  *
- * @version 0.1.0
+ * @version 0.1.1
  * @since   0.0.1
  */
 @SpringBootApplication
@@ -41,18 +41,17 @@ public class CustomersApiLiteApp implements DisposableBean {
         // Starting up the bundled web server.
         var ctx = SpringApplication.run(CustomersApiLiteApp.class, args);
 
+        var env = ctx.getEnvironment();
+
+        dbg = Boolean.parseBoolean(env.getProperty(DBG_LOG_ENBLR));
+
         // Opening the system logger.
         // Calling <syslog.h> openlog(NULL, LOG_CONS | LOG_PID, LOG_DAEMON);
         var cfg = new UnixSyslogConfig();
         cfg.setIdent(null); cfg.setFacility(SyslogIF.FACILITY_DAEMON);
         s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
 
-        var env = ctx.getEnvironment();
-
-        var debug_log_enabled
-            = Boolean.parseBoolean(env.getProperty(DBG_LOG_ENBLR));
-
-        if (debug_log_enabled) {
+        if (dbg) {
             var app_name = env.getProperty(APP_NAME);
 
             l.debug(O_BRACKET + app_name + C_BRACKET);

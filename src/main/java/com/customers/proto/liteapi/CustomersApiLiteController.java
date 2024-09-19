@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteController.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.1.0
+ * Customers API Lite microservice prototype. Version 0.1.1
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -16,13 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
 /**
  * The controller class of the microservice.
  *
- * @version 0.1.0
+ * @version 0.1.1
  * @since   0.1.0
  */
 @RestController // <method> /customers ----------------------------------------
@@ -31,8 +35,7 @@ public class CustomersApiLiteController {
     /**
      * The <code>PUT /customers</code> endpoint.
      * <br />
-     * <br />Creates a new customer (puts customer's data to the database
-     * for their further search and retrieval).
+     * <br />Creates a new customer (puts customer data to the database).
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
@@ -40,18 +43,30 @@ public class CustomersApiLiteController {
      *
      */ // PUT /customers -----------------------------------------------------
     @PutMapping
-    public String add_customer() {
+    public ResponseEntity<String> add_customer() {
         // TODO: Implement creating a new customer.
 
-        return (O_BRACKET + SLASH + C_BRACKET);
+        var resp = new ResponseEntity<String>(
+            O_BRACKET + SLASH + C_BRACKET, HttpStatus.CREATED);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
      * The <code>PUT /customers/{customer_id}/contact</code> endpoint.
      * <br />
-     * <br />Creates a new contact for a given customer (puts a contact,
-     * regarding a given customer, to the database
-     * for its search and retrieval).
+     * <br />Creates a new contact for a given customer (puts a contact
+     * regarding a given customer to the database).
+     *
+     * @param customer_id The customer ID used to associate a newly created
+     *                    contact with this customer.
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
@@ -59,10 +74,27 @@ public class CustomersApiLiteController {
      *
      */ // PUT /customers/{customer_id}/contact -------------------------------
     @PutMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACT)
-    public String add_contact() {
+    public ResponseEntity<String> add_contact(
+        @PathVariable String customer_id) {
+
+        if (dbg) {
+            l.debug(CUST_ID + EQUALS + customer_id);
+            s.debug(CUST_ID + EQUALS + customer_id);
+        }
+
         // TODO: Implement creating a new contact.
 
-        return (SLASH + REST_CUST_ID + SLASH + REST_CONTACT);
+        var resp = new ResponseEntity<String>(
+            SLASH + customer_id + SLASH + REST_CONTACT, HttpStatus.CREATED);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -76,16 +108,28 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers -----------------------------------------------------
     @GetMapping
-    public String list_customers() {
+    public ResponseEntity<String> list_customers() {
         // TODO: Implement retrieving and listing all customer profiles.
 
-        return (SLASH);
+        var resp = new ResponseEntity<String>(SLASH, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
      * The <code>GET /customers/{customer_id}</code> endpoint.
      * <br />
      * <br />Retrieves profile details for a given customer from the database.
+     *
+     * @param customer_id The customer ID used to retrieve
+     *                    customer profile data.
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided, containing profile details
@@ -94,10 +138,27 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers/{customer_id} ---------------------------------------
     @GetMapping(SLASH + REST_CUST_ID)
-    public String get_customer() {
+    public ResponseEntity<String> get_customer(
+        @PathVariable String customer_id) {
+
+        if (dbg) {
+            l.debug(CUST_ID + EQUALS + customer_id);
+            s.debug(CUST_ID + EQUALS + customer_id);
+        }
+
         // TODO: Implement retrieving profile details for a given customer.
 
-        return (SLASH + REST_CUST_ID);
+        var resp = new ResponseEntity<String>(
+            SLASH + customer_id, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -106,6 +167,9 @@ public class CustomersApiLiteController {
      * <br />Retrieves from the database and lists all contacts
      * associated with a given customer.
      *
+     * @param customer_id The customer ID used to retrieve contacts
+     *                    which belong to this customer.
+     *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided, containing a list of all contacts
      *         associated with a given customer (in the response body
@@ -113,11 +177,28 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers/{customer_id}/contacts ------------------------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
-    public String list_contacts() {
+    public ResponseEntity<String> list_contacts(
+        @PathVariable String customer_id) {
+
+        if (dbg) {
+            l.debug(CUST_ID + EQUALS + customer_id);
+            s.debug(CUST_ID + EQUALS + customer_id);
+        }
+
         // TODO: Implement retrieving and listing all contacts
         //       for a given customer.
 
-        return (SLASH + REST_CUST_ID + SLASH + REST_CONTACTS);
+        var resp = new ResponseEntity<String>(
+            SLASH + customer_id + SLASH + REST_CONTACTS, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 
     /**
@@ -127,6 +208,11 @@ public class CustomersApiLiteController {
      * <br />Retrieves from the database and lists all contacts of a given type
      * associated with a given customer.
      *
+     * @param customer_id  The customer ID used to retrieve contacts
+     *                     which belong to this customer.
+     * @param contact_type The particular type of contacts to retrieve
+     *                     (e.g. phone, email, postal address, etc.).
+     *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided, containing a list of all contacts
      *         of a given type associated with a given customer
@@ -135,12 +221,32 @@ public class CustomersApiLiteController {
      */ // GET /customers/{customer_id}/contacts/{contact_type} ---------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
                                      + SLASH + REST_CONT_TYPE)
-    public String list_contacts_by_type() {
+    public ResponseEntity<String> list_contacts_by_type(
+        @PathVariable String customer_id,
+        @PathVariable String contact_type) {
+
+        if (dbg) {
+            l.debug(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
+                  + CONT_TYPE + EQUALS + contact_type);
+            s.debug(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
+                  + CONT_TYPE + EQUALS + contact_type);
+        }
+
         // TODO: Implement retrieving and listing all contacts of a given type
         //       for a given customer.
 
-        return (SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
-                                     + SLASH + REST_CONT_TYPE);
+        var resp = new ResponseEntity<String>(
+            SLASH + customer_id + SLASH + REST_CONTACTS
+                                + SLASH + contact_type, HttpStatus.OK);
+
+        String respBody = resp.getBody();
+
+        if (dbg) {
+            l.debug(respBody);
+            s.debug(respBody);
+        }
+
+        return resp;
     }
 }
 
