@@ -13,6 +13,7 @@
 -- $ # Go to the "data/db/" directory.
 -- $ cd data/db/
 -- $
+-- $ # ------------------------------------------------------------------------
 -- $ # Create the "customers-api-lite.db" database and create the "tmp" table.
 -- $ sqlite3 customers-api-lite.db
 -- SQLite version 3.37.2 2022-01-06 13:25:41
@@ -36,6 +37,16 @@
 -- 2    value  character varying(2048)  0                    0
 -- sqlite>
 -- sqlite> .quit -- Or simply <Ctrl-D>.
+-- $
+-- $ # ------------------------------------------------------------------------
+-- $ # Populate the "tmp" table with a single record and display its contents.
+-- $ sqlite3 customers-api-lite.db \
+-- > < ../sql/00-create-db-create-and-populate-table-tmp.sql
+-- tmp
+--
+-- id  key                   value
+-- --  --------------------  -------------------------------
+-- 1   db.location.relative  ./data/db/customers-api-lite.db
 
 .headers on
 .mode    column
