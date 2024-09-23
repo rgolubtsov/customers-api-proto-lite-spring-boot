@@ -92,7 +92,7 @@ $ java -jar build/libs/customers-api-lite-0.1.1.jar; echo $?
 The microservice exposes **six endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
 
 No. | Endpoint name                                      | Request method and REST URI                            | Request body
---- | -------------------------------------------------- | ------------------------------------------------------ | ------------
+--: | -------------------------------------------------- | ------------------------------------------------------ | ------------
 1   | Create customer                                    | `PUT /customers`                                       | `{}`
 2   | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
 3   | List customers                                     | `GET /customers`                                       | N/A
@@ -120,16 +120,16 @@ $ curl -vXPUT http://localhost:8765/customers
 2. **Create contact**
 
 ```
-$ curl -vXPUT http://localhost:8765/customers/{customer_id}/contact
+$ curl -vXPUT http://localhost:8765/customers/12/contact
 ...
-> PUT /customers/customer_id/contact HTTP/1.1
+> PUT /customers/12/contact HTTP/1.1
 ...
 < HTTP/1.1 201 Created
 ...
 < Content-Type: text/plain;charset=UTF-8
-< Content-Length: 20
+< Content-Length: 11
 ...
-/customer_id/contact$
+/12/contact$
 ```
 
 3. **List customers**
@@ -150,46 +150,46 @@ $ curl -v http://localhost:8765/customers
 4. **Retrieve customer**
 
 ```
-$ curl -v http://localhost:8765/customers/{customer_id}
+$ curl -v http://localhost:8765/customers/12
 ...
-> GET /customers/customer_id HTTP/1.1
+> GET /customers/12 HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 3
+...
+/12$
+```
+
+5. **List contacts for a given customer**
+
+```
+$ curl -v http://localhost:8765/customers/12/contacts
+...
+> GET /customers/12/contacts HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: text/plain;charset=UTF-8
 < Content-Length: 12
 ...
-/customer_id$
-```
-
-5. **List contacts for a given customer**
-
-```
-$ curl -v http://localhost:8765/customers/{customer_id}/contacts
-...
-> GET /customers/customer_id/contacts HTTP/1.1
-...
-< HTTP/1.1 200 OK
-...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 21
-...
-/customer_id/contacts$
+/12/contacts$
 ```
 
 6. **List contacts of a given type for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/{customer_id}/contacts/{contact_type}
+$ curl -v http://localhost:8765/customers/12/contacts/email
 ...
-> GET /customers/customer_id/contacts/contact_type HTTP/1.1
+> GET /customers/12/contacts/email HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: text/plain;charset=UTF-8
-< Content-Length: 34
+< Content-Length: 18
 ...
-/customer_id/contacts/contact_type$
+/12/contacts/email$
 ```
 
 ### Logging
