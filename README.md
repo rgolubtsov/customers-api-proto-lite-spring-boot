@@ -91,14 +91,14 @@ $ java -jar build/libs/customers-api-lite-0.1.1.jar; echo $?
 
 The microservice exposes **six endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
 
-# # | Endpoint name                                      | Request method and REST URI                            | Request body
---- | -------------------------------------------------- | ------------------------------------------------------ | ----------------
-  1 | Create customer                                    | `PUT /customers`                                       | `{}`
-  2 | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
-  3 | List customers                                     | `GET /customers`                                       | N/A
-  4 | Retrieve customer                                  | `GET /customers/{customer_id}`                         | N/A
-  5 | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | N/A
-  6 | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | N/A
+ # | Endpoint name                                      | Request method and REST URI                            | Request body
+-- | -------------------------------------------------- | ------------------------------------------------------ | ------------
+1  | Create customer                                    | `PUT /customers`                                       | `{}`
+2  | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
+3  | List customers                                     | `GET /customers`                                       | N/A
+4  | Retrieve customer                                  | `GET /customers/{customer_id}`                         | N/A
+5  | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | N/A
+6  | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | N/A
 
 The following command-line snippets display the exact usage for these endpoints (the **cURL** utility is used as an example to access them):
 
