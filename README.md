@@ -89,7 +89,108 @@ $ java -jar build/libs/customers-api-lite-0.1.1.jar; echo $?
 
 ## Consuming
 
-**TBD** :cd:
+The microservice exposes **six endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
+
+# | Endpoint name                                      | Endpoint REST URI                                      | Endpoint payload
+- | -------------------------------------------------- | ------------------------------------------------------ | ----------------
+1 | Create customer                                    | `PUT /customers`                                       | `{}`
+2 | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
+3 | List customers                                     | `GET /customers`                                       | `{}`
+4 | Retrieve customer                                  | `GET /customers/{customer_id}`                         | `{}`
+5 | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | `{}`
+6 | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | `{}`
+
+The following command-line snippets display the exact usage for these endpoints (the `curl` utility is used as an example to access them):
+
+1. **PUT** `/customers`:
+
+```
+$ curl -vXPUT http://localhost:8765/customers
+...
+> PUT /customers HTTP/1.1
+...
+< HTTP/1.1 201 Created
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 3
+...
+[/]$
+```
+
+2. **PUT** `/customers/{customer_id}/contact`:
+
+```
+$ curl -vXPUT http://localhost:8765/customers/{customer_id}/contact
+...
+> PUT /customers/customer_id/contact HTTP/1.1
+...
+< HTTP/1.1 201 Created
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 20
+...
+/customer_id/contact$
+```
+
+3. **GET** `/customers`:
+`{}`
+```
+$ curl -v http://localhost:8765/customers
+...
+> GET /customers HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 1
+...
+/$
+```
+
+4. **GET** `/customers/{customer_id}`:
+
+```
+$ curl -v http://localhost:8765/customers/{customer_id}
+...
+> GET /customers/customer_id HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 12
+...
+/customer_id$
+```
+
+5. **GET** `/customers/{customer_id}/contacts`:
+
+```
+$ curl -v http://localhost:8765/customers/{customer_id}/contacts
+...
+> GET /customers/customer_id/contacts HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 21
+...
+/customer_id/contacts$
+```
+
+6. **GET** `/customers/{customer_id}/contacts/{contact_type}`:
+
+```
+$ curl -v http://localhost:8765/customers/{customer_id}/contacts/{contact_type}
+...
+> GET /customers/customer_id/contacts/contact_type HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 34
+...
+/customer_id/contacts/contact_type$
+```
 
 ### Logging
 
