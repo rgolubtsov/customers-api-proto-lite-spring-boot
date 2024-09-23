@@ -51,12 +51,7 @@ public class CustomersApiLiteApp implements DisposableBean {
         cfg.setIdent(null); cfg.setFacility(SyslogIF.FACILITY_DAEMON);
         s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
 
-        if (dbg) {
-            var app_name = env.getProperty(APP_NAME);
-
-            l.debug(O_BRACKET + app_name + C_BRACKET);
-            s.debug(O_BRACKET + app_name + C_BRACKET);
-        }
+        _dbg(O_BRACKET + env.getProperty(APP_NAME) + C_BRACKET);
 
         // Getting the port number used to run the bundled web server.
         var server_port = env.getProperty(SERVER_PORT);

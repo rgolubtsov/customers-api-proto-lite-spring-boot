@@ -67,6 +67,14 @@ public class CustomersApiLiteHelper {
 
     /** The Unix system logger. */
     public static UnixSyslog s;
+
+    // Helper method. Used to log messages for debugging aims in a free form.
+    public static void _dbg(final String message) {
+        if (dbg) {
+            l.debug(message);
+            s.debug(message);
+        }
+    }
 }
 
 // vim:set nu et ts=4 sw=4:

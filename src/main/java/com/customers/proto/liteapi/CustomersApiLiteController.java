@@ -51,10 +51,7 @@ public class CustomersApiLiteController {
 
         String respBody = resp.getBody();
 
-        if (dbg) {
-            l.debug(respBody);
-            s.debug(respBody);
-        }
+        _dbg(respBody);
 
         return resp;
     }
@@ -77,10 +74,7 @@ public class CustomersApiLiteController {
     public ResponseEntity<String> add_contact(
         @PathVariable String customer_id) {
 
-        if (dbg) {
-            l.debug(CUST_ID + EQUALS + customer_id);
-            s.debug(CUST_ID + EQUALS + customer_id);
-        }
+        _dbg(CUST_ID + EQUALS + customer_id);
 
         // TODO: Implement creating a new contact.
 
@@ -89,10 +83,7 @@ public class CustomersApiLiteController {
 
         String respBody = resp.getBody();
 
-        if (dbg) {
-            l.debug(respBody);
-            s.debug(respBody);
-        }
+        _dbg(respBody);
 
         return resp;
     }
@@ -110,15 +101,23 @@ public class CustomersApiLiteController {
     @GetMapping
     public ResponseEntity<String> list_customers() {
         // TODO: Implement retrieving and listing all customer profiles.
+        /* FIXME: sqlite> select cust.id      as 'Customer ID',
+                     ...>        cust.name    as 'Customer Name',
+                     ...>        cont.contact as  Contacts
+                     ...>  from
+                     ...>        customers cust,
+                     ...>        contacts  cont
+                     ...>  where
+                     ...>       (cust.contact_id = cont.id)
+                     ...>  order by
+                     ...>        cust.id,
+                     ...>        cust.name; */
 
         var resp = new ResponseEntity<String>(SLASH, HttpStatus.OK);
 
         String respBody = resp.getBody();
 
-        if (dbg) {
-            l.debug(respBody);
-            s.debug(respBody);
-        }
+        _dbg(respBody);
 
         return resp;
     }
@@ -141,22 +140,28 @@ public class CustomersApiLiteController {
     public ResponseEntity<String> get_customer(
         @PathVariable String customer_id) {
 
-        if (dbg) {
-            l.debug(CUST_ID + EQUALS + customer_id);
-            s.debug(CUST_ID + EQUALS + customer_id);
-        }
+        _dbg(CUST_ID + EQUALS + customer_id);
 
         // TODO: Implement retrieving profile details for a given customer.
+        /* FIXME: sqlite> select cust.id      as 'Customer ID',
+                     ...>        cust.name    as 'Customer Name',
+                     ...>        cont.contact as  Contacts
+                     ...>  from
+                     ...>        customers cust,
+                     ...>        contacts  cont
+                     ...>  where
+                     ...>        (cust.contact_id = cont.id) and
+                     ...>        (cust.id  =  {customer_id})
+                     ...>  order by
+                     ...>        cust.id,
+                     ...>        cust.name; */
 
         var resp = new ResponseEntity<String>(
             SLASH + customer_id, HttpStatus.OK);
 
         String respBody = resp.getBody();
 
-        if (dbg) {
-            l.debug(respBody);
-            s.debug(respBody);
-        }
+        _dbg(respBody);
 
         return resp;
     }
@@ -180,10 +185,7 @@ public class CustomersApiLiteController {
     public ResponseEntity<String> list_contacts(
         @PathVariable String customer_id) {
 
-        if (dbg) {
-            l.debug(CUST_ID + EQUALS + customer_id);
-            s.debug(CUST_ID + EQUALS + customer_id);
-        }
+        _dbg(CUST_ID + EQUALS + customer_id);
 
         // TODO: Implement retrieving and listing all contacts
         //       for a given customer.
@@ -193,10 +195,7 @@ public class CustomersApiLiteController {
 
         String respBody = resp.getBody();
 
-        if (dbg) {
-            l.debug(respBody);
-            s.debug(respBody);
-        }
+        _dbg(respBody);
 
         return resp;
     }
@@ -225,12 +224,8 @@ public class CustomersApiLiteController {
         @PathVariable String customer_id,
         @PathVariable String contact_type) {
 
-        if (dbg) {
-            l.debug(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
-                  + CONT_TYPE + EQUALS + contact_type);
-            s.debug(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
-                  + CONT_TYPE + EQUALS + contact_type);
-        }
+        _dbg(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
+           + CONT_TYPE + EQUALS + contact_type);
 
         // TODO: Implement retrieving and listing all contacts of a given type
         //       for a given customer.
@@ -241,10 +236,7 @@ public class CustomersApiLiteController {
 
         String respBody = resp.getBody();
 
-        if (dbg) {
-            l.debug(respBody);
-            s.debug(respBody);
-        }
+        _dbg(respBody);
 
         return resp;
     }

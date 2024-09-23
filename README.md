@@ -30,7 +30,7 @@ $ sudo apt-get update && \
 ...
 ```
 
-**Note:** A system-wide Gradle installation is not needed to build the microservice, since it is intended to use Gradle Wrapper for that, already stored in the current repository. Hence, commands given in the following two paragraphs can be simply ignored &mdash; they are kept here just for reference.
+**Note:** A system-wide Gradle installation is not needed to build the microservice, since it is intended to use Gradle Wrapper for that, which is already resided in the current repository. Hence, commands given in the following two paragraphs can be simply ignored &mdash; they are kept here just for reference.
 
 > Since Gradle package is somehow outdated in the stock Ubuntu package repository, it is preferred to be installed through the SDKMAN! toolkit. For that, first it needs to install SDKMAN! and to `source` its initialization script:
 
@@ -89,7 +89,108 @@ $ java -jar build/libs/customers-api-lite-0.1.1.jar; echo $?
 
 ## Consuming
 
-**TBD** :cd:
+The microservice exposes **six endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
+
+No. | Endpoint name                                      | Request method and REST URI                            | Request body
+--: | -------------------------------------------------- | ------------------------------------------------------ | ------------
+1   | Create customer                                    | `PUT /customers`                                       | `{}`
+2   | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
+3   | List customers                                     | `GET /customers`                                       | N/A
+4   | Retrieve customer                                  | `GET /customers/{customer_id}`                         | N/A
+5   | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | N/A
+6   | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | N/A
+
+The following command-line snippets display the exact usage for these endpoints (the **cURL** utility is used as an example to access them):
+
+1. **Create customer**
+
+```
+$ curl -vXPUT http://localhost:8765/customers
+...
+> PUT /customers HTTP/1.1
+...
+< HTTP/1.1 201 Created
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 3
+...
+[/]$
+```
+
+2. **Create contact**
+
+```
+$ curl -vXPUT http://localhost:8765/customers/12/contact
+...
+> PUT /customers/12/contact HTTP/1.1
+...
+< HTTP/1.1 201 Created
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 11
+...
+/12/contact$
+```
+
+3. **List customers**
+
+```
+$ curl -v http://localhost:8765/customers
+...
+> GET /customers HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 1
+...
+/$
+```
+
+4. **Retrieve customer**
+
+```
+$ curl -v http://localhost:8765/customers/12
+...
+> GET /customers/12 HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 3
+...
+/12$
+```
+
+5. **List contacts for a given customer**
+
+```
+$ curl -v http://localhost:8765/customers/12/contacts
+...
+> GET /customers/12/contacts HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 12
+...
+/12/contacts$
+```
+
+6. **List contacts of a given type for a given customer**
+
+```
+$ curl -v http://localhost:8765/customers/12/contacts/email
+...
+> GET /customers/12/contacts/email HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: text/plain;charset=UTF-8
+< Content-Length: 18
+...
+/12/contacts/email$
+```
 
 ### Logging
 
