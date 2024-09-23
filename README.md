@@ -91,18 +91,18 @@ $ java -jar build/libs/customers-api-lite-0.1.1.jar; echo $?
 
 The microservice exposes **six endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
 
-#&#x2060 | Endpoint name                                      | Request method and REST URI                            | Request body
--------- | -------------------------------------------------- | ------------------------------------------------------ | ----------------
-       1 | Create customer                                    | `PUT /customers`                                       | `{}`
-       2 | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
-       3 | List customers                                     | `GET /customers`                                       | N/A
-       4 | Retrieve customer                                  | `GET /customers/{customer_id}`                         | N/A
-       5 | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | N/A
-       6 | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | N/A
+# # | Endpoint name                                      | Request method and REST URI                            | Request body
+--- | -------------------------------------------------- | ------------------------------------------------------ | ----------------
+  1 | Create customer                                    | `PUT /customers`                                       | `{}`
+  2 | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
+  3 | List customers                                     | `GET /customers`                                       | N/A
+  4 | Retrieve customer                                  | `GET /customers/{customer_id}`                         | N/A
+  5 | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | N/A
+  6 | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | N/A
 
 The following command-line snippets display the exact usage for these endpoints (the **cURL** utility is used as an example to access them):
 
-1. **PUT** `/customers`:
+1. **Create customer**
 
 ```
 $ curl -vXPUT http://localhost:8765/customers
@@ -117,7 +117,7 @@ $ curl -vXPUT http://localhost:8765/customers
 [/]$
 ```
 
-2. **PUT** `/customers/{customer_id}/contact`:
+2. **Create contact**
 
 ```
 $ curl -vXPUT http://localhost:8765/customers/{customer_id}/contact
@@ -132,8 +132,8 @@ $ curl -vXPUT http://localhost:8765/customers/{customer_id}/contact
 /customer_id/contact$
 ```
 
-3. **GET** `/customers`:
-`{}`
+3. **List customers**
+
 ```
 $ curl -v http://localhost:8765/customers
 ...
@@ -147,7 +147,7 @@ $ curl -v http://localhost:8765/customers
 /$
 ```
 
-4. **GET** `/customers/{customer_id}`:
+4. **Retrieve customer**
 
 ```
 $ curl -v http://localhost:8765/customers/{customer_id}
@@ -162,7 +162,7 @@ $ curl -v http://localhost:8765/customers/{customer_id}
 /customer_id$
 ```
 
-5. **GET** `/customers/{customer_id}/contacts`:
+5. **List contacts for a given customer**
 
 ```
 $ curl -v http://localhost:8765/customers/{customer_id}/contacts
@@ -177,7 +177,7 @@ $ curl -v http://localhost:8765/customers/{customer_id}/contacts
 /customer_id/contacts$
 ```
 
-6. **GET** `/customers/{customer_id}/contacts/{contact_type}`:
+6. **List contacts of a given type for a given customer**
 
 ```
 $ curl -v http://localhost:8765/customers/{customer_id}/contacts/{contact_type}
