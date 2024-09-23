@@ -30,7 +30,7 @@ $ sudo apt-get update && \
 ...
 ```
 
-**Note:** A system-wide Gradle installation is not needed to build the microservice, since it is intended to use Gradle Wrapper for that, already stored in the current repository. Hence, commands given in the following two paragraphs can be simply ignored &mdash; they are kept here just for reference.
+**Note:** A system-wide Gradle installation is not needed to build the microservice, since it is intended to use Gradle Wrapper for that, which is already resided in the current repository. Hence, commands given in the following two paragraphs can be simply ignored &mdash; they are kept here just for reference.
 
 > Since Gradle package is somehow outdated in the stock Ubuntu package repository, it is preferred to be installed through the SDKMAN! toolkit. For that, first it needs to install SDKMAN! and to `source` its initialization script:
 
