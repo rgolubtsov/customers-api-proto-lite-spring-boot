@@ -1,5 +1,5 @@
 --
--- data/sql/03-create-and-populate-table-customers.sql
+-- data/sql/01-create-and-populate-table-customers.sql
 -- ============================================================================
 -- Customers API Lite microservice prototype. Version 0.1.1
 -- ============================================================================
@@ -16,12 +16,8 @@
 .tables
 .print
 
-create table customers (id        integer               not null
-                                                        primary key
-                                                        autoincrement,
-                       name       character varying(64) not null,
-                       contact_id integer               references contacts(id)
-                                                        on delete restrict);
+create table customers (id   integer     not null primary key autoincrement,
+                        name varchar(64) not null);
 
 .tables
 .print
@@ -31,8 +27,8 @@ pragma table_info(customers);
 
 select * from customers;
 
-insert into customers (name, contact_id) values ('Jammy Jellyfish', 1);
-insert into customers (name, contact_id) values ('Jammy Jellyfish', 2);
+insert into customers (name) values ('Jammy Jellyfish');
+insert into customers (name) values ('Noble Numbat'   );
 
 select * from customers;
 
