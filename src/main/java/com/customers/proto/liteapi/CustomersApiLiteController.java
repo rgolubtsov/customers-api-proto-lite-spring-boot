@@ -101,14 +101,17 @@ public class CustomersApiLiteController {
     @GetMapping
     public ResponseEntity<String> list_customers() {
         // TODO: Implement retrieving and listing all customer profiles.
-        /* FIXME: sqlite> select cust.id      as 'Customer ID',
-                     ...>        cust.name    as 'Customer Name',
-                     ...>        cont.contact as  Contacts
+        /* FIXME: sqlite> select   cust.id      as 'Customer ID',
+                     ...>          cust.name    as 'Customer Name',
+                     ...>        phones.contact as 'Phone(s)',
+                     ...>        emails.contact as 'Email(s)'
                      ...>  from
-                     ...>        customers cust,
-                     ...>        contacts  cont
+                     ...>        customers      cust,
+                     ...>        contact_phones phones,
+                     ...>        contact_emails emails
                      ...>  where
-                     ...>       (cust.contact_id = cont.id)
+                     ...>       (cust.id = phones.customer_id) and
+                     ...>       (cust.id = emails.customer_id)
                      ...>  order by
                      ...>        cust.id,
                      ...>        cust.name; */
@@ -143,18 +146,18 @@ public class CustomersApiLiteController {
         _dbg(CUST_ID + EQUALS + customer_id);
 
         // TODO: Implement retrieving profile details for a given customer.
-        /* FIXME: sqlite> select cust.id      as 'Customer ID',
-                     ...>        cust.name    as 'Customer Name',
-                     ...>        cont.contact as  Contacts
+        /* FIXME: sqlite> select   cust.id      as 'Customer ID',
+                     ...>          cust.name    as 'Customer Name',
+                     ...>        phones.contact as 'Phone(s)',
+                     ...>        emails.contact as 'Email(s)'
                      ...>  from
-                     ...>        customers cust,
-                     ...>        contacts  cont
+                     ...>        customers      cust,
+                     ...>        contact_phones phones,
+                     ...>        contact_emails emails
                      ...>  where
-                     ...>        (cust.contact_id = cont.id) and
-                     ...>        (cust.id  =  {customer_id})
-                     ...>  order by
-                     ...>        cust.id,
-                     ...>        cust.name; */
+                     ...>       (cust.id = phones.customer_id ) and
+                     ...>       (cust.id = emails.customer_id ) and
+                     ...>       (cust.id =       {customer_id}); */
 
         var resp = new ResponseEntity<String>(
             SLASH + customer_id, HttpStatus.OK);
