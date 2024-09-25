@@ -19,8 +19,9 @@
 -- > ../sql/01-create-and-populate-table-customers.sql
 -- ...
 
-.headers on
-.mode    column
+.headers   on
+.mode      column
+.nullvalue NULL
 
 .tables
 .print

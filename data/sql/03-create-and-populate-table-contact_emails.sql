@@ -19,8 +19,9 @@
 -- > ../sql/03-create-and-populate-table-contact_emails.sql
 -- ...
 
-.headers on
-.mode    column
+.headers   on
+.mode      column
+.nullvalue NULL
 
 .tables
 .print
