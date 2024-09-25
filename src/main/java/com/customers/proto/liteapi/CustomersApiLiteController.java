@@ -101,20 +101,13 @@ public class CustomersApiLiteController {
     @GetMapping
     public ResponseEntity<String> list_customers() {
         // TODO: Implement retrieving and listing all customer profiles.
-        /* FIXME: sqlite> select   cust.id      as 'Customer ID',
-                     ...>          cust.name    as 'Customer Name',
-                     ...>        phones.contact as 'Phone(s)',
-                     ...>        emails.contact as 'Email(s)'
+        /* FIXME: sqlite> .width -11
+                  sqlite> select id   as 'Customer ID',
+                     ...>        name as 'Customer Name'
                      ...>  from
-                     ...>        customers      cust,
-                     ...>        contact_phones phones,
-                     ...>        contact_emails emails
-                     ...>  where
-                     ...>       (cust.id = phones.customer_id) and
-                     ...>       (cust.id = emails.customer_id)
+                     ...>        customers
                      ...>  order by
-                     ...>        cust.id,
-                     ...>        cust.name; */
+                     ...>        id; */
 
         var resp = new ResponseEntity<String>(SLASH, HttpStatus.OK);
 
@@ -146,7 +139,8 @@ public class CustomersApiLiteController {
         _dbg(CUST_ID + EQUALS + customer_id);
 
         // TODO: Implement retrieving profile details for a given customer.
-        /* FIXME: sqlite> select   cust.id      as 'Customer ID',
+        /* FIXME: sqlite> .width -11
+                  sqlite> select   cust.id      as 'Customer ID',
                      ...>          cust.name    as 'Customer Name',
                      ...>        phones.contact as 'Phone(s)',
                      ...>        emails.contact as 'Email(s)'
@@ -157,7 +151,9 @@ public class CustomersApiLiteController {
                      ...>  where
                      ...>       (cust.id = phones.customer_id ) and
                      ...>       (cust.id = emails.customer_id ) and
-                     ...>       (cust.id =       {customer_id}); */
+                     ...>       (cust.id =       {customer_id})
+                     ...>  order by
+                     ...>        emails.contact; */
 
         var resp = new ResponseEntity<String>(
             SLASH + customer_id, HttpStatus.OK);
