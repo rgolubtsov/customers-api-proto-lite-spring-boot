@@ -10,6 +10,15 @@
 -- (See the LICENSE file at the top of the source tree.)
 --
 
+-- $ # Usage:
+-- $ # (1) Go to the "data/db/" directory.
+-- $ cd data/db/
+-- $
+-- $ # (2) Create and populate the "customers" table with initial data.
+-- $ sqlite3 customers-api-lite.db < \
+-- > ../sql/01-create-and-populate-table-customers.sql
+-- ...
+
 .headers on
 .mode    column
 
