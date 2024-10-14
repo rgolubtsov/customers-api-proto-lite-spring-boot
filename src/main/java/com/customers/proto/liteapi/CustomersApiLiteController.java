@@ -133,7 +133,7 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers/{customer_id} ---------------------------------------
     @GetMapping(SLASH + REST_CUST_ID)
-    public ResponseEntity<String> get_customer(
+    public ResponseEntity<CustomersApiLiteEntityCustomer> get_customer(
         @PathVariable String customer_id) {
 
         _dbg(CUST_ID + EQUALS + customer_id);
@@ -155,10 +155,21 @@ public class CustomersApiLiteController {
                      ...>  order by
                      ...>        emails.contact; */
 
-        var resp = new ResponseEntity<String>(
-            SLASH + customer_id, HttpStatus.OK);
+        var cust_id = 0L;
 
-        String respBody = resp.getBody();
+        try {
+            cust_id = Long.parseLong(customer_id);
+        } catch (NumberFormatException e) {
+            _dbg(O_BRACKET + O_BRACKET + customer_id
+               + C_BRACKET + C_BRACKET);
+        }
+
+        var customer = new CustomersApiLiteEntityCustomer(cust_id, SLASH);
+
+        var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
+            customer, HttpStatus.OK);
+
+        var respBody = resp.getBody().getName();
 
         _dbg(respBody);
 
