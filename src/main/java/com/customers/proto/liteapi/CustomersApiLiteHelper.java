@@ -47,6 +47,9 @@ public class CustomersApiLiteHelper {
     // Application properties key for the server port number.
     public static final String SERVER_PORT = "server.port";
 
+    // The name for the data source bean, used to connect to the database.
+    public static final String DATA_SOURCE = "dataSource";
+
     // REST URI path-related constants.
     public static final String REST_PREFIX    =  "customers";
     public static final String REST_CUST_ID   = "{customer_id}";
