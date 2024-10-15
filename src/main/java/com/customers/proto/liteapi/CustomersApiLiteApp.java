@@ -18,6 +18,8 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 import org.graylog2.syslog4j.impl.unix.UnixSyslogConfig;
 import org.graylog2.syslog4j.impl.unix.UnixSyslog;
 import org.graylog2.syslog4j.SyslogIF;
@@ -52,6 +54,11 @@ public class CustomersApiLiteApp implements DisposableBean {
         s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
 
         _dbg(O_BRACKET + env.getProperty(APP_NAME) + C_BRACKET);
+
+        var ds = (HikariDataSource) ctx.getBean(DATA_SOURCE);
+
+        _dbg(O_BRACKET + ds.getDriverClassName() + C_BRACKET);
+        _dbg(O_BRACKET + ds.getJdbcUrl()         + C_BRACKET);
 
         // Getting the port number used to run the bundled web server.
         var server_port = env.getProperty(SERVER_PORT);
