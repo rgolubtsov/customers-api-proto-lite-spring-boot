@@ -20,10 +20,10 @@ package com.customers.proto.liteapi;
  */
 public class CustomersApiLiteEntityCustomer {
     /** The customer ID. */
-    private final long id;
+    private long id;
 
     /** The customer name. */
-    private final String name;
+    private String name;
 
     /**
      * The accessor method for the customer ID.
@@ -32,6 +32,15 @@ public class CustomersApiLiteEntityCustomer {
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     * The mutator method for the customer ID.
+     *
+     * @param _id A new value for the customer ID.
+     */
+    public void setId(final long _id) {
+        id = _id;
     }
 
     /**
@@ -44,13 +53,11 @@ public class CustomersApiLiteEntityCustomer {
     }
 
     /**
-     * The effective constructor for the Customer entity.
+     * The mutator method for the customer name.
      *
-     * @param _id   The customer ID.
-     * @param _name The customer name.
+     * @param _name A new value for the customer name.
      */
-    public CustomersApiLiteEntityCustomer(final long _id, final String _name) {
-        id   = _id;
+    public void setName(final String _name) {
         name = _name;
     }
 }
