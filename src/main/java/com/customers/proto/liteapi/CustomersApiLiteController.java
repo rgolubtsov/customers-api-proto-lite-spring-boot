@@ -138,23 +138,6 @@ public class CustomersApiLiteController {
 
         _dbg(CUST_ID + EQUALS + customer_id);
 
-        // TODO: Implement retrieving profile details for a given customer.
-        /* FIXME: sqlite> .width -11
-                  sqlite> select   cust.id      as 'Customer ID',
-                     ...>          cust.name    as 'Customer Name',
-                     ...>        phones.contact as 'Phone(s)',
-                     ...>        emails.contact as 'Email(s)'
-                     ...>  from
-                     ...>        customers      cust,
-                     ...>        contact_phones phones,
-                     ...>        contact_emails emails
-                     ...>  where
-                     ...>       (cust.id = phones.customer_id ) and
-                     ...>       (cust.id = emails.customer_id ) and
-                     ...>       (cust.id =       {customer_id})
-                     ...>  order by
-                     ...>        emails.contact; */
-
         var cust_id = 0L;
 
         try {
@@ -164,14 +147,20 @@ public class CustomersApiLiteController {
                + C_BRACKET + C_BRACKET);
         }
 
-        var customer = new CustomersApiLiteEntityCustomer(cust_id, SLASH);
+        var customer = c.sql(SQL_GET_CUSTOMER_BY_ID)
+                        .param(cust_id)
+                        .query(CustomersApiLiteEntityCustomer.class)
+                        .optional()
+                        .orElse(null);
+
+        if (customer == null) {
+            customer = new CustomersApiLiteEntityCustomer();
+        }
 
         var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
             customer, HttpStatus.OK);
 
-        var respBody = resp.getBody().getName();
-
-        _dbg(respBody);
+        _dbg(O_BRACKET + resp.getBody().getName() + C_BRACKET);
 
         return resp;
     }
