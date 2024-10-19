@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
+import static com.customers.proto.liteapi.CustomersApiLiteModel.*;
 
 /**
  * The controller class of the microservice.
@@ -99,21 +102,19 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers -----------------------------------------------------
     @GetMapping
-    public ResponseEntity<String> list_customers() {
-        // TODO: Implement retrieving and listing all customer profiles.
-        /* FIXME: sqlite> .width -11
-                  sqlite> select id   as 'Customer ID',
-                     ...>        name as 'Customer Name'
-                     ...>  from
-                     ...>        customers
-                     ...>  order by
-                     ...>        id; */
+    public ResponseEntity<List> list_customers() {
+        var customers = c.sql(SQL_GET_ALL_CUSTOMERS)
+                         .query(CustomersApiLiteEntityCustomer.class)
+                         .list();
 
-        var resp = new ResponseEntity<String>(SLASH, HttpStatus.OK);
+        if (customers.isEmpty()) {
+            customers.add(new CustomersApiLiteEntityCustomer());
+        }
 
-        String respBody = resp.getBody();
+        var resp = new ResponseEntity<List>(customers, HttpStatus.OK);
 
-        _dbg(respBody);
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityCustomer)
+                           resp.getBody().get(0)).getName() + C_BRACKET);
 
         return resp;
     }
@@ -133,34 +134,34 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers/{customer_id} ---------------------------------------
     @GetMapping(SLASH + REST_CUST_ID)
-    public ResponseEntity<String> get_customer(
+    public ResponseEntity<CustomersApiLiteEntityCustomer> get_customer(
         @PathVariable String customer_id) {
 
         _dbg(CUST_ID + EQUALS + customer_id);
 
-        // TODO: Implement retrieving profile details for a given customer.
-        /* FIXME: sqlite> .width -11
-                  sqlite> select   cust.id      as 'Customer ID',
-                     ...>          cust.name    as 'Customer Name',
-                     ...>        phones.contact as 'Phone(s)',
-                     ...>        emails.contact as 'Email(s)'
-                     ...>  from
-                     ...>        customers      cust,
-                     ...>        contact_phones phones,
-                     ...>        contact_emails emails
-                     ...>  where
-                     ...>       (cust.id = phones.customer_id ) and
-                     ...>       (cust.id = emails.customer_id ) and
-                     ...>       (cust.id =       {customer_id})
-                     ...>  order by
-                     ...>        emails.contact; */
+        var cust_id = 0L;
 
-        var resp = new ResponseEntity<String>(
-            SLASH + customer_id, HttpStatus.OK);
+        try {
+            cust_id = Long.parseLong(customer_id);
+        } catch (NumberFormatException e) {
+            _dbg(O_BRACKET + O_BRACKET + customer_id
+               + C_BRACKET + C_BRACKET);
+        }
 
-        String respBody = resp.getBody();
+        var customer = c.sql(SQL_GET_CUSTOMER_BY_ID)
+                        .param(cust_id)
+                        .query(CustomersApiLiteEntityCustomer.class)
+                        .optional()
+                        .orElse(null);
 
-        _dbg(respBody);
+        if (customer == null) {
+            customer = new CustomersApiLiteEntityCustomer();
+        }
+
+        var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
+            customer, HttpStatus.OK);
+
+        _dbg(O_BRACKET + resp.getBody().getName() + C_BRACKET);
 
         return resp;
     }

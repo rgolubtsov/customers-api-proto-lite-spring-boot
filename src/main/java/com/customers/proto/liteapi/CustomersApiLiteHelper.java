@@ -19,6 +19,8 @@ import java.lang.invoke.MethodHandles;
 
 import org.graylog2.syslog4j.impl.unix.UnixSyslog;
 
+import org.springframework.jdbc.core.simple.JdbcClient;
+
 /**
  * The helper class for the microservice.
  *
@@ -47,6 +49,9 @@ public class CustomersApiLiteHelper {
     // Application properties key for the server port number.
     public static final String SERVER_PORT = "server.port";
 
+    // The name for the data source bean, used to connect to the database.
+    public static final String DATA_SOURCE = "dataSource";
+
     // REST URI path-related constants.
     public static final String REST_PREFIX    =  "customers";
     public static final String REST_CUST_ID   = "{customer_id}";
@@ -67,6 +72,9 @@ public class CustomersApiLiteHelper {
 
     /** The Unix system logger. */
     public static UnixSyslog s;
+
+    /** The Spring JDBC Client. */
+    public static JdbcClient c;
 
     // Helper method. Used to log messages for debugging aims in a free form.
     public static void _dbg(final String message) {
