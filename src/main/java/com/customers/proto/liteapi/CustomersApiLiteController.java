@@ -182,33 +182,33 @@ public class CustomersApiLiteController {
      *
      */ // GET /customers/{customer_id}/contacts ------------------------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
-    public ResponseEntity<String> list_contacts(
+    public ResponseEntity<List> list_contacts(
         @PathVariable String customer_id) {
 
         _dbg(CUST_ID + EQUALS + customer_id);
 
-        // TODO: Implement retrieving and listing all contacts
-        //       for a given customer.
-        /* FIXME: sqlite> .width 0
-                  sqlite> select phones.contact as 'Phone(s)',
-                     ...>        emails.contact as 'Email(s)'
-                     ...>  from
-                     ...>        contact_phones phones,
-                     ...>        contact_emails emails,
-                     ...>        customers      cust
-                     ...>  where
-                     ...>       (cust.id = phones.customer_id ) and
-                     ...>       (cust.id = emails.customer_id ) and
-                     ...>       (cust.id =       {customer_id})
-                     ...>  order by
-                     ...>        emails.contact; */
+        var cust_id = 0L;
 
-        var resp = new ResponseEntity<String>(
-            SLASH + customer_id + SLASH + REST_CONTACTS, HttpStatus.OK);
+        try {
+            cust_id = Long.parseLong(customer_id);
+        } catch (NumberFormatException e) {
+            _dbg(O_BRACKET + O_BRACKET + customer_id
+               + C_BRACKET + C_BRACKET);
+        }
 
-        String respBody = resp.getBody();
+        var contacts = c.sql(SQL_GET_ALL_CONTACTS)
+                        .param(cust_id)
+                        .query(CustomersApiLiteEntityContact.class)
+                        .list();
 
-        _dbg(respBody);
+        if (contacts.isEmpty()) {
+            contacts.add(new CustomersApiLiteEntityContact());
+        }
+
+        var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact)
+                           resp.getBody().get(0)).getContact() + C_BRACKET);
 
         return resp;
     }
