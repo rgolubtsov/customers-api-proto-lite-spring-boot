@@ -1,7 +1,7 @@
 --
 -- data/sql/02-create-and-populate-table-contact_phones.sql
 -- ============================================================================
--- Customers API Lite microservice prototype. Version 0.1.1
+-- Customers API Lite microservice prototype. Version 0.1.5
 -- ============================================================================
 -- A Spring Boot-based application, designed and intended to be run
 -- as a microservice, implementing a special Customers API prototype

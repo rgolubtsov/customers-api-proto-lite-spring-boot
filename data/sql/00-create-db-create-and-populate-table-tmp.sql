@@ -1,7 +1,7 @@
 --
 -- data/sql/00-create-db-create-and-populate-table-tmp.sql
 -- ============================================================================
--- Customers API Lite microservice prototype. Version 0.1.1
+-- Customers API Lite microservice prototype. Version 0.1.5
 -- ============================================================================
 -- A Spring Boot-based application, designed and intended to be run
 -- as a microservice, implementing a special Customers API prototype
