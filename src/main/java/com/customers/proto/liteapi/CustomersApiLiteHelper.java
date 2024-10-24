@@ -19,6 +19,7 @@ import java.lang.invoke.MethodHandles;
 
 import org.graylog2.syslog4j.impl.unix.UnixSyslog;
 
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 /**
@@ -75,6 +76,9 @@ public class CustomersApiLiteHelper {
 
     /** The Unix system logger. */
     public static UnixSyslog s;
+
+    /** The Spring JDBC DB metadata-driven <em>insert client</em>. */
+    public static SimpleJdbcInsert i;
 
     /** The Spring JDBC Client. */
     public static JdbcClient c;
