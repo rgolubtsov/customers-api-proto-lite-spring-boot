@@ -90,7 +90,8 @@ public class CustomersApiLiteModel {
         + "       customers      cust"
         + " where"
         + "      (cust.id = emails.customer_id) and"
-        + "      (cust.id =                  ?)"};
+        + "      (cust.id =                  ?)",
+          "select name from customers where (id = ?)"};
 }
 
 // vim:set nu et ts=4 sw=4:
