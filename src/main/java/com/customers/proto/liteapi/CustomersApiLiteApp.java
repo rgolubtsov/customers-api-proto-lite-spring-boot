@@ -24,6 +24,7 @@ import org.graylog2.syslog4j.SyslogIF;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
@@ -62,6 +63,7 @@ public class CustomersApiLiteApp implements DisposableBean {
         _dbg(O_BRACKET + ds.getDriverClassName() + C_BRACKET);
         _dbg(O_BRACKET + ds.getJdbcUrl()         + C_BRACKET);
 
+        i = new SimpleJdbcInsert(ds);
         c = JdbcClient.create(ds);
 
         // Getting the port number used to run the bundled web server.
