@@ -197,7 +197,8 @@ public class CustomersApiLiteController {
         }
 
         var contacts = c.sql(SQL_GET_ALL_CONTACTS)
-                        .param(cust_id)
+                        .param(cust_id) // <== For retrieving phones.
+                        .param(cust_id) // <== For retrieving emails.
                         .query(CustomersApiLiteEntityContact.class)
                         .list();
 
