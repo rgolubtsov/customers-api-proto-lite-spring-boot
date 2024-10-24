@@ -29,6 +29,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
  */
 public class CustomersApiLiteHelper {
     // Helper constants.
+    public static final String EMPTY_STRING =  "";
     public static final String SPACE        = " ";
     public static final String SLASH        = "/";
     public static final String EQUALS       = "=";
@@ -58,6 +59,8 @@ public class CustomersApiLiteHelper {
     public static final String REST_CONTACT   =  "contact";
     public static final String REST_CONTACTS  =  "contacts";
     public static final String REST_CONT_TYPE = "{contact_type}";
+    public static final String PHONE          =  "phone";
+    public static final String EMAIL          =  "email";
 
     // HTTP request path variable names.
     public static final String CUST_ID   = "customer_id";

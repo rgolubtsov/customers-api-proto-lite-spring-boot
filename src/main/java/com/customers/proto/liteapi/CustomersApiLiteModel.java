@@ -19,7 +19,11 @@ package com.customers.proto.liteapi;
  * @since   0.1.1
  */
 public class CustomersApiLiteModel {
-    /** The SQL query for retrieving all customer profiles. */
+    /**
+     * The SQL query for retrieving all customer profiles.
+     *
+     * Used by the <code>GET /customers</code> REST endpoint.
+     */
     public static final String SQL_GET_ALL_CUSTOMERS
         = "select id ," // as 'Customer ID',"
         + "       name" // as 'Customer Name'"
@@ -28,7 +32,11 @@ public class CustomersApiLiteModel {
         + " order by"
         + "       id";
 
-    /** The SQL query for retrieving profile details for a given customer. */
+    /**
+     * The SQL query for retrieving profile details for a given customer.
+     *
+     * Used by the <code>GET /customers/{customer_id}</code> REST endpoint.
+     */
     public static final String SQL_GET_CUSTOMER_BY_ID
         = "select id ," // as 'Customer ID',"
         + "       name" // as 'Customer Name'"
@@ -37,24 +45,36 @@ public class CustomersApiLiteModel {
         + " where"
         + "      (id = ?)";
 
-    /** The SQL query for retrieving all contacts for a given customer. */
+    /**
+     * The SQL query for retrieving all contacts for a given customer.
+     *
+     * Used by the <code>GET /customers/{customer_id}/contacts</code>
+     * REST endpoint.
+     */
     public static final String SQL_GET_ALL_CONTACTS
-        = "select phones.contact," // as 'Phone(s)',"
-        + "       emails.contact " // as 'Email(s)'"
+        = "select phones.contact" // as 'Phone(s)'"
         + " from"
         + "       contact_phones phones,"
-        + "       contact_emails emails,"
         + "       customers      cust"
         + " where"
         + "      (cust.id = phones.customer_id) and"
-        + "      (cust.id = emails.customer_id) and"
         + "      (cust.id =                  ?)"
-        + " order by"
-        + "       emails.contact";
+        + " union "
+        + "select emails.contact" // as 'Email(s)'"
+        + " from"
+        + "       contact_emails emails,"
+        + "       customers      cust"
+        + " where"
+        + "      (cust.id = emails.customer_id) and"
+        + "      (cust.id =                  ?)";
 
     /**
      * The SQL queries for retrieving all contacts of a given type
      * for a given customer.
+     *
+     * Used
+     * by the <code>GET /customers/{customer_id}/contacts/{contact_type}</code>
+     * REST endpoint.
      */
     public static final String[] SQL_GET_CONTACTS_BY_TYPE
         ={"select phones.contact" // as 'Phone(s)'"
@@ -70,7 +90,8 @@ public class CustomersApiLiteModel {
         + "       customers      cust"
         + " where"
         + "      (cust.id = emails.customer_id) and"
-        + "      (cust.id =                  ?)"};
+        + "      (cust.id =                  ?)",
+          "select name from customers where (id = ?)"};
 }
 
 // vim:set nu et ts=4 sw=4:
