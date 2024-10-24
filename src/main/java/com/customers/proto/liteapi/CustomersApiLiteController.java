@@ -234,39 +234,45 @@ public class CustomersApiLiteController {
      */ // GET /customers/{customer_id}/contacts/{contact_type} ---------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
                                      + SLASH + REST_CONT_TYPE)
-    public ResponseEntity<String> list_contacts_by_type(
+    public ResponseEntity<List> list_contacts_by_type(
         @PathVariable String customer_id,
         @PathVariable String contact_type) {
 
         _dbg(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
            + CONT_TYPE + EQUALS + contact_type);
 
-        // TODO: Implement retrieving and listing all contacts of a given type
-        //       for a given customer.
-        /* FIXME: sqlite> .width 0
-                  sqlite> select phones.contact as 'Phone(s)'
-                     ...>  from
-                     ...>        contact_phones phones,
-                     ...>        customers      cust
-                     ...>  where
-                     ...>       (cust.id = phones.customer_id ) and
-                     ...>       (cust.id =       {customer_id});
-                  sqlite> .print
-                  sqlite> select emails.contact as 'Email(s)'
-                     ...>  from
-                     ...>        contact_emails emails,
-                     ...>        customers      cust
-                     ...>  where
-                     ...>       (cust.id = emails.customer_id ) and
-                     ...>       (cust.id =       {customer_id}); */
+        var cust_id = 0L;
 
-        var resp = new ResponseEntity<String>(
-            SLASH + customer_id + SLASH + REST_CONTACTS
-                                + SLASH + contact_type, HttpStatus.OK);
+        try {
+            cust_id = Long.parseLong(customer_id);
+        } catch (NumberFormatException e) {
+            _dbg(O_BRACKET + O_BRACKET + customer_id
+               + C_BRACKET + C_BRACKET);
+        }
 
-        String respBody = resp.getBody();
+        var sql_query = EMPTY_STRING;
 
-        _dbg(respBody);
+               if (contact_type.compareToIgnoreCase(PHONE) == 0) {
+            sql_query = SQL_GET_CONTACTS_BY_TYPE[0];
+        } else if (contact_type.compareToIgnoreCase(EMAIL) == 0) {
+            sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
+        } else {
+            sql_query = SQL_GET_CONTACTS_BY_TYPE[2];
+        }
+
+        var contacts = c.sql(sql_query)
+                        .param(cust_id)
+                        .query(CustomersApiLiteEntityContact.class)
+                        .list();
+
+        if (contacts.isEmpty()) {
+            contacts.add(new CustomersApiLiteEntityContact());
+        }
+
+        var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact)
+                           resp.getBody().get(0)).getContact() + C_BRACKET);
 
         return resp;
     }
