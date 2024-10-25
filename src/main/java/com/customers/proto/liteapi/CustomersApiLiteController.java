@@ -20,10 +20,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 import java.util.List;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 import static com.customers.proto.liteapi.CustomersApiLiteModel.*;
@@ -56,7 +60,7 @@ public class CustomersApiLiteController {
      */ // PUT /customers -----------------------------------------------------
     @PutMapping
     public ResponseEntity<CustomersApiLiteEntityCustomer> add_customer(
-        @RequestBody Map<String,String> payload) {
+        @RequestBody Map<String,String> payload) throws URISyntaxException {
 
         _dbg(O_BRACKET + payload.get(DB_T_CUST_C_NAME) + C_BRACKET);
 
@@ -66,10 +70,16 @@ public class CustomersApiLiteController {
                         .query(CustomersApiLiteEntityCustomer.class)
                         .single();
 
-        var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
-            customer, HttpStatus.CREATED);
+        var hdrs = new HttpHeaders();
+            hdrs.setLocation(new URI(SLASH + REST_PREFIX
+                                   + SLASH + customer.getId()));
 
-        _dbg(O_BRACKET + resp.getBody().getName() + C_BRACKET);
+        var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
+            customer, hdrs, HttpStatus.CREATED); // <== HTTP 201 Created
+
+        var body = resp.getBody();
+
+        _dbg(O_BRACKET + body.getId() + V_BAR + body.getName() + C_BRACKET);
 
         return resp;
     }
