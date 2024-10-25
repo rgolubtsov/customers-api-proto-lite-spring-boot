@@ -19,8 +19,8 @@ import java.lang.invoke.MethodHandles;
 
 import org.graylog2.syslog4j.impl.unix.UnixSyslog;
 
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 /**
  * The helper class for the microservice.
@@ -67,6 +67,13 @@ public class CustomersApiLiteHelper {
     public static final String CUST_ID   = "customer_id";
     public static final String CONT_TYPE = "contact_type";
 
+    // Database table and column names for insert operations.
+    public static final String DB_T_CUSTOMERS      = "customers";
+    public static final String DB_T_CONTACT_PHONES = "contact_phones";
+    public static final String DB_T_CONTACT_EMAILS = "contact_emails";
+    public static final String DB_T_CUST_C_NAME    = "name";
+    public static final String DB_T_CONT_C_CONTACT = "contact";
+
     /** The debug logging enabler. */
     public static boolean dbg = false;
 
@@ -77,11 +84,14 @@ public class CustomersApiLiteHelper {
     /** The Unix system logger. */
     public static UnixSyslog s;
 
-    /** The Spring JDBC DB metadata-driven <em>insert client</em>. */
-    public static SimpleJdbcInsert i;
-
     /** The Spring JDBC Client. */
     public static JdbcClient c;
+
+    /** The Spring JDBC DB metadata-driven <em>insert client</em> No.1. */
+    public static SimpleJdbcInsert i_cust;
+
+    /** The Spring JDBC DB metadata-driven <em>insert client</em> No.2. */
+    public static SimpleJdbcInsert[] i_cont;
 
     // Helper method. Used to log messages for debugging aims in a free form.
     public static void _dbg(final String message) {
