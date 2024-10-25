@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -55,21 +54,22 @@ public class CustomersApiLiteController {
      *         in JSON representation in case of request payload is not valid).
      *
      */ // PUT /customers -----------------------------------------------------
-    @PutMapping//(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     public ResponseEntity<CustomersApiLiteEntityCustomer> add_customer(
-        @RequestBody Map<String, Object> payload) {
+        @RequestBody Map<String,String> payload) {
 
-        _dbg(O_BRACKET + payload + C_BRACKET);
+        _dbg(O_BRACKET + payload.get(DB_T_CUST_C_NAME) + C_BRACKET);
 
-        i.withTableName(REST_PREFIX) // <== The table has just the same name.
-         .execute(payload);
+        i_cust.execute(payload);
 
-        var customer = new CustomersApiLiteEntityCustomer();
-
-        customer.setName((String) payload.get("name"));
+        var customer = c.sql(SQL_GET_ALL_CUSTOMERS + SQL_DESC_LIMIT_1)
+                        .query(CustomersApiLiteEntityCustomer.class)
+                        .single();
 
         var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
             customer, HttpStatus.CREATED);
+
+        _dbg(O_BRACKET + resp.getBody().getName() + C_BRACKET);
 
         return resp;
     }
