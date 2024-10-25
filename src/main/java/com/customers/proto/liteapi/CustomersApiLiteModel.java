@@ -92,6 +92,10 @@ public class CustomersApiLiteModel {
         + "      (cust.id = emails.customer_id) and"
         + "      (cust.id =                  ?)",
           "select name from customers where (id = ?)"};
+
+    // The terminating part of an SQL query,
+    // used to retrieve the last record created.
+    public static final String SQL_DESC_LIMIT_1 = " desc limit 1";
 }
 
 // vim:set nu et ts=4 sw=4:
