@@ -138,8 +138,11 @@ public class CustomersApiLiteController {
 
         var resp = new ResponseEntity<List>(customers, HttpStatus.OK);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityCustomer)
-                           resp.getBody().get(0)).getName() + C_BRACKET);
+        var body = resp.getBody().get(0);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityCustomer) body).getId()
+           + V_BAR     + ((CustomersApiLiteEntityCustomer) body).getName()
+           + C_BRACKET);
 
         return resp;
     }
@@ -186,7 +189,9 @@ public class CustomersApiLiteController {
         var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
             customer, HttpStatus.OK);
 
-        _dbg(O_BRACKET + resp.getBody().getName() + C_BRACKET);
+        var body = resp.getBody();
+
+        _dbg(O_BRACKET + body.getId() + V_BAR + body.getName() + C_BRACKET);
 
         return resp;
     }
@@ -233,8 +238,10 @@ public class CustomersApiLiteController {
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact)
-                           resp.getBody().get(0)).getContact() + C_BRACKET);
+        var body = resp.getBody().get(0);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact) body).getContact()
+           + C_BRACKET);
 
         return resp;
     }
@@ -296,8 +303,10 @@ public class CustomersApiLiteController {
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact)
-                           resp.getBody().get(0)).getContact() + C_BRACKET);
+        var body = resp.getBody().get(0);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact) body).getContact()
+           + C_BRACKET);
 
         return resp;
     }
