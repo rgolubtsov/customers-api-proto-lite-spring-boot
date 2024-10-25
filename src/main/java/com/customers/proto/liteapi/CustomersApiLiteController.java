@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteController.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.1.5
+ * Customers API Lite microservice prototype. Version 0.1.9
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -16,12 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
+import java.util.Map;
 import java.util.List;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 import static com.customers.proto.liteapi.CustomersApiLiteModel.*;
@@ -29,7 +35,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteModel.*;
 /**
  * The controller class of the microservice.
  *
- * @version 0.1.5
+ * @version 0.1.9
  * @since   0.1.0
  */
 @RestController // <method> /customers ----------------------------------------
@@ -40,21 +46,40 @@ public class CustomersApiLiteController {
      * <br />
      * <br />Creates a new customer (puts customer data to the database).
      *
+     * @param payload The <code>Map<String, Object></code> object,
+     *                containing the request body exactly in the form
+     *                as <code>{"name":"{customer_name}"}</code>.
+     *                It should usually be passed with the accompanied request
+     *                header <code>content-type</code> just like the following:
+     *                <br /><code>-H 'content-type: application/json' -d '{"name":"{customer_name}"}'</code>
+     *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
      *         in JSON representation in case of request payload is not valid).
      *
      */ // PUT /customers -----------------------------------------------------
     @PutMapping
-    public ResponseEntity<String> add_customer() {
-        // TODO: Implement creating a new customer.
+    public ResponseEntity<CustomersApiLiteEntityCustomer> add_customer(
+        @RequestBody Map<String,String> payload) throws URISyntaxException {
 
-        var resp = new ResponseEntity<String>(
-            O_BRACKET + SLASH + C_BRACKET, HttpStatus.CREATED);
+        _dbg(O_BRACKET + payload.get(DB_T_CUST_C_NAME) + C_BRACKET);
 
-        String respBody = resp.getBody();
+        i_cust.execute(payload);
 
-        _dbg(respBody);
+        var customer = c.sql(SQL_GET_ALL_CUSTOMERS + SQL_DESC_LIMIT_1)
+                        .query(CustomersApiLiteEntityCustomer.class)
+                        .single();
+
+        var hdrs = new HttpHeaders();
+            hdrs.setLocation(new URI(SLASH + REST_PREFIX
+                                   + SLASH + customer.getId()));
+
+        var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
+            customer, hdrs, HttpStatus.CREATED); // <== HTTP 201 Created
+
+        var body = resp.getBody();
+
+        _dbg(O_BRACKET + body.getId() + V_BAR + body.getName() + C_BRACKET);
 
         return resp;
     }
@@ -113,8 +138,11 @@ public class CustomersApiLiteController {
 
         var resp = new ResponseEntity<List>(customers, HttpStatus.OK);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityCustomer)
-                           resp.getBody().get(0)).getName() + C_BRACKET);
+        var body = resp.getBody().get(0);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityCustomer) body).getId()
+           + V_BAR     + ((CustomersApiLiteEntityCustomer) body).getName()
+           + C_BRACKET);
 
         return resp;
     }
@@ -161,7 +189,9 @@ public class CustomersApiLiteController {
         var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
             customer, HttpStatus.OK);
 
-        _dbg(O_BRACKET + resp.getBody().getName() + C_BRACKET);
+        var body = resp.getBody();
+
+        _dbg(O_BRACKET + body.getId() + V_BAR + body.getName() + C_BRACKET);
 
         return resp;
     }
@@ -208,8 +238,10 @@ public class CustomersApiLiteController {
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact)
-                           resp.getBody().get(0)).getContact() + C_BRACKET);
+        var body = resp.getBody().get(0);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact) body).getContact()
+           + C_BRACKET);
 
         return resp;
     }
@@ -271,8 +303,10 @@ public class CustomersApiLiteController {
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact)
-                           resp.getBody().get(0)).getContact() + C_BRACKET);
+        var body = resp.getBody().get(0);
+
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact) body).getContact()
+           + C_BRACKET);
 
         return resp;
     }

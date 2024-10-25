@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteModel.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.1.5
+ * Customers API Lite microservice prototype. Version 0.1.9
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -15,7 +15,7 @@ package com.customers.proto.liteapi;
 /**
  * The model class of the microservice.
  *
- * @version 0.1.5
+ * @version 0.1.9
  * @since   0.1.1
  */
 public class CustomersApiLiteModel {
@@ -92,6 +92,10 @@ public class CustomersApiLiteModel {
         + "      (cust.id = emails.customer_id) and"
         + "      (cust.id =                  ?)",
           "select name from customers where (id = ?)"};
+
+    // The terminating part of an SQL query,
+    // used to retrieve the last record created.
+    public static final String SQL_DESC_LIMIT_1 = " desc limit 1";
 }
 
 // vim:set nu et ts=4 sw=4:

@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteApp.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.1.5
+ * Customers API Lite microservice prototype. Version 0.1.9
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -25,13 +25,14 @@ import org.graylog2.syslog4j.SyslogIF;
 import com.zaxxer.hikari.HikariDataSource;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
 /**
  * The startup class of the microservice.
  *
- * @version 0.1.5
+ * @version 0.1.9
  * @since   0.0.1
  */
 @SpringBootApplication
@@ -63,6 +64,11 @@ public class CustomersApiLiteApp implements DisposableBean {
         _dbg(O_BRACKET + ds.getJdbcUrl()         + C_BRACKET);
 
         c = JdbcClient.create(ds);
+
+        i_cust   = new SimpleJdbcInsert(ds).withTableName(DB_T_CUSTOMERS);
+        i_cont   = new SimpleJdbcInsert[2];
+        i_cont[0]= new SimpleJdbcInsert(ds).withTableName(DB_T_CONTACT_PHONES);
+        i_cont[1]= new SimpleJdbcInsert(ds).withTableName(DB_T_CONTACT_EMAILS);
 
         // Getting the port number used to run the bundled web server.
         var server_port = env.getProperty(SERVER_PORT);

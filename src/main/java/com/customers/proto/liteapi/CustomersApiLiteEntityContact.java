@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteEntityContact.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.1.5
+ * Customers API Lite microservice prototype. Version 0.1.9
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -15,7 +15,7 @@ package com.customers.proto.liteapi;
 /**
  * The POJO representation of the Contact entity, returning in the response.
  *
- * @version 0.1.5
+ * @version 0.1.9
  * @since   0.1.5
  */
 public class CustomersApiLiteEntityContact {
