@@ -93,28 +93,32 @@ The microservice exposes **six endpoints** to web clients. They are all intended
 
 No. | Endpoint name                                      | Request method and REST URI                            | Request body
 --: | -------------------------------------------------- | ------------------------------------------------------ | ------------
-1   | Create customer                                    | `PUT /customers`                                       | `{}`
+1   | Create customer                                    | `PUT /customers`                                       | `{"name":"{customer_name}"}`
 2   | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
-3   | List customers                                     | `GET /customers`                                       | N/A
-4   | Retrieve customer                                  | `GET /customers/{customer_id}`                         | N/A
-5   | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | N/A
-6   | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | N/A
+3   | List customers                                     | `GET /customers`                                       | &ndash;
+4   | Retrieve customer                                  | `GET /customers/{customer_id}`                         | &ndash;
+5   | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | &ndash;
+6   | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | &ndash;
 
 The following command-line snippets display the exact usage for these endpoints (the **cURL** utility is used as an example to access them):
 
 1. **Create customer**
 
 ```
-$ curl -vXPUT http://localhost:8765/customers
+$ curl -vXPUT -H 'content-type: application/json' -d '{"name":"Jamison Palmer"}' http://localhost:8765/customers
 ...
 > PUT /customers HTTP/1.1
 ...
+> content-type: application/json
+> Content-Length: 25
+...
 < HTTP/1.1 201 Created
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 3
+< Location: /customers/4
 ...
-[/]$
+< Content-Type: application/json
+...
+{"id":4,"name":"Jamison Palmer"}
 ```
 
 2. **Create contact**
@@ -141,55 +145,51 @@ $ curl -v http://localhost:8765/customers
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 1
+< Content-Type: application/json
 ...
-/$
+[{"id":1,"name":"Jammy Jellyfish"},{"id":2,"name":"Noble Numbat"},{"id":3,"name":"Noah Henley"},{"id":4,"name":"Jamison Palmer"},{"id":5,"name":"Madeline Michelle"},{"id":6,"name":"Al Lester"},{"id":7,"name":"Sarah Kitteringham"},{"id":8,"name":"Just Name"}]
 ```
 
 4. **Retrieve customer**
 
 ```
-$ curl -v http://localhost:8765/customers/12
+$ curl -v http://localhost:8765/customers/4
 ...
-> GET /customers/12 HTTP/1.1
+> GET /customers/4 HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 3
+< Content-Type: application/json
 ...
-/12$
+{"id":4,"name":"Jamison Palmer"}
 ```
 
 5. **List contacts for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/12/contacts
+$ curl -v http://localhost:8765/customers/4/contacts
 ...
-> GET /customers/12/contacts HTTP/1.1
+> GET /customers/4/contacts HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 12
+< Content-Type: application/json
 ...
-/12/contacts$
+[{"contact":null}]
 ```
 
 6. **List contacts of a given type for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/12/contacts/email
+$ curl -v http://localhost:8765/customers/4/contacts/email
 ...
-> GET /customers/12/contacts/email HTTP/1.1
+> GET /customers/4/contacts/email HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 18
+< Content-Type: application/json
 ...
-/12/contacts/email$
+[{"contact":null}]
 ```
 
 ### Logging
@@ -199,14 +199,16 @@ The microservice has the ability to log messages to a logfile and to the Unix sy
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2024-09-12][23:20:44][INFO ]  Undertow started on port 8765 (http) with context path '/'
-[2024-09-12][23:20:44][INFO ]  Started CustomersApiLiteApp in 5.345 seconds (process running for 6.609)
-[2024-09-12][23:20:44][DEBUG]  [Customers API Lite]
-[2024-09-12][23:20:44][INFO ]  Server started on port 8765
-[2024-09-12][23:25:07][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
-[2024-09-12][23:25:07][INFO ]  Graceful shutdown complete
-[2024-09-12][23:25:07][INFO ]  stopping server: Undertow - 2.3.13.Final
-[2024-09-12][23:25:07][INFO ]  Server stopped
+[2024-10-25][23:30:27][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2024-10-25][23:30:27][INFO ]  Started CustomersApiLiteApp in 6.08 seconds (process running for 7.562)
+[2024-10-25][23:30:27][DEBUG]  [Customers API Lite]
+[2024-10-25][23:30:27][DEBUG]  [org.sqlite.JDBC]
+[2024-10-25][23:30:27][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2024-10-25][23:30:27][INFO ]  Server started on port 8765
+[2024-10-25][23:30:56][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2024-10-25][23:30:56][INFO ]  Graceful shutdown complete
+[2024-10-25][23:30:56][INFO ]  stopping server: Undertow - 2.3.13.Final
+[2024-10-25][23:30:56][INFO ]  Server stopped
 ```
 
 Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
@@ -214,11 +216,13 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Sep 12 23:20:44 <hostname> java[<pid>]: [Customers API Lite]
-Sep 12 23:20:44 <hostname> java[<pid>]: Server started on port 8765
-Sep 12 23:25:07 <hostname> java[<pid>]: Server stopped
+Oct 25 23:30:27 <hostname> java[<pid>]: [Customers API Lite]
+Oct 25 23:30:27 <hostname> java[<pid>]: [org.sqlite.JDBC]
+Oct 25 23:30:27 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
+Oct 25 23:30:27 <hostname> java[<pid>]: Server started on port 8765
+Oct 25 23:30:56 <hostname> java[<pid>]: Server stopped
 ```
 
 ---
 
-:dvd:
+**TBD** :dvd:
