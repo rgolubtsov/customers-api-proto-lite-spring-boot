@@ -93,28 +93,32 @@ The microservice exposes **six endpoints** to web clients. They are all intended
 
 No. | Endpoint name                                      | Request method and REST URI                            | Request body
 --: | -------------------------------------------------- | ------------------------------------------------------ | ------------
-1   | Create customer                                    | `PUT /customers`                                       | `{}`
+1   | Create customer                                    | `PUT /customers`                                       | `{"name":"{customer_name}"}`
 2   | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
-3   | List customers                                     | `GET /customers`                                       | N/A
-4   | Retrieve customer                                  | `GET /customers/{customer_id}`                         | N/A
-5   | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | N/A
-6   | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | N/A
+3   | List customers                                     | `GET /customers`                                       | &ndash;
+4   | Retrieve customer                                  | `GET /customers/{customer_id}`                         | &ndash;
+5   | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | &ndash;
+6   | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | &ndash;
 
 The following command-line snippets display the exact usage for these endpoints (the **cURL** utility is used as an example to access them):
 
 1. **Create customer**
 
 ```
-$ curl -vXPUT http://localhost:8765/customers
+$ curl -vXPUT -H 'content-type: application/json' -d '{"name":"Jamison Palmer"}' http://localhost:8765/customers
 ...
 > PUT /customers HTTP/1.1
 ...
+> content-type: application/json
+> Content-Length: 25
+...
 < HTTP/1.1 201 Created
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 3
+< Location: /customers/4
 ...
-[/]$
+< Content-Type: application/json
+...
+{"id":4,"name":"Jamison Palmer"}
 ```
 
 2. **Create contact**
@@ -141,55 +145,51 @@ $ curl -v http://localhost:8765/customers
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 1
+< Content-Type: application/json
 ...
-/$
+[{"id":1,"name":"Jammy Jellyfish"},{"id":2,"name":"Noble Numbat"},{"id":3,"name":"Noah Henley"},{"id":4,"name":"Jamison Palmer"},{"id":5,"name":"Madeline Michelle"},{"id":6,"name":"Al Lester"},{"id":7,"name":"Sarah Kitteringham"},{"id":8,"name":"Just Name"}]
 ```
 
 4. **Retrieve customer**
 
 ```
-$ curl -v http://localhost:8765/customers/12
+$ curl -v http://localhost:8765/customers/4
 ...
-> GET /customers/12 HTTP/1.1
+> GET /customers/4 HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 3
+< Content-Type: application/json
 ...
-/12$
+{"id":4,"name":"Jamison Palmer"}
 ```
 
 5. **List contacts for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/12/contacts
+$ curl -v http://localhost:8765/customers/4/contacts
 ...
-> GET /customers/12/contacts HTTP/1.1
+> GET /customers/4/contacts HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 12
+< Content-Type: application/json
 ...
-/12/contacts$
+[{"contact":null}]
 ```
 
 6. **List contacts of a given type for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/12/contacts/email
+$ curl -v http://localhost:8765/customers/4/contacts/email
 ...
-> GET /customers/12/contacts/email HTTP/1.1
+> GET /customers/4/contacts/email HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 18
+< Content-Type: application/json
 ...
-/12/contacts/email$
+[{"contact":null}]
 ```
 
 ### Logging
