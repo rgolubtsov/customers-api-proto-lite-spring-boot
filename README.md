@@ -100,6 +100,9 @@ No. | Endpoint name                                      | Request method and RE
 5   | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | &ndash;
 6   | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | &ndash;
 
+The `{customer_id}` placeholder is a decimal positive integer number, greater than `0`.
+The `{contact_type}` placeholder is a string and can take one of two possible values, case-insensitive: `phone` or `email`.
+
 The following command-line snippets display the exact usage for these endpoints (the **cURL** utility is used as an example to access them):
 
 1. **Create customer**
@@ -179,6 +182,20 @@ $ curl -v http://localhost:8765/customers/4/contacts
 ```
 
 6. **List contacts of a given type for a given customer**
+
+```
+$ curl -v http://localhost:8765/customers/4/contacts/phone
+...
+> GET /customers/4/contacts/phone HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: application/json
+...
+[{"contact":null}]
+```
+
+Or:
 
 ```
 $ curl -v http://localhost:8765/customers/4/contacts/email
