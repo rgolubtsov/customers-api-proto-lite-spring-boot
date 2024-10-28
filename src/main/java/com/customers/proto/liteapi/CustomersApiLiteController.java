@@ -110,7 +110,7 @@ public class CustomersApiLiteController {
      */ // PUT /customers/contacts --------------------------------------------
     @PutMapping(SLASH + REST_CONTACTS)
     public ResponseEntity<CustomersApiLiteEntityContact> add_contact(
-        @RequestBody Map<String,String> payload) {
+        @RequestBody Map<String,String> payload) throws URISyntaxException {
 
         var customer_id      = payload.get(DB_T_CONT_C_CUST_ID);
         var customer_contact = payload.get(DB_T_CONT_C_CONTACT);
@@ -129,16 +129,15 @@ public class CustomersApiLiteController {
 
         var sql_query = EMPTY_STRING;
 
-               if (_parse_contact(customer_contact)
-                                 .compareToIgnoreCase(PHONE) == 0) {
+        // Parsing and validating a customer contact: phone or email.
+        var contact_type = _parse_contact(customer_contact);
 
+               if (contact_type.compareToIgnoreCase(PHONE) == 0) {
             i_cont[0].execute(payload);
 
             sql_query = SQL_GET_CONTACTS_BY_TYPE[0]
                       + SQL_ORDER_CONTACTS_BY_ID[0];
-        } else if (_parse_contact(customer_contact)
-                                 .compareToIgnoreCase(EMAIL) == 0) {
-
+        } else if (contact_type.compareToIgnoreCase(EMAIL) == 0) {
             i_cont[1].execute(payload);
 
             sql_query = SQL_GET_CONTACTS_BY_TYPE[1]
@@ -152,8 +151,14 @@ public class CustomersApiLiteController {
                        .query(CustomersApiLiteEntityContact.class)
                        .single();
 
+        var hdrs = new HttpHeaders();
+            hdrs.setLocation(new URI(SLASH + REST_PREFIX
+                                   + SLASH + customer_id
+                                   + SLASH + REST_CONTACTS
+                                   + SLASH + contact_type));
+
         var resp = new ResponseEntity<CustomersApiLiteEntityContact>(
-            contact, HttpStatus.CREATED); // <== HTTP 201 Created
+            contact, hdrs, HttpStatus.CREATED); // <== HTTP 201 Created
 
         var body = resp.getBody();
 
