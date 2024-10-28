@@ -46,7 +46,7 @@ public class CustomersApiLiteController {
      * <br />
      * <br />Creates a new customer (puts customer data to the database).
      *
-     * @param payload The <code>Map<String, Object></code> object,
+     * @param payload The <code>Map<String,String></code> object,
      *                containing the request body exactly in the form
      *                as <code>{"name":"{customer_name}"}</code>.
      *                It should usually be passed with the accompanied request
@@ -92,6 +92,13 @@ public class CustomersApiLiteController {
      *
      * @param customer_id The customer ID used to associate a newly created
      *                    contact with this customer.
+     * @param payload     The <code>Map<String,String></code> object,
+     *                    containing the request body exactly in the form
+     *                    as <code>{"customer_id":"{customer_id}","contact":"{customer_contact}"}</code>.
+     *                    It should usually be passed with the accompanied
+     *                    request header <code>content-type</code>
+     *                    just like the following:
+     *                    <br /><code>-H 'content-type: application/json' -d '{"customer_id":"{customer_id}","contact":"{customer_contact}"}'</code>
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
@@ -99,19 +106,54 @@ public class CustomersApiLiteController {
      *
      */ // PUT /customers/{customer_id}/contact -------------------------------
     @PutMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACT)
-    public ResponseEntity<String> add_contact(
-        @PathVariable String customer_id) {
+    public ResponseEntity<CustomersApiLiteEntityContact> add_contact(
+        @PathVariable String             customer_id,
+        @RequestBody  Map<String,String> payload) {
+
+        var customer_contact = payload.get(DB_T_CONT_C_CONTACT);
 
         _dbg(CUST_ID + EQUALS + customer_id);
+        _dbg(O_BRACKET + customer_contact + C_BRACKET);
 
-        // TODO: Implement creating a new contact.
+        var cust_id = 0L;
 
-        var resp = new ResponseEntity<String>(
-            SLASH + customer_id + SLASH + REST_CONTACT, HttpStatus.CREATED);
+        try {
+            cust_id = Long.parseLong(customer_id);
+        } catch (NumberFormatException e) {
+            _dbg(O_BRACKET + O_BRACKET + customer_id
+               + C_BRACKET + C_BRACKET);
+        }
 
-        String respBody = resp.getBody();
+        var sql_query = EMPTY_STRING;
 
-        _dbg(respBody);
+               if (_parse_contact(customer_contact)
+                                 .compareToIgnoreCase(PHONE) == 0) {
+
+            i_cont[0].execute(payload);
+
+            sql_query = SQL_GET_CONTACTS_BY_TYPE[0];
+        } else if (_parse_contact(customer_contact)
+                                 .compareToIgnoreCase(EMAIL) == 0) {
+
+            i_cont[1].execute(payload);
+
+            sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
+        } else {
+            throw new NullPointerException(); // FIXME: Replace this!
+        }
+
+        var contact = c.sql(sql_query + " order by phones.id"
+                                      + SQL_DESC_LIMIT_1)
+                       .param(cust_id)
+                       .query(CustomersApiLiteEntityContact.class)
+                       .single();
+
+        var resp = new ResponseEntity<CustomersApiLiteEntityContact>(
+            contact, HttpStatus.CREATED); // <== HTTP 201 Created
+
+        var body = resp.getBody();
+
+        _dbg(O_BRACKET + body.getContact() + C_BRACKET);
 
         return resp;
     }
@@ -309,6 +351,14 @@ public class CustomersApiLiteController {
            + C_BRACKET);
 
         return resp;
+    }
+
+    // Helper method. Used to parse and validate a customer contact.
+    //                Returns the type of contact: phone or email.
+    private String _parse_contact(final String contact) {
+             if (contact.matches(PHONE_REGEX)) return PHONE;
+        else if (contact.matches(EMAIL_REGEX)) return EMAIL;
+        else return EMPTY_STRING;
     }
 }
 
