@@ -49,9 +49,11 @@ public class CustomersApiLiteController {
      * @param payload The <code>Map<String,String></code> object,
      *                containing the request body exactly in the form
      *                as <code>{"name":"{customer_name}"}</code>.
-     *                It should usually be passed with the accompanied request
-     *                header <code>content-type</code> just like the following:
+     *                It should be passed with the accompanied request header
+     *                <code>content-type</code> just like the following:
      *                <br /><code>-H 'content-type: application/json' -d '{"name":"{customer_name}"}'</code>
+     *                <br /><code>{customer_name}</code> is a name assigned
+     *                to a newly created customer.
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
@@ -85,31 +87,32 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The <code>PUT /customers/{customer_id}/contact</code> endpoint.
+     * The <code>PUT /customers/contacts</code> endpoint.
      * <br />
      * <br />Creates a new contact for a given customer (puts a contact
      * regarding a given customer to the database).
      *
-     * @param customer_id The customer ID used to associate a newly created
-     *                    contact with this customer.
-     * @param payload     The <code>Map<String,String></code> object,
-     *                    containing the request body exactly in the form
-     *                    as <code>{"customer_id":"{customer_id}","contact":"{customer_contact}"}</code>.
-     *                    It should usually be passed with the accompanied
-     *                    request header <code>content-type</code>
-     *                    just like the following:
-     *                    <br /><code>-H 'content-type: application/json' -d '{"customer_id":"{customer_id}","contact":"{customer_contact}"}'</code>
+     * @param payload The <code>Map<String,String></code> object,
+     *                containing the request body exactly in the form
+     *                as <code>{"customer_id":"{customer_id}","contact":"{customer_contact}"}</code>.
+     *                It should be passed with the accompanied request header
+     *                <code>content-type</code> just like the following:
+     *                <br /><code>-H 'content-type: application/json' -d '{"customer_id":"{customer_id}","contact":"{customer_contact}"}'</code>
+     *                <br /><code>{customer_id}</code> is the customer ID used
+     *                to associate a newly created contact with this customer.
+     *                <br /><code>{customer_contact}</code> is a newly created
+     *                contact (phone or email).
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided (and the response body
      *         in JSON representation in case of request payload is not valid).
      *
-     */ // PUT /customers/{customer_id}/contact -------------------------------
-    @PutMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACT)
+     */ // PUT /customers/contacts --------------------------------------------
+    @PutMapping(SLASH + REST_CONTACTS)
     public ResponseEntity<CustomersApiLiteEntityContact> add_contact(
-        @PathVariable String             customer_id,
-        @RequestBody  Map<String,String> payload) {
+        @RequestBody Map<String,String> payload) {
 
+        var customer_id      = payload.get(DB_T_CONT_C_CUST_ID);
         var customer_contact = payload.get(DB_T_CONT_C_CONTACT);
 
         _dbg(CUST_ID + EQUALS + customer_id);
@@ -131,19 +134,20 @@ public class CustomersApiLiteController {
 
             i_cont[0].execute(payload);
 
-            sql_query = SQL_GET_CONTACTS_BY_TYPE[0];
+            sql_query = SQL_GET_CONTACTS_BY_TYPE[0]
+                      + SQL_ORDER_CONTACTS_BY_ID[0];
         } else if (_parse_contact(customer_contact)
                                  .compareToIgnoreCase(EMAIL) == 0) {
 
             i_cont[1].execute(payload);
 
-            sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
+            sql_query = SQL_GET_CONTACTS_BY_TYPE[1]
+                      + SQL_ORDER_CONTACTS_BY_ID[1];
         } else {
             throw new NullPointerException(); // FIXME: Replace this!
         }
 
-        var contact = c.sql(sql_query + " order by phones.id"
-                                      + SQL_DESC_LIMIT_1)
+        var contact = c.sql(sql_query + SQL_DESC_LIMIT_1)
                        .param(cust_id)
                        .query(CustomersApiLiteEntityContact.class)
                        .single();
