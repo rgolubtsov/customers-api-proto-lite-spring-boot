@@ -74,6 +74,10 @@ public class CustomersApiLiteHelper {
     public static final String DB_T_CUST_C_NAME    = "name";
     public static final String DB_T_CONT_C_CONTACT = "contact";
 
+    // Regex patterns for contact phones and emails.
+    public static final String PHONE_REGEX = "^\\+\\d{9,14}";
+    public static final String EMAIL_REGEX = ".{1,63}@.{3,190}";
+
     /** The debug logging enabler. */
     public static boolean dbg = false;
 
