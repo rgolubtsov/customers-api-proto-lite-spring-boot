@@ -55,9 +55,12 @@ public class CustomersApiLiteController {
      *                <br /><code>{customer_name}</code> is a name assigned
      *                to a newly created customer.
      *
-     * @return The <code>ResponseEntity</code> object with a specific
-     *         HTTP status code provided (and the response body
-     *         in JSON representation in case of request payload is not valid).
+     * @return The <code>ResponseEntity<CustomersApiLiteEntityCustomer></code>
+     *         object with the <code>201 Created</code> HTTP status code,
+     *         the <code>Location</code> response header (among others),
+     *         and the response body in JSON representation, containing profile
+     *         details of a newly created customer.
+     *         May return client or server error depending on incoming request.
      *
      */ // PUT /customers -----------------------------------------------------
     @PutMapping
@@ -103,9 +106,12 @@ public class CustomersApiLiteController {
      *                <br /><code>{customer_contact}</code> is a newly created
      *                contact (phone or email).
      *
-     * @return The <code>ResponseEntity</code> object with a specific
-     *         HTTP status code provided (and the response body
-     *         in JSON representation in case of request payload is not valid).
+     * @return The <code>ResponseEntity<CustomersApiLiteEntityContact></code>
+     *         object with the <code>201 Created</code> HTTP status code,
+     *         the <code>Location</code> response header (among others),
+     *         and the response body in JSON representation, containing details
+     *         of a newly created customer contact (phone or email).
+     *         May return client or server error depending on incoming request.
      *
      */ // PUT /customers/contacts --------------------------------------------
     @PutMapping(SLASH + REST_CONTACTS)
@@ -162,7 +168,7 @@ public class CustomersApiLiteController {
 
         var body = resp.getBody();
 
-        _dbg(O_BRACKET + body.getContact() + C_BRACKET);
+        _dbg(O_BRACKET + contact_type + V_BAR + body.getContact() + C_BRACKET);
 
         return resp;
     }
@@ -172,9 +178,11 @@ public class CustomersApiLiteController {
      * <br />
      * <br />Retrieves from the database and lists all customer profiles.
      *
-     * @return The <code>ResponseEntity</code> object with a specific
-     *         HTTP status code provided, containing a list of all customer
-     *         profiles (in the response body in JSON representation).
+     * @return The <code>ResponseEntity<List></code> object
+     *         with the <code>200 OK</code> HTTP status code and the response
+     *         body in JSON representation, containing a list of all customer
+     *         profiles.
+     *         May return client or server error depending on incoming request.
      *
      */ // GET /customers -----------------------------------------------------
     @GetMapping
@@ -256,10 +264,11 @@ public class CustomersApiLiteController {
      * @param customer_id The customer ID used to retrieve contacts
      *                    which belong to this customer.
      *
-     * @return The <code>ResponseEntity</code> object with a specific
-     *         HTTP status code provided, containing a list of all contacts
-     *         associated with a given customer (in the response body
-     *         in JSON representation).
+     * @return The <code>ResponseEntity<List></code> object
+     *         with the <code>200 OK</code> HTTP status code and the response
+     *         body in JSON representation, containing a list of all contacts
+     *         associated with a given customer.
+     *         May return client or server error depending on incoming request.
      *
      */ // GET /customers/{customer_id}/contacts ------------------------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
@@ -309,10 +318,11 @@ public class CustomersApiLiteController {
      * @param contact_type The particular type of contacts to retrieve
      *                     (e.g. phone, email, postal address, etc.).
      *
-     * @return The <code>ResponseEntity</code> object with a specific
-     *         HTTP status code provided, containing a list of all contacts
-     *         of a given type associated with a given customer
-     *         (in the response body in JSON representation).
+     * @return The <code>ResponseEntity<List></code> object
+     *         with the <code>200 OK</code> HTTP status code and the response
+     *         body in JSON representation, containing a list of all contacts
+     *         of a given type associated with a given customer.
+     *         May return client or server error depending on incoming request.
      *
      */ // GET /customers/{customer_id}/contacts/{contact_type} ---------------
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
