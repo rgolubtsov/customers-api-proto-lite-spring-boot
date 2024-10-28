@@ -57,7 +57,6 @@ public class CustomersApiLiteHelper {
     // REST URI path-related constants.
     public static final String REST_PREFIX    =  "customers";
     public static final String REST_CUST_ID   = "{customer_id}";
-    public static final String REST_CONTACT   =  "contact";
     public static final String REST_CONTACTS  =  "contacts";
     public static final String REST_CONT_TYPE = "{contact_type}";
     public static final String PHONE          =  "phone";
@@ -73,6 +72,7 @@ public class CustomersApiLiteHelper {
     public static final String DB_T_CONTACT_EMAILS = "contact_emails";
     public static final String DB_T_CUST_C_NAME    = "name";
     public static final String DB_T_CONT_C_CONTACT = "contact";
+    public static final String DB_T_CONT_C_CUST_ID = "customer_id";
 
     // Regex patterns for contact phones and emails.
     public static final String PHONE_REGEX = "^\\+\\d{9,14}";
