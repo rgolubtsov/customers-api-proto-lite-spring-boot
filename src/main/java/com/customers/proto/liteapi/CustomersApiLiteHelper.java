@@ -55,6 +55,7 @@ public class CustomersApiLiteHelper {
     public static final String DATA_SOURCE = "dataSource";
 
     // REST URI path-related constants.
+    public static final String REST_VERSION   =  "v1";
     public static final String REST_PREFIX    =  "customers";
     public static final String REST_CUST_ID   = "{customer_id}";
     public static final String REST_CONTACTS  =  "contacts";

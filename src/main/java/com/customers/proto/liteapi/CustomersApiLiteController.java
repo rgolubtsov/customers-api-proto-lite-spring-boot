@@ -33,16 +33,19 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 import static com.customers.proto.liteapi.CustomersApiLiteModel.*;
 
 /**
- * The controller class of the microservice.
+ * The controller class of the microservice. Defines all the REST API endpoints
+ * implemented for <em>this</em> microservice by design.
+ * <br />
+ * <br />&lt;HTTP request method&gt; <code>/v1/customers</code>.
  *
  * @version 0.1.9
  * @since   0.1.0
  */
-@RestController // <method> /customers ----------------------------------------
-@RequestMapping(SLASH + REST_PREFIX)
+@RestController
+@RequestMapping(SLASH + REST_VERSION + SLASH + REST_PREFIX)
 public class CustomersApiLiteController {
     /**
-     * The <code>PUT /customers</code> endpoint.
+     * The <code>PUT /v1/customers</code> endpoint.
      * <br />
      * <br />Creates a new customer (puts customer data to the database).
      *
@@ -61,8 +64,7 @@ public class CustomersApiLiteController {
      *         and the response body in JSON representation, containing profile
      *         details of a newly created customer.
      *         May return client or server error depending on incoming request.
-     *
-     */ // PUT /customers -----------------------------------------------------
+     */
     @PutMapping
     public ResponseEntity<CustomersApiLiteEntityCustomer> add_customer(
         @RequestBody Map<String,String> payload) throws URISyntaxException {
@@ -76,7 +78,8 @@ public class CustomersApiLiteController {
                         .single();
 
         var hdrs = new HttpHeaders();
-            hdrs.setLocation(new URI(SLASH + REST_PREFIX
+            hdrs.setLocation(new URI(SLASH + REST_VERSION
+                                   + SLASH + REST_PREFIX
                                    + SLASH + customer.getId()));
 
         var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
@@ -90,7 +93,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The <code>PUT /customers/contacts</code> endpoint.
+     * The <code>PUT /v1/customers/contacts</code> endpoint.
      * <br />
      * <br />Creates a new contact for a given customer (puts a contact
      * regarding a given customer to the database).
@@ -112,8 +115,7 @@ public class CustomersApiLiteController {
      *         and the response body in JSON representation, containing details
      *         of a newly created customer contact (phone or email).
      *         May return client or server error depending on incoming request.
-     *
-     */ // PUT /customers/contacts --------------------------------------------
+     */
     @PutMapping(SLASH + REST_CONTACTS)
     public ResponseEntity<CustomersApiLiteEntityContact> add_contact(
         @RequestBody Map<String,String> payload) throws URISyntaxException {
@@ -158,7 +160,8 @@ public class CustomersApiLiteController {
                        .single();
 
         var hdrs = new HttpHeaders();
-            hdrs.setLocation(new URI(SLASH + REST_PREFIX
+            hdrs.setLocation(new URI(SLASH + REST_VERSION
+                                   + SLASH + REST_PREFIX
                                    + SLASH + customer_id
                                    + SLASH + REST_CONTACTS
                                    + SLASH + contact_type));
@@ -174,7 +177,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The <code>GET /customers</code> endpoint.
+     * The <code>GET /v1/customers</code> endpoint.
      * <br />
      * <br />Retrieves from the database and lists all customer profiles.
      *
@@ -183,8 +186,7 @@ public class CustomersApiLiteController {
      *         body in JSON representation, containing a list of all customer
      *         profiles.
      *         May return client or server error depending on incoming request.
-     *
-     */ // GET /customers -----------------------------------------------------
+     */
     @GetMapping
     public ResponseEntity<List> list_customers() {
         var customers = c.sql(SQL_GET_ALL_CUSTOMERS)
@@ -207,7 +209,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The <code>GET /customers/{customer_id}</code> endpoint.
+     * The <code>GET /v1/customers/{customer_id}</code> endpoint.
      * <br />
      * <br />Retrieves profile details for a given customer from the database.
      *
@@ -218,8 +220,7 @@ public class CustomersApiLiteController {
      *         HTTP status code provided, containing profile details
      *         for a given customer (in the response body
      *         in JSON representation).
-     *
-     */ // GET /customers/{customer_id} ---------------------------------------
+     */
     @GetMapping(SLASH + REST_CUST_ID)
     public ResponseEntity<CustomersApiLiteEntityCustomer> get_customer(
         @PathVariable String customer_id) {
@@ -256,7 +257,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The <code>GET /customers/{customer_id}/contacts</code> endpoint.
+     * The <code>GET /v1/customers/{customer_id}/contacts</code> endpoint.
      * <br />
      * <br />Retrieves from the database and lists all contacts
      * associated with a given customer.
@@ -269,8 +270,7 @@ public class CustomersApiLiteController {
      *         body in JSON representation, containing a list of all contacts
      *         associated with a given customer.
      *         May return client or server error depending on incoming request.
-     *
-     */ // GET /customers/{customer_id}/contacts ------------------------------
+     */
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
     public ResponseEntity<List> list_contacts(
         @PathVariable String customer_id) {
@@ -307,7 +307,7 @@ public class CustomersApiLiteController {
     }
 
     /**
-     * The <code>GET /customers/{customer_id}/contacts/{contact_type}</code>
+     * The <code>GET /v1/customers/{customer_id}/contacts/{contact_type}</code>
      * endpoint.
      * <br />
      * <br />Retrieves from the database and lists all contacts of a given type
@@ -323,8 +323,7 @@ public class CustomersApiLiteController {
      *         body in JSON representation, containing a list of all contacts
      *         of a given type associated with a given customer.
      *         May return client or server error depending on incoming request.
-     *
-     */ // GET /customers/{customer_id}/contacts/{contact_type} ---------------
+     */
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
                                      + SLASH + REST_CONT_TYPE)
     public ResponseEntity<List> list_contacts_by_type(
