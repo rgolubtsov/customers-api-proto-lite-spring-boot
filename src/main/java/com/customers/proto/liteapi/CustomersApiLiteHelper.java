@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteHelper.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.1.9
+ * Customers API Lite microservice prototype. Version 0.2.0
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -25,7 +25,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 /**
  * The helper class for the microservice.
  *
- * @version 0.1.9
+ * @version 0.2.0
  * @since   0.0.1
  */
 public class CustomersApiLiteHelper {
@@ -55,9 +55,9 @@ public class CustomersApiLiteHelper {
     public static final String DATA_SOURCE = "dataSource";
 
     // REST URI path-related constants.
+    public static final String REST_VERSION   =  "v1";
     public static final String REST_PREFIX    =  "customers";
     public static final String REST_CUST_ID   = "{customer_id}";
-    public static final String REST_CONTACT   =  "contact";
     public static final String REST_CONTACTS  =  "contacts";
     public static final String REST_CONT_TYPE = "{contact_type}";
     public static final String PHONE          =  "phone";
@@ -73,6 +73,11 @@ public class CustomersApiLiteHelper {
     public static final String DB_T_CONTACT_EMAILS = "contact_emails";
     public static final String DB_T_CUST_C_NAME    = "name";
     public static final String DB_T_CONT_C_CONTACT = "contact";
+    public static final String DB_T_CONT_C_CUST_ID = "customer_id";
+
+    // Regex patterns for contact phones and emails.
+    public static final String PHONE_REGEX = "^\\+\\d{9,14}";
+    public static final String EMAIL_REGEX = ".{1,63}@.{3,190}";
 
     /** The debug logging enabler. */
     public static boolean dbg = false;

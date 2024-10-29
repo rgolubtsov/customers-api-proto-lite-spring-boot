@@ -83,38 +83,45 @@ $ ./gradlew -q bootRun; echo $?
 **Run** the microservice using its all-in-one JAR bundle, built previously by the `build` or `all` targets:
 
 ```
-$ java -jar build/libs/customers-api-lite-0.1.9.jar; echo $?
+$ java -jar build/libs/customers-api-lite-0.2.0.jar; echo $?
 ...
 ```
 
 ## Consuming
 
-The microservice exposes **six endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
+The microservice exposes **six REST API endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
 
-No. | Endpoint name                                      | Request method and REST URI                            | Request body
---: | -------------------------------------------------- | ------------------------------------------------------ | ------------
-1   | Create customer                                    | `PUT /customers`                                       | `{"name":"{customer_name}"}`
-2   | Create contact                                     | `PUT /customers/{customer_id}/contact`                 | `{}`
-3   | List customers                                     | `GET /customers`                                       | &ndash;
-4   | Retrieve customer                                  | `GET /customers/{customer_id}`                         | &ndash;
-5   | List contacts for a given customer                 | `GET /customers/{customer_id}/contacts`                | &ndash;
-6   | List contacts of a given type for a given customer | `GET /customers/{customer_id}/contacts/{contact_type}` | &ndash;
+No. | Endpoint name                                      | Request method and REST URI                               | Request body
+--: | -------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------
+1   | Create customer                                    | `PUT /v1/customers`                                       | `{"name":"{customer_name}"}`
+2   | Create contact                                     | `PUT /v1/customers/contacts`                              | `{"customer_id":"{customer_id}","contact":"{customer_contact}"}`
+3   | List customers                                     | `GET /v1/customers`                                       | &ndash;
+4   | Retrieve customer                                  | `GET /v1/customers/{customer_id}`                         | &ndash;
+5   | List contacts for a given customer                 | `GET /v1/customers/{customer_id}/contacts`                | &ndash;
+6   | List contacts of a given type for a given customer | `GET /v1/customers/{customer_id}/contacts/{contact_type}` | &ndash;
+
+* The `{customer_name}` placeholder is a string &mdash; it usually means the full name given to a newly created customer.
+* The `{customer_id}` placeholder is a decimal positive integer number, greater than `0`.
+* The `{customer_contact}` placeholder is a string &mdash; it denotes a newly created customer contact (phone or email).
+* The `{contact_type}` placeholder is a string and can take one of two possible values, case-insensitive: `phone` or `email`.
 
 The following command-line snippets display the exact usage for these endpoints (the **cURL** utility is used as an example to access them):
 
 1. **Create customer**
 
 ```
-$ curl -vXPUT -H 'content-type: application/json' -d '{"name":"Jamison Palmer"}' http://localhost:8765/customers
+$ curl -vXPUT http://localhost:8765/v1/customers \
+       -H 'content-type: application/json' \
+       -d '{"name":"Jamison Palmer"}'
 ...
-> PUT /customers HTTP/1.1
+> PUT /v1/customers HTTP/1.1
 ...
 > content-type: application/json
 > Content-Length: 25
 ...
 < HTTP/1.1 201 Created
 ...
-< Location: /customers/4
+< Location: /v1/customers/4
 ...
 < Content-Type: application/json
 ...
@@ -124,24 +131,51 @@ $ curl -vXPUT -H 'content-type: application/json' -d '{"name":"Jamison Palmer"}'
 2. **Create contact**
 
 ```
-$ curl -vXPUT http://localhost:8765/customers/12/contact
+$ curl -vXPUT http://localhost:8765/v1/customers/contacts \
+       -H 'content-type: application/json' \
+       -d '{"customer_id":"4","contact":"+12197654320"}'
 ...
-> PUT /customers/12/contact HTTP/1.1
+> PUT /v1/customers/contacts HTTP/1.1
+...
+> content-type: application/json
+> Content-Length: 44
 ...
 < HTTP/1.1 201 Created
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 11
+< Location: /v1/customers/4/contacts/phone
 ...
-/12/contact$
+< Content-Type: application/json
+...
+{"contact":"+12197654320"}
+```
+
+Or create **email** contact:
+
+```
+$ curl -vXPUT http://localhost:8765/v1/customers/contacts \
+       -H 'content-type: application/json' \
+       -d '{"customer_id":"4","contact":"jamison.palmer@example.com"}'
+...
+> PUT /v1/customers/contacts HTTP/1.1
+...
+> content-type: application/json
+> Content-Length: 58
+...
+< HTTP/1.1 201 Created
+...
+< Location: /v1/customers/4/contacts/email
+...
+< Content-Type: application/json
+...
+{"contact":"jamison.palmer@example.com"}
 ```
 
 3. **List customers**
 
 ```
-$ curl -v http://localhost:8765/customers
+$ curl -v http://localhost:8765/v1/customers
 ...
-> GET /customers HTTP/1.1
+> GET /v1/customers HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
@@ -153,9 +187,9 @@ $ curl -v http://localhost:8765/customers
 4. **Retrieve customer**
 
 ```
-$ curl -v http://localhost:8765/customers/4
+$ curl -v http://localhost:8765/v1/customers/4
 ...
-> GET /customers/4 HTTP/1.1
+> GET /v1/customers/4 HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
@@ -167,29 +201,43 @@ $ curl -v http://localhost:8765/customers/4
 5. **List contacts for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/4/contacts
+$ curl -v http://localhost:8765/v1/customers/4/contacts
 ...
-> GET /customers/4/contacts HTTP/1.1
+> GET /v1/customers/4/contacts HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-[{"contact":null}]
+[{"contact":"+12197654320"},{"contact":"jamison.palmer@example.com"}]
 ```
 
 6. **List contacts of a given type for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/4/contacts/email
+$ curl -v http://localhost:8765/v1/customers/4/contacts/phone
 ...
-> GET /customers/4/contacts/email HTTP/1.1
+> GET /v1/customers/4/contacts/phone HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-[{"contact":null}]
+[{"contact":"+12197654320"}]
+```
+
+Or list **email** contacts:
+
+```
+$ curl -v http://localhost:8765/v1/customers/4/contacts/email
+...
+> GET /v1/customers/4/contacts/email HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: application/json
+...
+[{"contact":"jamison.palmer@example.com"}]
 ```
 
 ### Logging
