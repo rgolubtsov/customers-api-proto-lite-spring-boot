@@ -1,7 +1,7 @@
 #
 # .gitignore
 # =============================================================================
-# Customers API Lite microservice prototype. Version 0.1.9
+# Customers API Lite microservice prototype. Version 0.2.0
 # =============================================================================
 # A Spring Boot-based application, designed and intended to be run
 # as a microservice, implementing a special Customers API prototype
