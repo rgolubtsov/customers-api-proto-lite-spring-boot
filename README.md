@@ -110,16 +110,18 @@ The following command-line snippets display the exact usage for these endpoints 
 1. **Create customer**
 
 ```
-$ curl -vXPUT -H 'content-type: application/json' -d '{"name":"Jamison Palmer"}' http://localhost:8765/customers
+$ curl -vXPUT http://localhost:8765/v1/customers \
+       -H 'content-type: application/json' \
+       -d '{"name":"Jamison Palmer"}'
 ...
-> PUT /customers HTTP/1.1
+> PUT /v1/customers HTTP/1.1
 ...
 > content-type: application/json
 > Content-Length: 25
 ...
 < HTTP/1.1 201 Created
 ...
-< Location: /customers/4
+< Location: /v1/customers/4
 ...
 < Content-Type: application/json
 ...
@@ -129,24 +131,51 @@ $ curl -vXPUT -H 'content-type: application/json' -d '{"name":"Jamison Palmer"}'
 2. **Create contact**
 
 ```
-$ curl -vXPUT http://localhost:8765/customers/12/contact
+$ curl -vXPUT http://localhost:8765/v1/customers/contacts \
+       -H 'content-type: application/json' \
+       -d '{"customer_id":"4","contact":"+12197654320"}'
 ...
-> PUT /customers/12/contact HTTP/1.1
+> PUT /v1/customers/contacts HTTP/1.1
+...
+> content-type: application/json
+> Content-Length: 44
 ...
 < HTTP/1.1 201 Created
 ...
-< Content-Type: text/plain;charset=UTF-8
-< Content-Length: 11
+< Location: /v1/customers/4/contacts/phone
 ...
-/12/contact$
+< Content-Type: application/json
+...
+{"contact":"+12197654320"}
+```
+
+Or create **email** contact:
+
+```
+$ curl -vXPUT http://localhost:8765/v1/customers/contacts \
+       -H 'content-type: application/json' \
+       -d '{"customer_id":"4","contact":"jamison.palmer@example.com"}'
+...
+> PUT /v1/customers/contacts HTTP/1.1
+...
+> content-type: application/json
+> Content-Length: 58
+...
+< HTTP/1.1 201 Created
+...
+< Location: /v1/customers/4/contacts/email
+...
+< Content-Type: application/json
+...
+{"contact":"jamison.palmer@example.com"}
 ```
 
 3. **List customers**
 
 ```
-$ curl -v http://localhost:8765/customers
+$ curl -v http://localhost:8765/v1/customers
 ...
-> GET /customers HTTP/1.1
+> GET /v1/customers HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
@@ -158,9 +187,9 @@ $ curl -v http://localhost:8765/customers
 4. **Retrieve customer**
 
 ```
-$ curl -v http://localhost:8765/customers/4
+$ curl -v http://localhost:8765/v1/customers/4
 ...
-> GET /customers/4 HTTP/1.1
+> GET /v1/customers/4 HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
@@ -172,43 +201,43 @@ $ curl -v http://localhost:8765/customers/4
 5. **List contacts for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/4/contacts
+$ curl -v http://localhost:8765/v1/customers/4/contacts
 ...
-> GET /customers/4/contacts HTTP/1.1
+> GET /v1/customers/4/contacts HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-[{"contact":null}]
+[{"contact":"+12197654320"},{"contact":"jamison.palmer@example.com"}]
 ```
 
 6. **List contacts of a given type for a given customer**
 
 ```
-$ curl -v http://localhost:8765/customers/4/contacts/phone
+$ curl -v http://localhost:8765/v1/customers/4/contacts/phone
 ...
-> GET /customers/4/contacts/phone HTTP/1.1
-...
-< HTTP/1.1 200 OK
-...
-< Content-Type: application/json
-...
-[{"contact":null}]
-```
-
-Or:
-
-```
-$ curl -v http://localhost:8765/customers/4/contacts/email
-...
-> GET /customers/4/contacts/email HTTP/1.1
+> GET /v1/customers/4/contacts/phone HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-[{"contact":null}]
+[{"contact":"+12197654320"}]
+```
+
+Or list **email** contacts:
+
+```
+$ curl -v http://localhost:8765/v1/customers/4/contacts/email
+...
+> GET /v1/customers/4/contacts/email HTTP/1.1
+...
+< HTTP/1.1 200 OK
+...
+< Content-Type: application/json
+...
+[{"contact":"jamison.palmer@example.com"}]
 ```
 
 ### Logging
