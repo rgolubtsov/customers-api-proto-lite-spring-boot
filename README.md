@@ -19,6 +19,7 @@ One may consider this project to be suitable for a wide variety of applied areas
 * **[Running](#running)**
 * **[Consuming](#consuming)**
   * **[Logging](#logging)**
+  * **[Error handling](#error-handling)**
 
 ## Building
 
@@ -91,14 +92,14 @@ $ java -jar build/libs/customers-api-lite-0.2.0.jar; echo $?
 
 The microservice exposes **six REST API endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
 
-No. | Endpoint name                                      | Request method and REST URI                               | Request body
---: | -------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------
-1   | Create customer                                    | `PUT /v1/customers`                                       | `{"name":"{customer_name}"}`
-2   | Create contact                                     | `PUT /v1/customers/contacts`                              | `{"customer_id":"{customer_id}","contact":"{customer_contact}"}`
-3   | List customers                                     | `GET /v1/customers`                                       | &ndash;
-4   | Retrieve customer                                  | `GET /v1/customers/{customer_id}`                         | &ndash;
-5   | List contacts for a given customer                 | `GET /v1/customers/{customer_id}/contacts`                | &ndash;
-6   | List contacts of a given type for a given customer | `GET /v1/customers/{customer_id}/contacts/{contact_type}` | &ndash;
+No. | Endpoint name                                      | Request method and REST URI                                   | Request body
+--: | -------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------
+1   | Create customer                                    | **PUT** `/v1/customers`                                       | `{"name":"{customer_name}"}`
+2   | Create contact                                     | **PUT** `/v1/customers/contacts`                              | `{"customer_id":"{customer_id}","contact":"{customer_contact}"}`
+3   | List customers                                     | **GET** `/v1/customers`                                       | &ndash;
+4   | Retrieve customer                                  | **GET** `/v1/customers/{customer_id}`                         | &ndash;
+5   | List contacts for a given customer                 | **GET** `/v1/customers/{customer_id}/contacts`                | &ndash;
+6   | List contacts of a given type for a given customer | **GET** `/v1/customers/{customer_id}/contacts/{contact_type}` | &ndash;
 
 * The `{customer_name}` placeholder is a string &mdash; it usually means the full name given to a newly created customer.
 * The `{customer_id}` placeholder is a decimal positive integer number, greater than `0`.
@@ -247,16 +248,16 @@ The microservice has the ability to log messages to a logfile and to the Unix sy
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2024-10-25][23:30:27][INFO ]  Undertow started on port 8765 (http) with context path '/'
-[2024-10-25][23:30:27][INFO ]  Started CustomersApiLiteApp in 6.08 seconds (process running for 7.562)
-[2024-10-25][23:30:27][DEBUG]  [Customers API Lite]
-[2024-10-25][23:30:27][DEBUG]  [org.sqlite.JDBC]
-[2024-10-25][23:30:27][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
-[2024-10-25][23:30:27][INFO ]  Server started on port 8765
-[2024-10-25][23:30:56][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
-[2024-10-25][23:30:56][INFO ]  Graceful shutdown complete
-[2024-10-25][23:30:56][INFO ]  stopping server: Undertow - 2.3.13.Final
-[2024-10-25][23:30:56][INFO ]  Server stopped
+[2024-10-31][14:30:43][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2024-10-31][14:30:43][INFO ]  Started CustomersApiLiteApp in 5.859 seconds (process running for 7.184)
+[2024-10-31][14:30:43][DEBUG]  [Customers API Lite]
+[2024-10-31][14:30:43][DEBUG]  [org.sqlite.JDBC]
+[2024-10-31][14:30:43][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2024-10-31][14:30:43][INFO ]  Server started on port 8765
+[2024-10-31][14:35:13][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2024-10-31][14:35:13][INFO ]  Graceful shutdown complete
+[2024-10-31][14:35:13][INFO ]  stopping server: Undertow - 2.3.17.Final
+[2024-10-31][14:35:13][INFO ]  Server stopped
 ```
 
 Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
@@ -264,12 +265,18 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Oct 25 23:30:27 <hostname> java[<pid>]: [Customers API Lite]
-Oct 25 23:30:27 <hostname> java[<pid>]: [org.sqlite.JDBC]
-Oct 25 23:30:27 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
-Oct 25 23:30:27 <hostname> java[<pid>]: Server started on port 8765
-Oct 25 23:30:56 <hostname> java[<pid>]: Server stopped
+Oct 31 14:30:43 <hostname> java[<pid>]: [Customers API Lite]
+Oct 31 14:30:43 <hostname> java[<pid>]: [org.sqlite.JDBC]
+Oct 31 14:30:43 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
+Oct 31 14:30:43 <hostname> java[<pid>]: Server started on port 8765
+Oct 31 14:35:13 <hostname> java[<pid>]: Server stopped
 ```
+
+### Error handling
+
+When the URI path or request body passed in an incoming request contains inappropriate input, the microservice will respond with the **HTTP 400 Bad Request** status code, including a specific response body in JSON representation which describes a possible cause of underlying client error, like the following:
+
+**TBD** :cd:
 
 ---
 
