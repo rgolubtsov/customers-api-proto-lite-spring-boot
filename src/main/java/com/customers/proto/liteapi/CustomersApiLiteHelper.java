@@ -30,6 +30,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
  */
 public class CustomersApiLiteHelper {
     // Helper constants.
+    public static final int    EXIT_FAILURE =   1; //    Failing exit status.
+    public static final int    EXIT_SUCCESS =   0; // Successful exit status.
     public static final String EMPTY_STRING =  "";
     public static final String SPACE        = " ";
     public static final String SLASH        = "/";
@@ -37,6 +39,18 @@ public class CustomersApiLiteHelper {
     public static final String V_BAR        = "|";
     public static final String O_BRACKET    = "[";
     public static final String C_BRACKET    = "]";
+
+    // Common error messages.
+    public static final String ERR_PORT_VALID_MUST_BE_POSITIVE_INT
+        = "Valid server port must be a positive integer value, "
+        + "in the range 1024 .. 49151. The default value of 8080 "
+        + "will be used instead.";
+    public static final String ERR_CANNOT_START_SERVER
+        = "FATAL: Cannot start server ";
+    public static final String ERR_ADDR_ALREADY_IN_USE
+        = "due to address requested already in use. Quitting...";
+    public static final String ERR_SERV_UNKNOWN_REASON
+        = "for an unknown reason. Quitting...";
 
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
