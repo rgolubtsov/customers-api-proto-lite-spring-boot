@@ -248,16 +248,16 @@ The microservice has the ability to log messages to a logfile and to the Unix sy
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2024-10-25][23:30:27][INFO ]  Undertow started on port 8765 (http) with context path '/'
-[2024-10-25][23:30:27][INFO ]  Started CustomersApiLiteApp in 6.08 seconds (process running for 7.562)
-[2024-10-25][23:30:27][DEBUG]  [Customers API Lite]
-[2024-10-25][23:30:27][DEBUG]  [org.sqlite.JDBC]
-[2024-10-25][23:30:27][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
-[2024-10-25][23:30:27][INFO ]  Server started on port 8765
-[2024-10-25][23:30:56][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
-[2024-10-25][23:30:56][INFO ]  Graceful shutdown complete
-[2024-10-25][23:30:56][INFO ]  stopping server: Undertow - 2.3.13.Final
-[2024-10-25][23:30:56][INFO ]  Server stopped
+[2024-10-31][14:30:43][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2024-10-31][14:30:43][INFO ]  Started CustomersApiLiteApp in 5.859 seconds (process running for 7.184)
+[2024-10-31][14:30:43][DEBUG]  [Customers API Lite]
+[2024-10-31][14:30:43][DEBUG]  [org.sqlite.JDBC]
+[2024-10-31][14:30:43][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2024-10-31][14:30:43][INFO ]  Server started on port 8765
+[2024-10-31][14:35:13][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2024-10-31][14:35:13][INFO ]  Graceful shutdown complete
+[2024-10-31][14:35:13][INFO ]  stopping server: Undertow - 2.3.17.Final
+[2024-10-31][14:35:13][INFO ]  Server stopped
 ```
 
 Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
@@ -265,11 +265,11 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Oct 25 23:30:27 <hostname> java[<pid>]: [Customers API Lite]
-Oct 25 23:30:27 <hostname> java[<pid>]: [org.sqlite.JDBC]
-Oct 25 23:30:27 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
-Oct 25 23:30:27 <hostname> java[<pid>]: Server started on port 8765
-Oct 25 23:30:56 <hostname> java[<pid>]: Server stopped
+Oct 31 14:30:43 <hostname> java[<pid>]: [Customers API Lite]
+Oct 31 14:30:43 <hostname> java[<pid>]: [org.sqlite.JDBC]
+Oct 31 14:30:43 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
+Oct 31 14:30:43 <hostname> java[<pid>]: Server started on port 8765
+Oct 31 14:35:13 <hostname> java[<pid>]: Server stopped
 ```
 
 ### Error handling
