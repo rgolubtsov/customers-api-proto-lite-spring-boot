@@ -19,6 +19,7 @@ One may consider this project to be suitable for a wide variety of applied areas
 * **[Running](#running)**
 * **[Consuming](#consuming)**
   * **[Logging](#logging)**
+  * **[Error handling](#error-handling)**
 
 ## Building
 
@@ -91,14 +92,14 @@ $ java -jar build/libs/customers-api-lite-0.2.0.jar; echo $?
 
 The microservice exposes **six REST API endpoints** to web clients. They are all intended to deal with customer entities and/or contact entities that belong to customer profiles. The following table displays their syntax:
 
-No. | Endpoint name                                      | Request method and REST URI                               | Request body
---: | -------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------
-1   | Create customer                                    | `PUT /v1/customers`                                       | `{"name":"{customer_name}"}`
-2   | Create contact                                     | `PUT /v1/customers/contacts`                              | `{"customer_id":"{customer_id}","contact":"{customer_contact}"}`
-3   | List customers                                     | `GET /v1/customers`                                       | &ndash;
-4   | Retrieve customer                                  | `GET /v1/customers/{customer_id}`                         | &ndash;
-5   | List contacts for a given customer                 | `GET /v1/customers/{customer_id}/contacts`                | &ndash;
-6   | List contacts of a given type for a given customer | `GET /v1/customers/{customer_id}/contacts/{contact_type}` | &ndash;
+No. | Endpoint name                                      | Request method and REST URI                                   | Request body
+--: | -------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------
+1   | Create customer                                    | **PUT** `/v1/customers`                                       | `{"name":"{customer_name}"}`
+2   | Create contact                                     | **PUT** `/v1/customers/contacts`                              | `{"customer_id":"{customer_id}","contact":"{customer_contact}"}`
+3   | List customers                                     | **GET** `/v1/customers`                                       | &ndash;
+4   | Retrieve customer                                  | **GET** `/v1/customers/{customer_id}`                         | &ndash;
+5   | List contacts for a given customer                 | **GET** `/v1/customers/{customer_id}/contacts`                | &ndash;
+6   | List contacts of a given type for a given customer | **GET** `/v1/customers/{customer_id}/contacts/{contact_type}` | &ndash;
 
 * The `{customer_name}` placeholder is a string &mdash; it usually means the full name given to a newly created customer.
 * The `{customer_id}` placeholder is a decimal positive integer number, greater than `0`.
@@ -270,6 +271,12 @@ Oct 25 23:30:27 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.
 Oct 25 23:30:27 <hostname> java[<pid>]: Server started on port 8765
 Oct 25 23:30:56 <hostname> java[<pid>]: Server stopped
 ```
+
+### Error handling
+
+When the URI path or request body passed in an incoming request contains inappropriate input, the microservice will respond with the **HTTP 400 Bad Request** status code, including a specific response body in JSON representation which describes a possible cause of underlying client error, like the following:
+
+**TBD** :cd:
 
 ---
 
