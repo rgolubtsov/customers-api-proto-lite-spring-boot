@@ -14,9 +14,10 @@ package com.customers.proto.liteapi;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.web.server.PortInUseException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.context.ApplicationContextException;
 
 import org.graylog2.syslog4j.impl.unix.UnixSyslogConfig;
 import org.graylog2.syslog4j.impl.unix.UnixSyslog;
@@ -43,18 +44,32 @@ public class CustomersApiLiteApp implements DisposableBean {
      * @param args An array of command-line arguments.
      */
     public static void main(final String[] args) {
-        // Starting up the bundled web server.
-        var ctx = SpringApplication.run(CustomersApiLiteApp.class, args);
-
-        var env = ctx.getEnvironment();
-
-        dbg = Boolean.parseBoolean(env.getProperty(DBG_LOG_ENBLR));
-
         // Opening the system logger.
         // Calling <syslog.h> openlog(NULL, LOG_CONS | LOG_PID, LOG_DAEMON);
         var cfg = new UnixSyslogConfig();
         cfg.setIdent(null); cfg.setFacility(SyslogIF.FACILITY_DAEMON);
         s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
+
+        ConfigurableApplicationContext ctx = null;
+
+        // Trying to start up the bundled web server.
+        try {
+            ctx = SpringApplication.run(CustomersApiLiteApp.class, args);
+        } catch (Exception e) {
+            if ((e instanceof ApplicationContextException)
+                && (e.getCause() instanceof PortInUseException)) {
+
+                l.error(ERR_CANNOT_START_SERVER + ERR_ADDR_ALREADY_IN_USE);
+            } else {
+                l.error(ERR_CANNOT_START_SERVER + ERR_SERV_UNKNOWN_REASON);
+            }
+
+            System.exit(EXIT_FAILURE);
+        }
+
+        var env = ctx.getEnvironment();
+
+        dbg = Boolean.parseBoolean(env.getProperty(DBG_LOG_ENBLR));
 
         _dbg(O_BRACKET + env.getProperty(APP_NAME) + C_BRACKET);
 
