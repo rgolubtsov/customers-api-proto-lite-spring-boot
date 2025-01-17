@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteHelper.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.2.0
+ * Customers API Lite microservice prototype. Version 0.2.5
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Properties;
 
 import org.graylog2.syslog4j.impl.unix.UnixSyslog;
 
@@ -25,7 +26,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 /**
  * The helper class for the microservice.
  *
- * @version 0.2.0
+ * @version 0.2.5
  * @since   0.0.1
  */
 public class CustomersApiLiteHelper {
@@ -43,8 +44,10 @@ public class CustomersApiLiteHelper {
     // Common error messages.
     public static final String ERR_PORT_VALID_MUST_BE_POSITIVE_INT
         = "Valid server port must be a positive integer value, "
-        + "in the range 1024 .. 49151. The default value of 8080 "
-        + "will be used instead.";
+        + "in the range 1024 .. 49151. Please set the correct "
+        + "server port number in application properties.";
+    public static final String ERR_APP_PROPS_UNABLE_TO_GET
+        = "Unable to get application properties.";
     public static final String ERR_CANNOT_START_SERVER
         = "FATAL: Cannot start server ";
     public static final String ERR_ADDR_ALREADY_IN_USE
@@ -55,6 +58,18 @@ public class CustomersApiLiteHelper {
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
     public static final String MSG_SERVER_STOPPED = "Server stopped";
+
+    /** The application properties filename. */
+    public static final String APP_PROPS = "application.properties";
+
+    /** The minimum port number allowed. */
+    public static final int MIN_PORT = 1024;
+
+    /** The maximum port number allowed. */
+    public static final int MAX_PORT = 49151;
+
+    /** The default server port number. */
+    public static final int DEF_PORT = 8080;
 
     // Application properties key for the debug logging enabler.
     public static final String DBG_LOG_ENBLR = "logger.debug.enabled";
@@ -118,6 +133,54 @@ public class CustomersApiLiteHelper {
             l.debug(message);
             s.debug(message);
         }
+    }
+
+    /**
+     * Retrieves the port number used to run the server,
+     * from application properties.
+     *
+     * @return The port number on which the server has to be run.
+     */
+    public static int get_server_port() {
+        var server_port_ = _get_props().getProperty(SERVER_PORT);
+        var server_port  = 0;
+
+        try { server_port = Integer.parseInt(server_port_); }
+        catch (NumberFormatException e) { /* Using the last `else' block. */ }
+
+        if (server_port != 0) {
+            if ((server_port >= MIN_PORT) && (server_port <= MAX_PORT)) {
+                return server_port;
+            } else {
+                l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT);
+
+                System.exit(EXIT_FAILURE);
+            }
+        } else {
+            l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT);
+
+            System.exit(EXIT_FAILURE);
+        }
+
+        return DEF_PORT; // <== For the sake of suppressing compilation errors.
+    }
+
+    // Helper method. Used to get the application properties object.
+    private static final Properties _get_props() {
+        var props = new Properties();
+
+        var loader = CustomersApiLiteHelper.class.getClassLoader();
+
+        var data = loader.getResourceAsStream(APP_PROPS);
+
+        try {
+            props.load(data);
+            data.close();
+        } catch (java.io.IOException e) {
+            l.error(ERR_APP_PROPS_UNABLE_TO_GET);
+        }
+
+        return props;
     }
 }
 

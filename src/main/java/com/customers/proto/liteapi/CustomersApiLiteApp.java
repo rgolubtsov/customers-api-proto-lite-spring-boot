@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteApp.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.2.0
+ * Customers API Lite microservice prototype. Version 0.2.5
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -33,7 +33,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 /**
  * The startup class of the microservice.
  *
- * @version 0.2.0
+ * @version 0.2.5
  * @since   0.0.1
  */
 @SpringBootApplication
@@ -49,6 +49,9 @@ public class CustomersApiLiteApp implements DisposableBean {
         var cfg = new UnixSyslogConfig();
         cfg.setIdent(null); cfg.setFacility(SyslogIF.FACILITY_DAEMON);
         s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
+
+        // Getting the port number used to run the bundled web server.
+        var server_port = get_server_port();
 
         ConfigurableApplicationContext ctx = null;
 
@@ -84,9 +87,6 @@ public class CustomersApiLiteApp implements DisposableBean {
         i_cont   = new SimpleJdbcInsert[2];
         i_cont[0]= new SimpleJdbcInsert(ds).withTableName(DB_T_CONTACT_PHONES);
         i_cont[1]= new SimpleJdbcInsert(ds).withTableName(DB_T_CONTACT_EMAILS);
-
-        // Getting the port number used to run the bundled web server.
-        var server_port = env.getProperty(SERVER_PORT);
 
         l.info(MSG_SERVER_STARTED + server_port);
         s.info(MSG_SERVER_STARTED + server_port);
