@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Properties;
 
 import org.graylog2.syslog4j.impl.unix.UnixSyslog;
 
@@ -45,6 +46,8 @@ public class CustomersApiLiteHelper {
         = "Valid server port must be a positive integer value, "
         + "in the range 1024 .. 49151. The default value of 8080 "
         + "will be used instead.";
+    public static final String ERR_APP_PROPS_UNABLE_TO_GET
+        = "Unable to get application properties.";
     public static final String ERR_CANNOT_START_SERVER
         = "FATAL: Cannot start server ";
     public static final String ERR_ADDR_ALREADY_IN_USE
@@ -55,6 +58,18 @@ public class CustomersApiLiteHelper {
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
     public static final String MSG_SERVER_STOPPED = "Server stopped";
+
+    /** The application properties filename. */
+    public static final String APP_PROPS = "application.properties";
+
+    /** The minimum port number allowed. */
+    public static final int MIN_PORT = 1024;
+
+    /** The maximum port number allowed. */
+    public static final int MAX_PORT = 49151;
+
+    /** The default server port number. */
+    public static final int DEF_PORT = 8080;
 
     // Application properties key for the debug logging enabler.
     public static final String DBG_LOG_ENBLR = "logger.debug.enabled";
@@ -118,6 +133,60 @@ public class CustomersApiLiteHelper {
             l.debug(message);
             s.debug(message);
         }
+    }
+
+    /**
+     * Retrieves the port number used to run the server,
+     * from application properties.
+     *
+     * @return The port number on which the server has to be run.
+     */
+    public static int get_server_port() {
+        var server_port_ = _get_props().getProperty(SERVER_PORT);
+        var server_port  = 0;
+
+        l.debug(O_BRACKET + server_port_ + C_BRACKET);
+
+        try { server_port = Integer.parseInt(server_port_); }
+        catch (NumberFormatException e) { /* Using the last `else' block. */ }
+
+        l.debug(O_BRACKET + server_port + C_BRACKET);
+
+        if (server_port != 0) {
+            l.debug(O_BRACKET + "---1---" + C_BRACKET);
+
+            if ((server_port >= MIN_PORT) && (server_port <= MAX_PORT)) {
+                l.debug(O_BRACKET + "---2---" + C_BRACKET);
+
+                return server_port;
+            } else {
+                l.debug(O_BRACKET + "---3---" + C_BRACKET);
+
+                l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT); return DEF_PORT;
+            }
+        } else {
+            l.debug(O_BRACKET + "---4---" + C_BRACKET);
+
+            l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT); return DEF_PORT;
+        }
+    }
+
+    // Helper method. Used to get the application properties object.
+    private static final Properties _get_props() {
+        var props = new Properties();
+
+        var loader = CustomersApiLiteHelper.class.getClassLoader();
+
+        var data = loader.getResourceAsStream(APP_PROPS);
+
+        try {
+            props.load(data);
+            data.close();
+        } catch (java.io.IOException e) {
+            l.error(ERR_APP_PROPS_UNABLE_TO_GET);
+        }
+
+        return props;
     }
 }
 
