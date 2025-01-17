@@ -44,8 +44,8 @@ public class CustomersApiLiteHelper {
     // Common error messages.
     public static final String ERR_PORT_VALID_MUST_BE_POSITIVE_INT
         = "Valid server port must be a positive integer value, "
-        + "in the range 1024 .. 49151. The default value of 8080 "
-        + "will be used instead.";
+        + "in the range 1024 .. 49151. Please set the correct "
+        + "server port number in application properties.";
     public static final String ERR_APP_PROPS_UNABLE_TO_GET
         = "Unable to get application properties.";
     public static final String ERR_CANNOT_START_SERVER
@@ -145,30 +145,24 @@ public class CustomersApiLiteHelper {
         var server_port_ = _get_props().getProperty(SERVER_PORT);
         var server_port  = 0;
 
-        l.debug(O_BRACKET + server_port_ + C_BRACKET);
-
         try { server_port = Integer.parseInt(server_port_); }
         catch (NumberFormatException e) { /* Using the last `else' block. */ }
 
-        l.debug(O_BRACKET + server_port + C_BRACKET);
-
         if (server_port != 0) {
-            l.debug(O_BRACKET + "---1---" + C_BRACKET);
-
             if ((server_port >= MIN_PORT) && (server_port <= MAX_PORT)) {
-                l.debug(O_BRACKET + "---2---" + C_BRACKET);
-
                 return server_port;
             } else {
-                l.debug(O_BRACKET + "---3---" + C_BRACKET);
+                l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT);
 
-                l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT); return DEF_PORT;
+                System.exit(EXIT_FAILURE);
             }
         } else {
-            l.debug(O_BRACKET + "---4---" + C_BRACKET);
+            l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT);
 
-            l.error(ERR_PORT_VALID_MUST_BE_POSITIVE_INT); return DEF_PORT;
+            System.exit(EXIT_FAILURE);
         }
+
+        return DEF_PORT; // <== For the sake of suppressing compilation errors.
     }
 
     // Helper method. Used to get the application properties object.
