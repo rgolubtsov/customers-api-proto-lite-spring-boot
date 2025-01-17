@@ -50,6 +50,9 @@ public class CustomersApiLiteApp implements DisposableBean {
         cfg.setIdent(null); cfg.setFacility(SyslogIF.FACILITY_DAEMON);
         s = new UnixSyslog(); s.initialize (SyslogIF.UNIX_SYSLOG,cfg);
 
+        // Getting the port number used to run the bundled web server.
+        var server_port = get_server_port();
+
         ConfigurableApplicationContext ctx = null;
 
         // Trying to start up the bundled web server.
@@ -84,9 +87,6 @@ public class CustomersApiLiteApp implements DisposableBean {
         i_cont   = new SimpleJdbcInsert[2];
         i_cont[0]= new SimpleJdbcInsert(ds).withTableName(DB_T_CONTACT_PHONES);
         i_cont[1]= new SimpleJdbcInsert(ds).withTableName(DB_T_CONTACT_EMAILS);
-
-        // Getting the port number used to run the bundled web server.
-        var server_port = env.getProperty(SERVER_PORT);
 
         l.info(MSG_SERVER_STARTED + server_port);
         s.info(MSG_SERVER_STARTED + server_port);
