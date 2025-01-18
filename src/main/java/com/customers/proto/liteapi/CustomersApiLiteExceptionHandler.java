@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 
@@ -37,11 +36,17 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 public class CustomersApiLiteExceptionHandler
     extends ResponseEntityExceptionHandler {
 
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-        HttpMessageNotReadableException ex,
-        HttpHeaders                     headers,
-        HttpStatusCode                  status,
-        WebRequest                      request) {
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(
+        Exception      ex,
+        Object         body,
+        HttpHeaders    headers,
+        HttpStatusCode statusCode,
+        WebRequest     request) {
+
+        if (statusCode.value() == HttpStatus.METHOD_NOT_ALLOWED.value()) {
+            return new ResponseEntity<Object>(body, headers, statusCode);
+        }
 
         var error = new CustomersApiLiteEntityError();
 
@@ -49,9 +54,9 @@ public class CustomersApiLiteExceptionHandler
 
         var resp = new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 
-        var body = resp.getBody();
+        var body_ = resp.getBody();
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityError) body).getError()
+        _dbg(O_BRACKET + ((CustomersApiLiteEntityError) body_).getError()
            + C_BRACKET);
 
         return resp;
