@@ -274,10 +274,24 @@ Oct 31 14:35:13 <hostname> java[<pid>]: Server stopped
 
 ### Error handling
 
-When the URI path or request body passed in an incoming request contains inappropriate input, the microservice will respond with the **HTTP 400 Bad Request** status code, including a specific response body in JSON representation which describes a possible cause of underlying client error, like the following:
+When the URI path or request body passed in an incoming request contains inappropriate input, the microservice will respond with the **HTTP 400 Bad Request** status code, including a specific response body in JSON representation which may describe a possible cause of underlying client error, like the following:
 
-**TBD** :cd:
+```
+$ curl 'http://localhost:8765/v1/customers/4/contacts=qwerty4838&=-i-.;--089asdf../nj524987'
+{"error":"HTTP 400 Bad Request: Request is malformed. Please check your inputs."}
+$
+$ curl http://localhost:8765/v1QWERTY/customers/4..,,7/contacts/email
+{"error":"HTTP 400 Bad Request: Request is malformed. Please check your inputs."}
+$
+$ curl -XPUT http://localhost:8765/v1/customers \
+       -H 'content-type: application/--089asdf../nj524987' \
+       -d '{"name":"Saturday Sunday"}'
+{"error":"HTTP 400 Bad Request: Request is malformed. Please check your inputs."}
+```
 
----
+Or even simpler:
 
-**TBD** :dvd:
+```
+$ curl http://localhost:8765/v1/customers/
+{"error":"HTTP 400 Bad Request: Request is malformed. Please check your inputs."}
+```
