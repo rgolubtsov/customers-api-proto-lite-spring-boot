@@ -54,6 +54,9 @@ public class CustomersApiLiteHelper {
         = "due to address requested already in use. Quitting...";
     public static final String ERR_SERV_UNKNOWN_REASON
         = "for an unknown reason. Quitting...";
+    public static final String ERR_REQ_MALFORMED
+        = "HTTP 400 Bad Request: Request is malformed. "
+        + "Please check your inputs.";
 
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
