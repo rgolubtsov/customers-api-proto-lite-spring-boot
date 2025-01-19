@@ -397,6 +397,66 @@ Jan 19 03:09:37 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
 Jan 19 03:10:06 <hostname> java[<pid>]: Server stopped
 ```
 
+Inside the running container logs might be queried also by `tail`ing the `log/customers-api-lite.log` logfile:
+
+```
+/var/tmp $ tail -f log/customers-api-lite.log
+...
+[2025-01-19][20:00:26][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2025-01-19][20:00:26][INFO ]  Started CustomersApiLiteApp in 8.342 seconds (process running for 11.369)
+[2025-01-19][20:00:26][DEBUG]  [Customers API Lite]
+[2025-01-19][20:00:26][DEBUG]  [org.sqlite.JDBC]
+[2025-01-19][20:00:26][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2025-01-19][20:00:26][INFO ]  Server started on port 8765
+[2025-01-19][21:12:10][INFO ]  Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Initializing Servlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Completed initialization in 6 ms
+[2025-01-19][21:12:10][DEBUG]  [Saturday Sunday]
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Starting...
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@e3daeac
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Start completed.
+[2025-01-19][21:12:11][DEBUG]  [3|Saturday Sunday]
+[2025-01-19][21:15:02][DEBUG]  customer_id=3
+[2025-01-19][21:15:02][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][21:15:02][DEBUG]  [email|Saturday.Sunday@example.com]
+[2025-01-19][21:17:10][DEBUG]  customer_id=3 | contact_type=email
+[2025-01-19][21:17:10][DEBUG]  [Saturday.Sunday@example.com]
+...
+```
+
+And of course Docker itself gives the possibility to read log messages by using the corresponding command for that:
+
+```
+$ sudo docker logs -f api-lite
+...
+[2025-01-19][20:00:26][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2025-01-19][20:00:26][INFO ]  Started CustomersApiLiteApp in 8.342 seconds (process running for 11.369)
+[2025-01-19][20:00:26][DEBUG]  [Customers API Lite]
+[2025-01-19][20:00:26][DEBUG]  [org.sqlite.JDBC]
+[2025-01-19][20:00:26][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2025-01-19][20:00:26][INFO ]  Server started on port 8765
+[2025-01-19][21:12:10][INFO ]  Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Initializing Servlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Completed initialization in 6 ms
+[2025-01-19][21:12:10][DEBUG]  [Saturday Sunday]
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Starting...
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@e3daeac
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Start completed.
+[2025-01-19][21:12:11][DEBUG]  [3|Saturday Sunday]
+[2025-01-19][21:15:02][DEBUG]  customer_id=3
+[2025-01-19][21:15:02][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][21:15:02][DEBUG]  [email|Saturday.Sunday@example.com]
+[2025-01-19][21:17:10][DEBUG]  customer_id=3 | contact_type=email
+[2025-01-19][21:17:10][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][21:20:20][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2025-01-19][21:20:20][INFO ]  Graceful shutdown complete
+[2025-01-19][21:20:20][INFO ]  stopping server: Undertow - 2.3.18.Final
+[2025-01-19][21:20:20][INFO ]  Destroying Spring FrameworkServlet 'dispatcherServlet'
+[2025-01-19][21:20:20][INFO ]  HikariPool-1 - Shutdown initiated...
+[2025-01-19][21:20:20][INFO ]  HikariPool-1 - Shutdown completed.
+[2025-01-19][21:20:20][INFO ]  Server stopped
+```
+
 ### Error handling
 
 When the URI path or request body passed in an incoming request contains inappropriate input, the microservice will respond with the **HTTP 400 Bad Request** status code, including a specific response body in JSON representation which may describe a possible cause of underlying client error, like the following:
