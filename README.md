@@ -16,7 +16,9 @@ One may consider this project to be suitable for a wide variety of applied areas
 ## Table of Contents
 
 * **[Building](#building)**
+  * **[Creating a Docker image](#creating-a-docker-image)**
 * **[Running](#running)**
+  * **[Running a Docker image](#running-a-docker-image)**
 * **[Consuming](#consuming)**
   * **[Logging](#logging)**
   * **[Error handling](#error-handling)**
@@ -72,6 +74,19 @@ $ make all  # <== Assembling JAR bundles of the microservice.
 ...
 ```
 
+### Creating a Docker image
+
+**Build** a Docker image for the microservice:
+
+```
+$ # Pull the JRE image first, if not already there:
+$ sudo docker pull azul/zulu-openjdk-alpine:17-jre-headless-latest
+...
+$ # Then build the microservice image:
+$ sudo docker build -tcustomersapi/api-lite .
+...
+```
+
 ## Running
 
 **Run** the microservice using **Gradle Wrapper** (generally for development and debugging purposes):
@@ -85,6 +100,16 @@ $ ./gradlew -q bootRun; echo $?
 
 ```
 $ java -jar build/libs/customers-api-lite-0.3.0.jar; echo $?
+...
+```
+
+### Running a Docker image
+
+**Run** a Docker image of the microservice, deleting all stopped containers prior to that (if any):
+
+```
+$ sudo docker rm `sudo docker ps -aq`; \
+  export PORT=8765 && sudo docker run -dp${PORT}:${PORT} --name api-lite customersapi/api-lite; echo $?
 ...
 ```
 
