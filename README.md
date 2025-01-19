@@ -248,16 +248,32 @@ The microservice has the ability to log messages to a logfile and to the Unix sy
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2024-10-31][14:30:43][INFO ]  Undertow started on port 8765 (http) with context path '/'
-[2024-10-31][14:30:43][INFO ]  Started CustomersApiLiteApp in 5.859 seconds (process running for 7.184)
-[2024-10-31][14:30:43][DEBUG]  [Customers API Lite]
-[2024-10-31][14:30:43][DEBUG]  [org.sqlite.JDBC]
-[2024-10-31][14:30:43][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
-[2024-10-31][14:30:43][INFO ]  Server started on port 8765
-[2024-10-31][14:35:13][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
-[2024-10-31][14:35:13][INFO ]  Graceful shutdown complete
-[2024-10-31][14:35:13][INFO ]  stopping server: Undertow - 2.3.17.Final
-[2024-10-31][14:35:13][INFO ]  Server stopped
+[2025-01-19][03:00:41][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2025-01-19][03:00:41][INFO ]  Started CustomersApiLiteApp in 7.709 seconds (process running for 9.915)
+[2025-01-19][03:00:41][DEBUG]  [Customers API Lite]
+[2025-01-19][03:00:41][DEBUG]  [org.sqlite.JDBC]
+[2025-01-19][03:00:41][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2025-01-19][03:00:41][INFO ]  Server started on port 8765
+[2025-01-19][03:06:02][INFO ]  Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-01-19][03:06:02][INFO ]  Initializing Servlet 'dispatcherServlet'
+[2025-01-19][03:06:02][INFO ]  Completed initialization in 4 ms
+[2025-01-19][03:06:02][DEBUG]  customer_id=12
+[2025-01-19][03:06:02][INFO ]  HikariPool-1 - Starting...
+[2025-01-19][03:06:03][INFO ]  HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@44f35bb0
+[2025-01-19][03:06:03][INFO ]  HikariPool-1 - Start completed.
+[2025-01-19][03:06:03][DEBUG]  [12|Saturday Sunday]
+[2025-01-19][03:09:32][DEBUG]  customer_id=12
+[2025-01-19][03:09:32][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][03:09:33][DEBUG]  [email|Saturday.Sunday@example.com]
+[2025-01-19][03:09:37][DEBUG]  customer_id=12 | contact_type=email
+[2025-01-19][03:09:37][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][03:10:06][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2025-01-19][03:10:06][INFO ]  Graceful shutdown complete
+[2025-01-19][03:10:06][INFO ]  stopping server: Undertow - 2.3.18.Final
+[2025-01-19][03:10:06][INFO ]  Destroying Spring FrameworkServlet 'dispatcherServlet'
+[2025-01-19][03:10:06][INFO ]  HikariPool-1 - Shutdown initiated...
+[2025-01-19][03:10:06][INFO ]  HikariPool-1 - Shutdown completed.
+[2025-01-19][03:10:06][INFO ]  Server stopped
 ```
 
 Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
@@ -265,11 +281,18 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Oct 31 14:30:43 <hostname> java[<pid>]: [Customers API Lite]
-Oct 31 14:30:43 <hostname> java[<pid>]: [org.sqlite.JDBC]
-Oct 31 14:30:43 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
-Oct 31 14:30:43 <hostname> java[<pid>]: Server started on port 8765
-Oct 31 14:35:13 <hostname> java[<pid>]: Server stopped
+Jan 19 03:00:41 <hostname> java[<pid>]: [Customers API Lite]
+Jan 19 03:00:41 <hostname> java[<pid>]: [org.sqlite.JDBC]
+Jan 19 03:00:41 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
+Jan 19 03:00:41 <hostname> java[<pid>]: Server started on port 8765
+Jan 19 03:06:02 <hostname> java[<pid>]: customer_id=12
+Jan 19 03:06:03 <hostname> java[<pid>]: [12|Saturday Sunday]
+Jan 19 03:09:32 <hostname> java[<pid>]: customer_id=12
+Jan 19 03:09:32 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
+Jan 19 03:09:33 <hostname> java[<pid>]: [email|Saturday.Sunday@example.com]
+Jan 19 03:09:37 <hostname> java[<pid>]: customer_id=12 | contact_type=email
+Jan 19 03:09:37 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
+Jan 19 03:10:06 <hostname> java[<pid>]: Server stopped
 ```
 
 ### Error handling
