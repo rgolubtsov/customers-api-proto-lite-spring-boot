@@ -1,7 +1,7 @@
 /*
  * build.gradle
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.2.5
+ * Customers API Lite microservice prototype. Version 0.3.0
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -15,8 +15,8 @@ plugins {
     id 'java'
 
     // This project is a Spring Boot-based application.
-    id 'org.springframework.boot'        version '3.3.5'
-    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.springframework.boot'        version '3.4.1'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 repositories {
@@ -54,13 +54,13 @@ dependencies {
     implementation 'org.graylog2:syslog4j:0.9.61'
 
     // JNA (Java Native Access) - as a runtime dependency to Syslog4j.
-    implementation 'net.java.dev.jna:jna:5.15.0'
+    implementation 'net.java.dev.jna:jna:5.16.0'
 
     // Spring Boot Starter JDBC - to establish HikariCP JDBC connection pool.
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
     // SQLite JDBC - to utilize JDBC driver and library for SQLite database.
-    implementation 'org.xerial:sqlite-jdbc:3.47.0.0'
+    implementation 'org.xerial:sqlite-jdbc:3.48.0.0'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -71,7 +71,7 @@ java {
 }
 
 group       = 'com.customers.proto'
-version     = '0.2.5'
+version     = '0.3.0'
 description = 'Customers API Lite microservice prototype.'
 
 // vim:set nu et ts=4 sw=4:
