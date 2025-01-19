@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteEntityError.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.2.5
+ * Customers API Lite microservice prototype. Version 0.3.0
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -17,7 +17,7 @@ package com.customers.proto.liteapi;
  * Mainly it regards to one of the <strong>4xx Client Error</strong> section's
  * errors occurred during processing the request.
  *
- * @version 0.2.5
+ * @version 0.3.0
  * @since   0.2.5
  */
 public class CustomersApiLiteEntityError {
