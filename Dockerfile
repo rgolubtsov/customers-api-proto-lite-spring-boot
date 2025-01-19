@@ -1,7 +1,7 @@
 #
 # Dockerfile
 # =============================================================================
-# Customers API Lite microservice prototype. Version 0.3.0
+# Customers API Lite microservice prototype. Version 0.3.1
 # =============================================================================
 # A Spring Boot-based application, designed and intended to be run
 # as a microservice, implementing a special Customers API prototype
@@ -14,7 +14,7 @@
 FROM       azul/zulu-openjdk-alpine:17-jre-headless-latest AS layers
 USER       nobody
 WORKDIR    var/tmp
-COPY       build/libs/customers-api-lite-0.3.0.jar api-lite.jar
+COPY       build/libs/customers-api-lite-0.3.1.jar api-lite.jar
 RUN        ["java", "-Djarmode=tools", "-jar", "api-lite.jar", "extract", "--layers", "--launcher", "--destination", "layers"]
 
 # === Stage 2: Run the microservice ===========================================

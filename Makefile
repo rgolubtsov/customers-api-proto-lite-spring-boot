@@ -1,7 +1,7 @@
 #
 # Makefile
 # =============================================================================
-# Customers API Lite microservice prototype. Version 0.3.0
+# Customers API Lite microservice prototype. Version 0.3.1
 # =============================================================================
 # A Spring Boot-based application, designed and intended to be run
 # as a microservice, implementing a special Customers API prototype

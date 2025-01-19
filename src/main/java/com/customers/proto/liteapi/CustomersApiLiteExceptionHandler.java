@@ -2,7 +2,7 @@
  * src/main/java/com/customers/proto/liteapi/
  * CustomersApiLiteExceptionHandler.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.0
+ * Customers API Lite microservice prototype. Version 0.3.1
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -29,7 +29,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
  * It is mainly dedicated to handle client errors and respond accordingly
  * with one of the <strong>4xx Client Error</strong> section's errors.
  *
- * @version 0.3.0
+ * @version 0.3.1
  * @since   0.2.5
  */
 @ControllerAdvice

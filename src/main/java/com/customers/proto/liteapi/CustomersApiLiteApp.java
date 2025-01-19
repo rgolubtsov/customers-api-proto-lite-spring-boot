@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/CustomersApiLiteApp.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.0
+ * Customers API Lite microservice prototype. Version 0.3.1
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -33,7 +33,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
 /**
  * The startup class of the microservice.
  *
- * @version 0.3.0
+ * @version 0.3.1
  * @since   0.0.1
  */
 @SpringBootApplication
