@@ -16,7 +16,10 @@ One may consider this project to be suitable for a wide variety of applied areas
 ## Table of Contents
 
 * **[Building](#building)**
+  * **[Creating a Docker image](#creating-a-docker-image)**
 * **[Running](#running)**
+  * **[Running a Docker image](#running-a-docker-image)**
+  * **[Exploring a Docker image payload](#exploring-a-docker-image-payload)**
 * **[Consuming](#consuming)**
   * **[Logging](#logging)**
   * **[Error handling](#error-handling)**
@@ -72,6 +75,19 @@ $ make all  # <== Assembling JAR bundles of the microservice.
 ...
 ```
 
+### Creating a Docker image
+
+**Build** a Docker image for the microservice:
+
+```
+$ # Pull the JRE image first, if not already there:
+$ sudo docker pull azul/zulu-openjdk-alpine:17-jre-headless-latest
+...
+$ # Then build the microservice image:
+$ sudo docker build -tcustomersapi/api-lite .
+...
+```
+
 ## Running
 
 **Run** the microservice using **Gradle Wrapper** (generally for development and debugging purposes):
@@ -86,6 +102,92 @@ $ ./gradlew -q bootRun; echo $?
 ```
 $ java -jar build/libs/customers-api-lite-0.3.0.jar; echo $?
 ...
+```
+
+### Running a Docker image
+
+**Run** a Docker image of the microservice, deleting all stopped containers prior to that (if any):
+
+```
+$ sudo docker rm `sudo docker ps -aq`; \
+  export PORT=8765 && sudo docker run -dp${PORT}:${PORT} --name api-lite customersapi/api-lite; echo $?
+...
+```
+
+### Exploring a Docker image payload
+
+The following is not necessary but might be considered somewhat interesting &mdash; to look up into the running container, and check out that the microservice's JAR layers, logfile, and accompanied SQLite database are at their expected places and in effect:
+
+```
+$ sudo docker ps -a
+CONTAINER ID   IMAGE                   COMMAND                    CREATED              STATUS              PORTS                                       NAMES
+<container_id> customersapi/api-lite   "java org.springfram..."   About a minute ago   Up About a minute   0.0.0.0:8765->8765/tcp, :::8765->8765/tcp   api-lite
+$
+$ sudo docker exec -it api-lite sh; echo $?
+/var/tmp $
+/var/tmp $ java --version
+openjdk 17.0.13 2024-10-15 LTS
+OpenJDK Runtime Environment Zulu17.54+21-CA (build 17.0.13+11-LTS)
+OpenJDK 64-Bit Server VM Zulu17.54+21-CA (build 17.0.13+11-LTS, mixed mode, sharing)
+/var/tmp $
+/var/tmp $ ls -al
+total 32
+drwxrwxrwt    1 root     root          4096 Jan 19 20:00 .
+drwxr-xr-x    1 root     root          4096 Jan  8 11:04 ..
+drwxr-xr-x    1 nobody   nobody        4096 Jan 19 19:50 BOOT-INF
+drwxr-xr-x    3 nobody   nobody        4096 Jan 19 19:50 META-INF
+drwxr-xr-x    1 daemon   daemon        4096 Jan 19 19:50 data
+drwxr-xr-x    2 daemon   daemon        4096 Jan 19 20:00 log
+drwxr-xr-x    3 nobody   nobody        4096 Jan 19 18:10 org
+/var/tmp $
+/var/tmp $ ls -al BOOT-INF/ BOOT-INF/classes/com/customers/proto/liteapi/ data/db/ log/
+BOOT-INF/:
+total 24
+drwxr-xr-x    1 nobody   nobody        4096 Jan 19 19:50 .
+drwxrwxrwt    1 root     root          4096 Jan 19 20:00 ..
+drwxr-xr-x    3 nobody   nobody        4096 Jan 19 19:50 classes
+-rw-r--r--    1 nobody   nobody        1907 Jan 19  2025 classpath.idx
+-rw-r--r--    1 nobody   nobody         212 Jan 19  2025 layers.idx
+drwxr-xr-x    2 nobody   nobody        4096 Jan 19 18:10 lib
+
+BOOT-INF/classes/com/customers/proto/liteapi/:
+total 56
+drwxr-xr-x    2 nobody   nobody        4096 Jan 19 19:50 .
+drwxr-xr-x    3 nobody   nobody        4096 Jan 19 19:50 ..
+-rw-r--r--    1 nobody   nobody        4458 Jan 19 19:50 CustomersApiLiteApp.class
+-rw-r--r--    1 nobody   nobody        9931 Jan 19 19:50 CustomersApiLiteController.class
+-rw-r--r--    1 nobody   nobody         668 Jan 19 19:50 CustomersApiLiteEntityContact.class
+-rw-r--r--    1 nobody   nobody         869 Jan 19 19:50 CustomersApiLiteEntityCustomer.class
+-rw-r--r--    1 nobody   nobody         654 Jan 19 19:50 CustomersApiLiteEntityError.class
+-rw-r--r--    1 nobody   nobody        3067 Jan 19 19:50 CustomersApiLiteExceptionHandler.class
+-rw-r--r--    1 nobody   nobody        4867 Jan 19 19:50 CustomersApiLiteHelper.class
+-rw-r--r--    1 nobody   nobody        1692 Jan 19 19:50 CustomersApiLiteModel.class
+
+data/db/:
+total 32
+drwxr-xr-x    1 daemon   daemon        4096 Jan 19 19:50 .
+drwxr-xr-x    1 daemon   daemon        4096 Jan 19 19:50 ..
+-rw-rw-r--    1 daemon   daemon       24576 Jan 19 17:50 customers-api-lite.db
+
+log/:
+total 12
+drwxr-xr-x    2 daemon   daemon        4096 Jan 19 20:00 .
+drwxrwxrwt    1 root     root          4096 Jan 19 20:00 ..
+-rw-r--r--    1 daemon   daemon        1183 Jan 19 20:00 customers-api-lite.log
+/var/tmp $
+/var/tmp $ netstat -plunt
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 :::8765                 :::*                    LISTEN      1/java
+/var/tmp $
+/var/tmp $ ps ax
+PID   USER     TIME  COMMAND
+    1 daemon    0:20 java org.springframework.boot.loader.launch.JarLauncher
+   28 daemon    0:00 sh
+   50 daemon    0:00 ps ax
+/var/tmp $
+/var/tmp $ exit # Or simply <Ctrl-D>.
+0
 ```
 
 ## Consuming
@@ -293,6 +395,66 @@ Jan 19 03:09:33 <hostname> java[<pid>]: [email|Saturday.Sunday@example.com]
 Jan 19 03:09:37 <hostname> java[<pid>]: customer_id=12 | contact_type=email
 Jan 19 03:09:37 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
 Jan 19 03:10:06 <hostname> java[<pid>]: Server stopped
+```
+
+Inside the running container logs might be queried also by `tail`ing the `log/customers-api-lite.log` logfile:
+
+```
+/var/tmp $ tail -f log/customers-api-lite.log
+...
+[2025-01-19][20:00:26][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2025-01-19][20:00:26][INFO ]  Started CustomersApiLiteApp in 8.342 seconds (process running for 11.369)
+[2025-01-19][20:00:26][DEBUG]  [Customers API Lite]
+[2025-01-19][20:00:26][DEBUG]  [org.sqlite.JDBC]
+[2025-01-19][20:00:26][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2025-01-19][20:00:26][INFO ]  Server started on port 8765
+[2025-01-19][21:12:10][INFO ]  Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Initializing Servlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Completed initialization in 6 ms
+[2025-01-19][21:12:10][DEBUG]  [Saturday Sunday]
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Starting...
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@e3daeac
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Start completed.
+[2025-01-19][21:12:11][DEBUG]  [3|Saturday Sunday]
+[2025-01-19][21:15:02][DEBUG]  customer_id=3
+[2025-01-19][21:15:02][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][21:15:02][DEBUG]  [email|Saturday.Sunday@example.com]
+[2025-01-19][21:17:10][DEBUG]  customer_id=3 | contact_type=email
+[2025-01-19][21:17:10][DEBUG]  [Saturday.Sunday@example.com]
+...
+```
+
+And of course Docker itself gives the possibility to read log messages by using the corresponding command for that:
+
+```
+$ sudo docker logs -f api-lite
+...
+[2025-01-19][20:00:26][INFO ]  Undertow started on port 8765 (http) with context path '/'
+[2025-01-19][20:00:26][INFO ]  Started CustomersApiLiteApp in 8.342 seconds (process running for 11.369)
+[2025-01-19][20:00:26][DEBUG]  [Customers API Lite]
+[2025-01-19][20:00:26][DEBUG]  [org.sqlite.JDBC]
+[2025-01-19][20:00:26][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
+[2025-01-19][20:00:26][INFO ]  Server started on port 8765
+[2025-01-19][21:12:10][INFO ]  Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Initializing Servlet 'dispatcherServlet'
+[2025-01-19][21:12:10][INFO ]  Completed initialization in 6 ms
+[2025-01-19][21:12:10][DEBUG]  [Saturday Sunday]
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Starting...
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@e3daeac
+[2025-01-19][21:12:11][INFO ]  HikariPool-1 - Start completed.
+[2025-01-19][21:12:11][DEBUG]  [3|Saturday Sunday]
+[2025-01-19][21:15:02][DEBUG]  customer_id=3
+[2025-01-19][21:15:02][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][21:15:02][DEBUG]  [email|Saturday.Sunday@example.com]
+[2025-01-19][21:17:10][DEBUG]  customer_id=3 | contact_type=email
+[2025-01-19][21:17:10][DEBUG]  [Saturday.Sunday@example.com]
+[2025-01-19][21:20:20][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
+[2025-01-19][21:20:20][INFO ]  Graceful shutdown complete
+[2025-01-19][21:20:20][INFO ]  stopping server: Undertow - 2.3.18.Final
+[2025-01-19][21:20:20][INFO ]  Destroying Spring FrameworkServlet 'dispatcherServlet'
+[2025-01-19][21:20:20][INFO ]  HikariPool-1 - Shutdown initiated...
+[2025-01-19][21:20:20][INFO ]  HikariPool-1 - Shutdown completed.
+[2025-01-19][21:20:20][INFO ]  Server stopped
 ```
 
 ### Error handling
