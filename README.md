@@ -37,7 +37,7 @@ Surely, one may consider this project to be suitable for a wide variety of appli
 
 ## Building
 
-The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 24.04.1 LTS x86-64)**. Install the necessary dependencies (`openjdk-17-jdk-headless`, ~~`gradle`~~, `make`, `sqlite3`, `docker.io`):
+The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 24.04.2 LTS x86-64)**. Install the necessary dependencies (`openjdk-17-jdk-headless`, ~~`gradle`~~, `make`, `sqlite3`, `docker.io`):
 
 ```
 $ sudo apt-get update && \
@@ -67,12 +67,14 @@ $ sdk install gradle
 **Build** the microservice using **Gradle Wrapper**:
 
 ```
-$ ./gradlew clean
-...
-$ ./gradlew compileJava
-...
-$ ./gradlew build
-...
+$ ./gradlew -q clean
+$
+$ ./gradlew -q compileJava
+$
+$ ./gradlew -q build && \
+if [ -f data/db/customers-api-lite.db.xz ]; then \
+    unxz data/db/customers-api-lite.db.xz; \
+fi
 ```
 
 Or **build** the microservice using **GNU Make** (optional, but for convenience &mdash; it covers the same **Gradle Wrapper** build workflow under the hood):
