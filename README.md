@@ -448,7 +448,7 @@ Inside the running container logs might be queried also by `tail`ing the `log/cu
 ...
 ```
 
-And of course Docker itself gives the possibility to read log messages by using the corresponding command for that:
+And of course, Docker itself gives the possibility to read log messages by using the corresponding command for that:
 
 ```
 $ sudo docker logs -f api-lite
