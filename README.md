@@ -37,11 +37,11 @@ Surely, one may consider this project to be suitable for a wide variety of appli
 
 ## Building
 
-The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 24.04.3 LTS x86-64)**. Install the necessary dependencies (`openjdk-17-jdk-headless`, ~~`gradle`~~, `make`, `sqlite3`, `docker.io`):
+The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 24.04.3 LTS x86-64)**. Install the necessary dependencies (`openjdk-21-jdk-headless`, ~~`gradle`~~, `make`, `docker.io`):
 
 ```
 $ sudo apt-get update && \
-  sudo apt-get install openjdk-17-jdk-headless make sqlite3 docker.io -y
+  sudo apt-get install openjdk-21-jdk-headless make docker.io -y
 ...
 ```
 
