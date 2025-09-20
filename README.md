@@ -37,7 +37,7 @@ Surely, one may consider this project to be suitable for a wide variety of appli
 
 ## Building
 
-The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 24.04.3 LTS x86-64)** and **Arch Linux** (both proven). &mdash; First install the necessary dependencies (`openjdk-21-jdk-headless`, ~~`gradle`~~, `make`, `docker.io`):
+The microservice might be built and run successfully under **Ubuntu Server (Ubuntu 24.04.3 LTS x86-64)** and **Arch Linux** (both proven). &mdash; First install the necessary dependencies (`openjdk-21-jdk-headless`, `make`, `docker.io`):
 
 * In Ubuntu Server:
 
@@ -51,23 +51,6 @@ $ sudo apt-get update && \
 
 ```
 $ sudo pacman -Syu jdk21-openjdk make docker
-...
-```
-
-**Note:** A system-wide Gradle installation is not needed to build the microservice, since it is intended to use Gradle Wrapper for that, which is already resided in the current repository. Hence, commands given in the following two paragraphs can be simply ignored &mdash; they are kept here just for reference.
-
-> Since Gradle package is somehow outdated in the stock Ubuntu package repository, it is preferred to be installed through the SDKMAN! toolkit. For that, first it needs to install SDKMAN! and to `source` its initialization script:
-
-```
-$ curl -s https://get.sdkman.io | bash
-...
-$ . /home/<username>/.sdkman/bin/sdkman-init.sh
-```
-
-> Then install latest stable version of Gradle via SDKMAN!:
-
-```
-$ sdk install gradle
 ...
 ```
 
