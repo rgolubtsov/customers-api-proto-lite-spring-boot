@@ -102,6 +102,28 @@ public class ApiLiteModel {
     // The terminating part of an SQL query,
     // used to retrieve the last record created.
     public static final String SQL_DESC_LIMIT_1 = " desc limit 1";
+
+    /**
+     * The record defining the Customer entity.
+     *
+     * @version 0.3.1
+     * @since   0.3.1
+     */
+    record Customer (
+        long   id,
+        String name
+    ) {}
+
+    /**
+     * The record defining the Contact entity.
+     *
+     * @version 0.3.1
+     * @since   0.3.1
+     */
+    record Contact (
+        String contact
+    ) {}
+
 }
 
 // vim:set nu et ts=4 sw=4:
