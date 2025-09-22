@@ -79,7 +79,6 @@ public class ApiLiteCore implements DisposableBean {
         var ds = (HikariDataSource) ctx.getBean(DATA_SOURCE);
 
         _dbg(O_BRACKET + ds.getDriverClassName() + C_BRACKET);
-        _dbg(O_BRACKET + ds.getJdbcUrl()         + C_BRACKET);
 
         c = JdbcClient.create(ds);
 
