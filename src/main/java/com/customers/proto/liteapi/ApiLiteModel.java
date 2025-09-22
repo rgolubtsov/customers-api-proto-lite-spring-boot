@@ -123,7 +123,6 @@ public class ApiLiteModel {
     record Contact (
         String contact
     ) {}
-
 }
 
 // vim:set nu et ts=4 sw=4:
