@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.Map;
 import java.util.List;
@@ -58,15 +62,15 @@ public class ApiLiteController {
      *                <br /><code>{customer_name}</code> is a name assigned
      *                to a newly created customer.
      *
-     * @return The <code>ResponseEntity<CustomersApiLiteEntityCustomer></code>
-     *         object with the <code>201 Created</code> HTTP status code,
+     * @return The <code>ResponseEntity<Customer></code> object
+     *         with the <code>201 Created</code> HTTP status code,
      *         the <code>Location</code> response header (among others),
      *         and the response body in JSON representation, containing profile
      *         details of a newly created customer.
      *         May return client or server error depending on incoming request.
      */
     @PutMapping
-    public ResponseEntity<CustomersApiLiteEntityCustomer> add_customer(
+    public ResponseEntity<Customer> add_customer(
         @RequestBody Map<String,String> payload) throws URISyntaxException {
 
         _dbg(O_BRACKET + payload.get(DB_T_CUST_C_NAME) + C_BRACKET);
@@ -74,20 +78,20 @@ public class ApiLiteController {
         i_cust.execute(payload);
 
         var customer = c.sql(SQL_GET_ALL_CUSTOMERS + SQL_DESC_LIMIT_1)
-                        .query(CustomersApiLiteEntityCustomer.class)
+                        .query(Customer.class)
                         .single();
 
         var hdrs = new HttpHeaders();
             hdrs.setLocation(new URI(SLASH + REST_VERSION
                                    + SLASH + REST_PREFIX
-                                   + SLASH + customer.getId()));
+                                   + SLASH + customer.id()));
 
-        var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
-            customer, hdrs, HttpStatus.CREATED); // <== HTTP 201 Created
+        var resp = new ResponseEntity<Customer>(customer, hdrs,
+            HttpStatus.CREATED); // <== HTTP 201 Created
 
         var body = resp.getBody();
 
-        _dbg(O_BRACKET + body.getId() + V_BAR + body.getName() + C_BRACKET);
+        _dbg(O_BRACKET + body.id() + V_BAR + body.name() + C_BRACKET);
 
         return resp;
     }
@@ -109,15 +113,15 @@ public class ApiLiteController {
      *                <br /><code>{customer_contact}</code> is a newly created
      *                contact (phone or email).
      *
-     * @return The <code>ResponseEntity<CustomersApiLiteEntityContact></code>
-     *         object with the <code>201 Created</code> HTTP status code,
+     * @return The <code>ResponseEntity<Contact></code> object
+     *         with the <code>201 Created</code> HTTP status code,
      *         the <code>Location</code> response header (among others),
      *         and the response body in JSON representation, containing details
      *         of a newly created customer contact (phone or email).
      *         May return client or server error depending on incoming request.
      */
     @PutMapping(SLASH + REST_CONTACTS)
-    public ResponseEntity<CustomersApiLiteEntityContact> add_contact(
+    public ResponseEntity<Contact> add_contact(
         @RequestBody Map<String,String> payload) throws URISyntaxException {
 
         var customer_id      = payload.get(DB_T_CONT_C_CUST_ID);
@@ -156,7 +160,7 @@ public class ApiLiteController {
 
         var contact = c.sql(sql_query + SQL_DESC_LIMIT_1)
                        .param(cust_id)
-                       .query(CustomersApiLiteEntityContact.class)
+                       .query(Contact.class)
                        .single();
 
         var hdrs = new HttpHeaders();
@@ -166,12 +170,12 @@ public class ApiLiteController {
                                    + SLASH + REST_CONTACTS
                                    + SLASH + contact_type));
 
-        var resp = new ResponseEntity<CustomersApiLiteEntityContact>(
-            contact, hdrs, HttpStatus.CREATED); // <== HTTP 201 Created
+        var resp = new ResponseEntity<Contact>(contact, hdrs,
+            HttpStatus.CREATED); // <== HTTP 201 Created
 
         var body = resp.getBody();
 
-        _dbg(O_BRACKET + contact_type + V_BAR + body.getContact() + C_BRACKET);
+        _dbg(O_BRACKET + contact_type + V_BAR + body.contact() + C_BRACKET);
 
         return resp;
     }
@@ -190,19 +194,19 @@ public class ApiLiteController {
     @GetMapping
     public ResponseEntity<List> list_customers() {
         var customers = c.sql(SQL_GET_ALL_CUSTOMERS)
-                         .query(CustomersApiLiteEntityCustomer.class)
+                         .query(Customer.class)
                          .list();
 
         if (customers.isEmpty()) {
-            customers.add(new CustomersApiLiteEntityCustomer());
+            customers.add(new Customer(0L, EMPTY_STRING));
         }
 
         var resp = new ResponseEntity<List>(customers, HttpStatus.OK);
 
         var body = resp.getBody().get(0);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityCustomer) body).getId()
-           + V_BAR     + ((CustomersApiLiteEntityCustomer) body).getName()
+        _dbg(O_BRACKET + ((Customer) body).id()
+           + V_BAR     + ((Customer) body).name()
            + C_BRACKET);
 
         return resp;
@@ -222,7 +226,7 @@ public class ApiLiteController {
      *         in JSON representation).
      */
     @GetMapping(SLASH + REST_CUST_ID)
-    public ResponseEntity<CustomersApiLiteEntityCustomer> get_customer(
+    public ResponseEntity<Customer> get_customer(
         @PathVariable String customer_id) {
 
         _dbg(CUST_ID + EQUALS + customer_id);
@@ -238,20 +242,19 @@ public class ApiLiteController {
 
         var customer = c.sql(SQL_GET_CUSTOMER_BY_ID)
                         .param(cust_id)
-                        .query(CustomersApiLiteEntityCustomer.class)
+                        .query(Customer.class)
                         .optional()
                         .orElse(null);
 
         if (customer == null) {
-            customer = new CustomersApiLiteEntityCustomer();
+            customer = new Customer(0L, EMPTY_STRING);
         }
 
-        var resp = new ResponseEntity<CustomersApiLiteEntityCustomer>(
-            customer, HttpStatus.OK);
+        var resp = new ResponseEntity<Customer>(customer, HttpStatus.OK);
 
         var body = resp.getBody();
 
-        _dbg(O_BRACKET + body.getId() + V_BAR + body.getName() + C_BRACKET);
+        _dbg(O_BRACKET + body.id() + V_BAR + body.name() + C_BRACKET);
 
         return resp;
     }
@@ -289,19 +292,18 @@ public class ApiLiteController {
         var contacts = c.sql(SQL_GET_ALL_CONTACTS)
                         .param(cust_id) // <== For retrieving phones.
                         .param(cust_id) // <== For retrieving emails.
-                        .query(CustomersApiLiteEntityContact.class)
+                        .query(Contact.class)
                         .list();
 
         if (contacts.isEmpty()) {
-            contacts.add(new CustomersApiLiteEntityContact());
+            contacts.add(new Contact(EMPTY_STRING));
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
 
         var body = resp.getBody().get(0);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact) body).getContact()
-           + C_BRACKET);
+        _dbg(O_BRACKET + ((Contact) body).contact() + C_BRACKET);
 
         return resp;
     }
@@ -354,19 +356,18 @@ public class ApiLiteController {
 
         var contacts = c.sql(sql_query)
                         .param(cust_id)
-                        .query(CustomersApiLiteEntityContact.class)
+                        .query(Contact.class)
                         .list();
 
         if (contacts.isEmpty()) {
-            contacts.add(new CustomersApiLiteEntityContact());
+            contacts.add(new Contact(EMPTY_STRING));
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
 
         var body = resp.getBody().get(0);
 
-        _dbg(O_BRACKET + ((CustomersApiLiteEntityContact) body).getContact()
-           + C_BRACKET);
+        _dbg(O_BRACKET + ((Contact) body).contact() + C_BRACKET);
 
         return resp;
     }
@@ -377,6 +378,43 @@ public class ApiLiteController {
              if (contact.matches(PHONE_REGEX)) return PHONE;
         else if (contact.matches(EMAIL_REGEX)) return EMAIL;
         else return EMPTY_STRING;
+    }
+
+    /**
+     * The exception handler class for the controller of the microservice.
+     * It is mainly dedicated to handle client errors and respond accordingly
+     * with one of the <strong>4xx Client Error</strong> section's errors.
+     *
+     * @version 0.3.1
+     * @since   0.3.1
+     */
+    @ControllerAdvice
+    public class ExceptionHandler extends ResponseEntityExceptionHandler {
+        @Override
+        protected ResponseEntity<Object> handleExceptionInternal(
+            Exception      ex,
+            Object         body,
+            HttpHeaders    headers,
+            HttpStatusCode statusCode,
+            WebRequest     request) {
+
+            if (statusCode.value() == HttpStatus.METHOD_NOT_ALLOWED.value()) {
+                return new ResponseEntity<Object>(body, headers, statusCode);
+            }
+
+            return new ResponseEntity<Object>(new Error(ERR_REQ_MALFORMED),
+                HttpStatus.BAD_REQUEST); // <== HTTP 400 Bad Request
+        }
+
+        /**
+         * The record defining the Error entity.
+         *
+         * @version 0.3.1
+         * @since   0.3.1
+         */
+        record Error (
+            String error
+        ) {}
     }
 }
 
