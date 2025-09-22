@@ -11,14 +11,14 @@
 #
 
 # === Stage 1: Extract JAR layers =============================================
-FROM       azul/zulu-openjdk-alpine:17-jre-headless-latest AS layers
+FROM       azul/zulu-openjdk-alpine:21-jre-latest AS layers
 USER       nobody
 WORKDIR    var/tmp
 COPY       build/libs/customers-api-lite-0.3.5.jar api-lite.jar
 RUN        ["java", "-Djarmode=tools", "-jar", "api-lite.jar", "extract", "--layers", "--launcher", "--destination", "layers"]
 
 # === Stage 2: Run the microservice ===========================================
-FROM       azul/zulu-openjdk-alpine:17-jre-headless-latest
+FROM       azul/zulu-openjdk-alpine:21-jre-latest
 USER       daemon
 WORKDIR    var/tmp
 ARG        LAYERS=var/tmp/layers
