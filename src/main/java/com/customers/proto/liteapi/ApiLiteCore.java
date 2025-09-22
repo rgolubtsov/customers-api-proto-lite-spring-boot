@@ -31,7 +31,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import static com.customers.proto.liteapi.ApiLiteHelper.*;
 
 /**
- * The startup class of the microservice.
+ * The main class of the microservice.
  *
  * @version 0.3.1
  * @since   0.0.1
