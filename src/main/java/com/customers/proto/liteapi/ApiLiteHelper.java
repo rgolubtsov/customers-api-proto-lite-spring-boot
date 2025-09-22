@@ -1,5 +1,5 @@
 /*
- * src/main/java/com/customers/proto/liteapi/CustomersApiLiteHelper.java
+ * src/main/java/com/customers/proto/liteapi/ApiLiteHelper.java
  * ============================================================================
  * Customers API Lite microservice prototype. Version 0.3.1
  * ============================================================================
@@ -29,7 +29,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
  * @version 0.3.1
  * @since   0.0.1
  */
-public class CustomersApiLiteHelper {
+public class ApiLiteHelper {
     // Helper constants.
     public static final int    EXIT_FAILURE =   1; //    Failing exit status.
     public static final int    EXIT_SUCCESS =   0; // Successful exit status.
@@ -172,7 +172,7 @@ public class CustomersApiLiteHelper {
     private static final Properties _get_props() {
         var props = new Properties();
 
-        var loader = CustomersApiLiteHelper.class.getClassLoader();
+        var loader = ApiLiteHelper.class.getClassLoader();
 
         var data = loader.getResourceAsStream(APP_PROPS);
 

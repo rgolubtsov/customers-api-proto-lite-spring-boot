@@ -22,7 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
-import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
+import static com.customers.proto.liteapi.ApiLiteHelper.*;
 
 /**
  * The exception handler class for the controller of the microservice.

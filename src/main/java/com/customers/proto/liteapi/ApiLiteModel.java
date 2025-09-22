@@ -1,5 +1,5 @@
 /*
- * src/main/java/com/customers/proto/liteapi/CustomersApiLiteModel.java
+ * src/main/java/com/customers/proto/liteapi/ApiLiteModel.java
  * ============================================================================
  * Customers API Lite microservice prototype. Version 0.3.1
  * ============================================================================
@@ -18,7 +18,7 @@ package com.customers.proto.liteapi;
  * @version 0.3.1
  * @since   0.1.1
  */
-public class CustomersApiLiteModel {
+public class ApiLiteModel {
     /**
      * The SQL query for retrieving all customer profiles.
      *

@@ -1,5 +1,5 @@
 /*
- * src/main/java/com/customers/proto/liteapi/CustomersApiLiteController.java
+ * src/main/java/com/customers/proto/liteapi/ApiLiteController.java
  * ============================================================================
  * Customers API Lite microservice prototype. Version 0.3.1
  * ============================================================================
@@ -29,8 +29,8 @@ import java.util.List;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
-import static com.customers.proto.liteapi.CustomersApiLiteModel.*;
+import static com.customers.proto.liteapi.ApiLiteHelper.*;
+import static com.customers.proto.liteapi.ApiLiteModel.*;
 
 /**
  * The controller class of the microservice. Defines all the REST API endpoints
@@ -43,7 +43,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteModel.*;
  */
 @RestController
 @RequestMapping(SLASH + REST_VERSION + SLASH + REST_PREFIX)
-public class CustomersApiLiteController {
+public class ApiLiteController {
     /**
      * The <code>PUT /v1/customers</code> endpoint.
      * <br />

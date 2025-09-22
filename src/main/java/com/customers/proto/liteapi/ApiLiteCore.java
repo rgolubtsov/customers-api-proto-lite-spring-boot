@@ -1,5 +1,5 @@
 /*
- * src/main/java/com/customers/proto/liteapi/CustomersApiLiteApp.java
+ * src/main/java/com/customers/proto/liteapi/ApiLiteCore.java
  * ============================================================================
  * Customers API Lite microservice prototype. Version 0.3.1
  * ============================================================================
@@ -28,7 +28,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
+import static com.customers.proto.liteapi.ApiLiteHelper.*;
 
 /**
  * The startup class of the microservice.
@@ -37,7 +37,7 @@ import static com.customers.proto.liteapi.CustomersApiLiteHelper.*;
  * @since   0.0.1
  */
 @SpringBootApplication
-public class CustomersApiLiteApp implements DisposableBean {
+public class ApiLiteCore implements DisposableBean {
     /**
      * The microservice entry point.
      *
@@ -57,7 +57,7 @@ public class CustomersApiLiteApp implements DisposableBean {
 
         // Trying to start up the bundled web server.
         try {
-            ctx = SpringApplication.run(CustomersApiLiteApp.class, args);
+            ctx = SpringApplication.run(ApiLiteCore.class, args);
         } catch (Exception e) {
             if ((e instanceof ApplicationContextException)
                 && (e.getCause() instanceof PortInUseException)) {
