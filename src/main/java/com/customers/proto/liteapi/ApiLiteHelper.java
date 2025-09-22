@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/ApiLiteHelper.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.1
+ * Customers API Lite microservice prototype. Version 0.3.5
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -26,7 +26,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 /**
  * The helper class for the microservice.
  *
- * @version 0.3.1
+ * @version 0.3.5
  * @since   0.0.1
  */
 public class ApiLiteHelper {
