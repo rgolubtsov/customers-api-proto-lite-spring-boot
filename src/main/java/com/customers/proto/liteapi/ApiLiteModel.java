@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/ApiLiteModel.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.5
+ * Customers API Lite microservice prototype. Version 0.3.6
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -15,7 +15,7 @@ package com.customers.proto.liteapi;
 /**
  * The model class of the microservice.
  *
- * @version 0.3.5
+ * @version 0.3.6
  * @since   0.1.1
  */
 public class ApiLiteModel {
@@ -106,7 +106,7 @@ public class ApiLiteModel {
     /**
      * The record defining the Customer entity.
      *
-     * @version 0.3.5
+     * @version 0.3.6
      * @since   0.3.1
      */
     record Customer (
@@ -117,7 +117,7 @@ public class ApiLiteModel {
     /**
      * The record defining the Contact entity.
      *
-     * @version 0.3.5
+     * @version 0.3.6
      * @since   0.3.1
      */
     record Contact (

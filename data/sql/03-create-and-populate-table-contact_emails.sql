@@ -1,7 +1,7 @@
 --
 -- data/sql/03-create-and-populate-table-contact_emails.sql
 -- ============================================================================
--- Customers API Lite microservice prototype. Version 0.3.5
+-- Customers API Lite microservice prototype. Version 0.3.6
 -- ============================================================================
 -- A Spring Boot-based application, designed and intended to be run
 -- as a microservice, implementing a special Customers API prototype
