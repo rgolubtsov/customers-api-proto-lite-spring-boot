@@ -90,8 +90,7 @@ public class ApiLiteModel {
         + "       customers      cust"
         + " where"
         + "      (cust.id = emails.customer_id) and"
-        + "      (cust.id =                  ?)",
-          "select name from customers where (id = ?)"};
+        + "      (cust.id =                  ?)"};
 
     // The intermediate part of an SQL query,
     // used to order contact records by ID.
