@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/ApiLiteModel.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.6
+ * Customers API Lite microservice prototype. Version 0.3.7
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -15,7 +15,7 @@ package com.customers.proto.liteapi;
 /**
  * The model class of the microservice.
  *
- * @version 0.3.6
+ * @version 0.3.7
  * @since   0.1.1
  */
 public class ApiLiteModel {
@@ -90,8 +90,7 @@ public class ApiLiteModel {
         + "       customers      cust"
         + " where"
         + "      (cust.id = emails.customer_id) and"
-        + "      (cust.id =                  ?)",
-          "select name from customers where (id = ?)"};
+        + "      (cust.id =                  ?)"};
 
     // The intermediate part of an SQL query,
     // used to order contact records by ID.
@@ -106,7 +105,7 @@ public class ApiLiteModel {
     /**
      * The record defining the Customer entity.
      *
-     * @version 0.3.6
+     * @version 0.3.7
      * @since   0.3.1
      */
     record Customer (
@@ -117,7 +116,7 @@ public class ApiLiteModel {
     /**
      * The record defining the Contact entity.
      *
-     * @version 0.3.6
+     * @version 0.3.7
      * @since   0.3.1
      */
     record Contact (

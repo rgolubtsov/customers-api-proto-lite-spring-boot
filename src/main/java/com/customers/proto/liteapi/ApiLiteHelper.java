@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/ApiLiteHelper.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.6
+ * Customers API Lite microservice prototype. Version 0.3.7
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -26,7 +26,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 /**
  * The helper class for the microservice.
  *
- * @version 0.3.6
+ * @version 0.3.7
  * @since   0.0.1
  */
 public class ApiLiteHelper {
@@ -56,6 +56,17 @@ public class ApiLiteHelper {
         = "for an unknown reason. Quitting...";
     public static final String ERR_REQ_MALFORMED
         = "HTTP 400 Bad Request: Request is malformed. "
+        + "Please check your inputs.";
+    public static final String ERR_REQ_NOT_FOUND_1
+        = "HTTP 404 Not Found: No such REST URI path exists. "
+        + "Please check your inputs.";
+    public static final String ERR_REQ_NOT_FOUND_2
+        = "HTTP 404 Not Found: No such customer exists.";
+    public static final String ERR_REQ_NOT_FOUND_3
+        = "HTTP 404 Not Found: No contacts belonging to a given customer "
+        + "exist, or no such customer exists.";
+    public static final String ERR_REQ_NOT_ALLOWED
+        = "HTTP 405 Method Not Allowed: Bad HTTP method used. "
         + "Please check your inputs.";
 
     // Common notification messages.
@@ -94,6 +105,12 @@ public class ApiLiteHelper {
     public static final String REST_CONT_TYPE = "{contact_type}";
     public static final String PHONE          =  "phone";
     public static final String EMAIL          =  "email";
+
+    // Regex patterns for customer and contacts REST URI paths.
+    public static final String REST_URI_CUST_REGEX
+        = "^\\/v1\\/customers\\/\\d+$";
+    public static final String REST_URI_CONT_REGEX
+        = "^\\/v1\\/customers\\/\\d+\\/contacts.*";
 
     // HTTP request path variable names.
     public static final String CUST_ID   = "customer_id";

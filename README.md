@@ -105,14 +105,14 @@ $ ./gradlew -q bootRun; echo $?
 **Run** the microservice using its all-in-one JAR bundle, built previously by the `build` or `all` targets:
 
 ```
-$ java -jar build/libs/customers-api-lite-0.3.6.jar; echo $?
+$ java -jar build/libs/customers-api-lite-0.3.7.jar; echo $?
 ...
 ```
 
 To run the microservice as a *true* daemon, i.e. in the background, redirecting all the console output to `/dev/null`, the following form of invocation of its executable can be used:
 
 ```
-$ java -jar build/libs/customers-api-lite-0.3.6.jar > /dev/null 2>&1 &
+$ java -jar build/libs/customers-api-lite-0.3.7.jar > /dev/null 2>&1 &
 [1] <pid>
 ```
 
@@ -123,7 +123,7 @@ The daemonized microservice then can be stopped at any time by issuing the follo
 ```
 $ kill -SIGTERM <pid>
 $
-[1]+  Exit 143                java -jar build/libs/customers-api-lite-0.3.6.jar > /dev/null 2>&1
+[1]+  Exit 143                java -jar build/libs/customers-api-lite-0.3.7.jar > /dev/null 2>&1
 ```
 
 ### Running a Docker image
@@ -246,11 +246,11 @@ $ curl -vXPUT http://localhost:8765/v1/customers \
 ...
 < HTTP/1.1 201 Created
 ...
-< Location: /v1/customers/4
+< Location: /v1/customers/3
 ...
 < Content-Type: application/json
 ...
-{"id":4,"name":"Jamison Palmer"}
+{"id":3,"name":"Jamison Palmer"}
 ```
 
 2. **Create contact**
@@ -258,7 +258,7 @@ $ curl -vXPUT http://localhost:8765/v1/customers \
 ```
 $ curl -vXPUT http://localhost:8765/v1/customers/contacts \
        -H 'content-type: application/json' \
-       -d '{"customer_id":"4","contact":"+12197654320"}'
+       -d '{"customer_id":"3","contact":"+12197654320"}'
 ...
 > PUT /v1/customers/contacts HTTP/1.1
 ...
@@ -267,7 +267,7 @@ $ curl -vXPUT http://localhost:8765/v1/customers/contacts \
 ...
 < HTTP/1.1 201 Created
 ...
-< Location: /v1/customers/4/contacts/phone
+< Location: /v1/customers/3/contacts/phone
 ...
 < Content-Type: application/json
 ...
@@ -279,7 +279,7 @@ Or create **email** contact:
 ```
 $ curl -vXPUT http://localhost:8765/v1/customers/contacts \
        -H 'content-type: application/json' \
-       -d '{"customer_id":"4","contact":"jamison.palmer@example.com"}'
+       -d '{"customer_id":"3","contact":"jamison.palmer@example.com"}'
 ...
 > PUT /v1/customers/contacts HTTP/1.1
 ...
@@ -288,7 +288,7 @@ $ curl -vXPUT http://localhost:8765/v1/customers/contacts \
 ...
 < HTTP/1.1 201 Created
 ...
-< Location: /v1/customers/4/contacts/email
+< Location: /v1/customers/3/contacts/email
 ...
 < Content-Type: application/json
 ...
@@ -306,63 +306,63 @@ $ curl -v http://localhost:8765/v1/customers
 ...
 < Content-Type: application/json
 ...
-[{"id":1,"name":"Jammy Jellyfish"},{"id":2,"name":"Noble Numbat"},{"id":3,"name":"Noah Henley"},{"id":4,"name":"Jamison Palmer"},{"id":5,"name":"Madeline Michelle"},{"id":6,"name":"Al Lester"},{"id":7,"name":"Sarah Kitteringham"},{"id":8,"name":"Just Name"}]
+[{"id":1,"name":"Jammy Jellyfish"},{"id":2,"name":"Noble Numbat"},{"id":3,"name":"Jamison Palmer"},{"id":4,"name":"Sarah Kitteringham"}]
 ```
 
 4. **Retrieve customer**
 
 ```
-$ curl -v http://localhost:8765/v1/customers/4
+$ curl -v http://localhost:8765/v1/customers/3
 ...
-> GET /v1/customers/4 HTTP/1.1
+> GET /v1/customers/3 HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-{"id":4,"name":"Jamison Palmer"}
+{"id":3,"name":"Jamison Palmer"}
 ```
 
 5. **List contacts for a given customer**
 
 ```
-$ curl -v http://localhost:8765/v1/customers/4/contacts
+$ curl -v http://localhost:8765/v1/customers/3/contacts
 ...
-> GET /v1/customers/4/contacts HTTP/1.1
+> GET /v1/customers/3/contacts HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-[{"contact":"+12197654320"},{"contact":"jamison.palmer@example.com"}]
+[{"contact":"+12197654320"},{"contact":"+12197654321"},{"contact":"+12197654322"},{"contact":"jamison.palmer@example.com"},{"contact":"jp@example.com"},{"contact":"jpalmer@example.com"}]
 ```
 
 6. **List contacts of a given type for a given customer**
 
 ```
-$ curl -v http://localhost:8765/v1/customers/4/contacts/phone
+$ curl -v http://localhost:8765/v1/customers/3/contacts/phone
 ...
-> GET /v1/customers/4/contacts/phone HTTP/1.1
+> GET /v1/customers/3/contacts/phone HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-[{"contact":"+12197654320"}]
+[{"contact":"+12197654320"},{"contact":"+12197654321"},{"contact":"+12197654322"}]
 ```
 
 Or list **email** contacts:
 
 ```
-$ curl -v http://localhost:8765/v1/customers/4/contacts/email
+$ curl -v http://localhost:8765/v1/customers/3/contacts/email
 ...
-> GET /v1/customers/4/contacts/email HTTP/1.1
+> GET /v1/customers/3/contacts/email HTTP/1.1
 ...
 < HTTP/1.1 200 OK
 ...
 < Content-Type: application/json
 ...
-[{"contact":"jamison.palmer@example.com"}]
+[{"contact":"jamison.palmer@example.com"},{"contact":"jpalmer@example.com"},{"contact":"jp@example.com"}]
 ```
 
 > ^ The given names in customer accounts and in email contacts (in samples above) are for demonstrational purposes only. They have nothing common WRT any actual, ever really encountered names elsewhere.
@@ -374,32 +374,31 @@ The microservice has the ability to log messages to a logfile and to the Unix sy
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2025-01-19][03:00:41][INFO ]  Undertow started on port 8765 (http) with context path '/'
-[2025-01-19][03:00:41][INFO ]  Started CustomersApiLiteApp in 7.709 seconds (process running for 9.915)
-[2025-01-19][03:00:41][DEBUG]  [Customers API Lite]
-[2025-01-19][03:00:41][DEBUG]  [org.sqlite.JDBC]
-[2025-01-19][03:00:41][DEBUG]  [jdbc:sqlite:data/db/customers-api-lite.db]
-[2025-01-19][03:00:41][INFO ]  Server started on port 8765
-[2025-01-19][03:06:02][INFO ]  Initializing Spring DispatcherServlet 'dispatcherServlet'
-[2025-01-19][03:06:02][INFO ]  Initializing Servlet 'dispatcherServlet'
-[2025-01-19][03:06:02][INFO ]  Completed initialization in 4 ms
-[2025-01-19][03:06:02][DEBUG]  customer_id=12
-[2025-01-19][03:06:02][INFO ]  HikariPool-1 - Starting...
-[2025-01-19][03:06:03][INFO ]  HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@44f35bb0
-[2025-01-19][03:06:03][INFO ]  HikariPool-1 - Start completed.
-[2025-01-19][03:06:03][DEBUG]  [12|Saturday Sunday]
-[2025-01-19][03:09:32][DEBUG]  customer_id=12
-[2025-01-19][03:09:32][DEBUG]  [Saturday.Sunday@example.com]
-[2025-01-19][03:09:33][DEBUG]  [email|Saturday.Sunday@example.com]
-[2025-01-19][03:09:37][DEBUG]  customer_id=12 | contact_type=email
-[2025-01-19][03:09:37][DEBUG]  [Saturday.Sunday@example.com]
-[2025-01-19][03:10:06][INFO ]  Commencing graceful shutdown. Waiting for active requests to complete
-[2025-01-19][03:10:06][INFO ]  Graceful shutdown complete
-[2025-01-19][03:10:06][INFO ]  stopping server: Undertow - 2.3.18.Final
-[2025-01-19][03:10:06][INFO ]  Destroying Spring FrameworkServlet 'dispatcherServlet'
-[2025-01-19][03:10:06][INFO ]  HikariPool-1 - Shutdown initiated...
-[2025-01-19][03:10:06][INFO ]  HikariPool-1 - Shutdown completed.
-[2025-01-19][03:10:06][INFO ]  Server stopped
+[2025-09-24][12:10:10] [DEBUG] [Customers API Lite]
+[2025-09-24][12:10:10] [DEBUG] [org.sqlite.JDBC]
+[2025-09-24][12:10:10] [INFO ] Server started on port 8765
+[2025-09-24][12:15:10] [INFO ] Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-09-24][12:15:10] [INFO ] Initializing Servlet 'dispatcherServlet'
+[2025-09-24][12:15:10] [INFO ] Completed initialization in 2 ms
+[2025-09-24][12:15:10] [DEBUG] [Saturday Sunday]
+[2025-09-24][12:15:10] [INFO ] HikariPool-1 - Starting...
+[2025-09-24][12:15:10] [INFO ] HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@36c69882
+[2025-09-24][12:15:10] [INFO ] HikariPool-1 - Start completed.
+[2025-09-24][12:15:10] [DEBUG] [5|Saturday Sunday]
+[2025-09-24][13:00:10] [DEBUG] customer_id=5
+[2025-09-24][13:00:10] [DEBUG] [Saturday.Sunday@example.com]
+[2025-09-24][13:00:10] [DEBUG] [email|Saturday.Sunday@example.com]
+[2025-09-24][13:05:20] [DEBUG] customer_id=5
+[2025-09-24][13:05:20] [DEBUG] [5|Saturday Sunday]
+[2025-09-24][13:10:30] [DEBUG] customer_id=5 | contact_type=email
+[2025-09-24][13:10:30] [DEBUG] [Saturday.Sunday@example.com]
+[2025-09-24][13:15:40] [INFO ] Commencing graceful shutdown. Waiting for active requests to complete
+[2025-09-24][13:15:40] [INFO ] Graceful shutdown complete
+[2025-09-24][13:15:40] [INFO ] stopping server: Undertow - 2.3.19.Final
+[2025-09-24][13:15:40] [INFO ] Destroying Spring FrameworkServlet 'dispatcherServlet'
+[2025-09-24][13:15:40] [INFO ] HikariPool-1 - Shutdown initiated...
+[2025-09-24][13:15:40] [INFO ] HikariPool-1 - Shutdown completed.
+[2025-09-24][13:15:40] [INFO ] Server stopped
 ```
 
 Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
@@ -407,18 +406,19 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Jan 19 03:00:41 <hostname> java[<pid>]: [Customers API Lite]
-Jan 19 03:00:41 <hostname> java[<pid>]: [org.sqlite.JDBC]
-Jan 19 03:00:41 <hostname> java[<pid>]: [jdbc:sqlite:data/db/customers-api-lite.db]
-Jan 19 03:00:41 <hostname> java[<pid>]: Server started on port 8765
-Jan 19 03:06:02 <hostname> java[<pid>]: customer_id=12
-Jan 19 03:06:03 <hostname> java[<pid>]: [12|Saturday Sunday]
-Jan 19 03:09:32 <hostname> java[<pid>]: customer_id=12
-Jan 19 03:09:32 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
-Jan 19 03:09:33 <hostname> java[<pid>]: [email|Saturday.Sunday@example.com]
-Jan 19 03:09:37 <hostname> java[<pid>]: customer_id=12 | contact_type=email
-Jan 19 03:09:37 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
-Jan 19 03:10:06 <hostname> java[<pid>]: Server stopped
+Sep 24 12:10:10 <hostname> java[<pid>]: [Customers API Lite]
+Sep 24 12:10:10 <hostname> java[<pid>]: [org.sqlite.JDBC]
+Sep 24 12:10:10 <hostname> java[<pid>]: Server started on port 8765
+Sep 24 12:15:10 <hostname> java[<pid>]: [Saturday Sunday]
+Sep 24 12:15:10 <hostname> java[<pid>]: [5|Saturday Sunday]
+Sep 24 13:00:10 <hostname> java[<pid>]: customer_id=5
+Sep 24 13:00:10 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
+Sep 24 13:00:10 <hostname> java[<pid>]: [email|Saturday.Sunday@example.com]
+Sep 24 13:05:20 <hostname> java[<pid>]: customer_id=5
+Sep 24 13:05:20 <hostname> java[<pid>]: [5|Saturday Sunday]
+Sep 24 13:10:30 <hostname> java[<pid>]: customer_id=5 | contact_type=email
+Sep 24 13:10:30 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
+Sep 24 13:15:40 <hostname> java[<pid>]: Server stopped
 ```
 
 Inside the running container logs might be queried also by `tail`ing the `log/customers-api-lite.log` logfile:

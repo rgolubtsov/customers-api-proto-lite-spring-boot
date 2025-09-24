@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/ApiLiteController.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.6
+ * Customers API Lite microservice prototype. Version 0.3.7
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -20,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+
+import org.springframework.beans.TypeMismatchException;
 
 import java.util.Map;
 import java.util.List;
@@ -42,7 +46,7 @@ import static com.customers.proto.liteapi.ApiLiteModel.*;
  * <br />
  * <br />&lt;HTTP request method&gt; <code>/v1/customers</code>.
  *
- * @version 0.3.6
+ * @version 0.3.7
  * @since   0.1.0
  */
 @RestController
@@ -75,6 +79,7 @@ public class ApiLiteController {
 
         _dbg(O_BRACKET + payload.get(DB_T_CUST_C_NAME) + C_BRACKET);
 
+        // Creating a new customer (putting customer data to the database).
         i_cust.execute(payload);
 
         var customer = c.sql(SQL_GET_ALL_CUSTOMERS + SQL_DESC_LIMIT_1)
@@ -132,18 +137,26 @@ public class ApiLiteController {
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request payload {customer_id}.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
-        }
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
 
-        var sql_query = EMPTY_STRING;
+            throw new TypeMismatchException(customer_id, null);
+        }
 
         // Parsing and validating a customer contact: phone or email.
         var contact_type = _parse_contact(customer_contact);
 
+        if (contact_type.isEmpty()) {
+            throw new TypeMismatchException(customer_contact, null);
+        }
+
+        var sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
+
+        // Creating a new contact (putting a contact regarding a given customer
+        // to the database).
                if (contact_type.compareToIgnoreCase(PHONE) == 0) {
             i_cont[0].execute(payload);
 
@@ -154,8 +167,6 @@ public class ApiLiteController {
 
             sql_query = SQL_GET_CONTACTS_BY_TYPE[1]
                       + SQL_ORDER_CONTACTS_BY_ID[1];
-        } else {
-            throw new NullPointerException(); // FIXME: Replace this!
         }
 
         var contact = c.sql(sql_query + SQL_DESC_LIMIT_1)
@@ -193,16 +204,12 @@ public class ApiLiteController {
      */
     @GetMapping
     public ResponseEntity<List> list_customers() {
+        // Retrieving all customer profiles from the database.
         var customers = c.sql(SQL_GET_ALL_CUSTOMERS)
                          .query(Customer.class)
                          .list();
 
-        if (customers.isEmpty()) {
-            customers.add(new Customer(0L, EMPTY_STRING));
-        }
-
         var resp = new ResponseEntity<List>(customers, HttpStatus.OK);
-
         var body = resp.getBody().get(0);
 
         _dbg(O_BRACKET + ((Customer) body).id()
@@ -219,27 +226,33 @@ public class ApiLiteController {
      *
      * @param customer_id The customer ID used to retrieve
      *                    customer profile data.
+     * @param request     The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided, containing profile details
      *         for a given customer (in the response body
      *         in JSON representation).
+     *         May return client or server error depending on incoming request.
      */
     @GetMapping(SLASH + REST_CUST_ID)
     public ResponseEntity<Customer> get_customer(
-        @PathVariable String customer_id) {
+        @PathVariable String    customer_id,
+        final ServletWebRequest request) throws NoResourceFoundException {
 
         _dbg(CUST_ID + EQUALS + customer_id);
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request path variable.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
+
+            throw new TypeMismatchException(customer_id, null);
         }
 
+        // Retrieving profile details for a given customer from the database.
         var customer = c.sql(SQL_GET_CUSTOMER_BY_ID)
                         .param(cust_id)
                         .query(Customer.class)
@@ -247,11 +260,13 @@ public class ApiLiteController {
                         .orElse(null);
 
         if (customer == null) {
-            customer = new Customer(0L, EMPTY_STRING);
+            throw new NoResourceFoundException(request.getHttpMethod(),
+                                               SLASH + REST_VERSION
+                                             + SLASH + REST_PREFIX
+                                             + SLASH + cust_id);
         }
 
         var resp = new ResponseEntity<Customer>(customer, HttpStatus.OK);
-
         var body = resp.getBody();
 
         _dbg(O_BRACKET + body.id() + V_BAR + body.name() + C_BRACKET);
@@ -267,6 +282,7 @@ public class ApiLiteController {
      *
      * @param customer_id The customer ID used to retrieve contacts
      *                    which belong to this customer.
+     * @param request     The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity<List></code> object
      *         with the <code>200 OK</code> HTTP status code and the response
@@ -276,19 +292,24 @@ public class ApiLiteController {
      */
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
     public ResponseEntity<List> list_contacts(
-        @PathVariable String customer_id) {
+        @PathVariable String    customer_id,
+        final ServletWebRequest request) throws NoResourceFoundException {
 
         _dbg(CUST_ID + EQUALS + customer_id);
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request path variable.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
+
+            throw new TypeMismatchException(customer_id, null);
         }
 
+        // Retrieving all contacts associated with a given customer
+        // from the database.
         var contacts = c.sql(SQL_GET_ALL_CONTACTS)
                         .param(cust_id) // <== For retrieving phones.
                         .param(cust_id) // <== For retrieving emails.
@@ -296,11 +317,14 @@ public class ApiLiteController {
                         .list();
 
         if (contacts.isEmpty()) {
-            contacts.add(new Contact(EMPTY_STRING));
+            throw new NoResourceFoundException(request.getHttpMethod(),
+                                               SLASH + REST_VERSION
+                                             + SLASH + REST_PREFIX
+                                             + SLASH + cust_id
+                                             + SLASH + REST_CONTACTS);
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
-
         var body = resp.getBody().get(0);
 
         _dbg(O_BRACKET + ((Contact) body).contact() + C_BRACKET);
@@ -319,6 +343,7 @@ public class ApiLiteController {
      *                     which belong to this customer.
      * @param contact_type The particular type of contacts to retrieve
      *                     (e.g. phone, email, postal address, etc.).
+     * @param request      The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity<List></code> object
      *         with the <code>200 OK</code> HTTP status code and the response
@@ -329,42 +354,49 @@ public class ApiLiteController {
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
                                      + SLASH + REST_CONT_TYPE)
     public ResponseEntity<List> list_contacts_by_type(
-        @PathVariable String customer_id,
-        @PathVariable String contact_type) {
+        @PathVariable String    customer_id,
+        @PathVariable String    contact_type,
+        final ServletWebRequest request) throws NoResourceFoundException {
 
         _dbg(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
            + CONT_TYPE + EQUALS + contact_type);
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request path var {customer_id}.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
+
+            throw new TypeMismatchException(customer_id, null);
         }
 
-        var sql_query = EMPTY_STRING;
+        var sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
 
                if (contact_type.compareToIgnoreCase(PHONE) == 0) {
             sql_query = SQL_GET_CONTACTS_BY_TYPE[0];
         } else if (contact_type.compareToIgnoreCase(EMAIL) == 0) {
             sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
-        } else {
-            sql_query = SQL_GET_CONTACTS_BY_TYPE[2];
         }
 
+        // Retrieving all contacts of a given type associated
+        // with a given customer from the database.
         var contacts = c.sql(sql_query)
                         .param(cust_id)
                         .query(Contact.class)
                         .list();
 
         if (contacts.isEmpty()) {
-            contacts.add(new Contact(EMPTY_STRING));
+            throw new NoResourceFoundException(request.getHttpMethod(),
+                                               SLASH + REST_VERSION
+                                             + SLASH + REST_PREFIX
+                                             + SLASH + cust_id
+                                             + SLASH + REST_CONTACTS
+                                             + SLASH + contact_type);
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
-
         var body = resp.getBody().get(0);
 
         _dbg(O_BRACKET + ((Contact) body).contact() + C_BRACKET);
@@ -385,7 +417,7 @@ public class ApiLiteController {
      * It is mainly dedicated to handle client errors and respond accordingly
      * with one of the <strong>4xx Client Error</strong> section's errors.
      *
-     * @version 0.3.6
+     * @version 0.3.7
      * @since   0.3.1
      */
     @ControllerAdvice
@@ -398,18 +430,46 @@ public class ApiLiteController {
             HttpStatusCode statusCode,
             WebRequest     request) {
 
-            if (statusCode.value() == HttpStatus.METHOD_NOT_ALLOWED.value()) {
-                return new ResponseEntity<Object>(body, headers, statusCode);
+            l.debug(O_BRACKET + ex.getMessage() + C_BRACKET);
+
+            switch (statusCode) {
+                case HttpStatus.BAD_REQUEST:        // 400
+                    body = new Error(ERR_REQ_MALFORMED);
+
+                    break;
+                case HttpStatus.NOT_FOUND:          // 404
+                    if (ex instanceof NoResourceFoundException) {
+                        var path = ((NoResourceFoundException) ex)
+                            .getResourcePath();
+
+                        l.debug(O_BRACKET + path + C_BRACKET);
+
+                               if (path.matches(REST_URI_CUST_REGEX)) {
+                            body = new Error(ERR_REQ_NOT_FOUND_2);
+                        } else if (path.matches(REST_URI_CONT_REGEX)) {
+                            body = new Error(ERR_REQ_NOT_FOUND_3);
+                        } else {
+                            body = new Error(ERR_REQ_NOT_FOUND_1);
+                        }
+                    }
+
+                    break;
+                case HttpStatus.METHOD_NOT_ALLOWED: // 405
+                    body = new Error(ERR_REQ_NOT_ALLOWED);
+
+                    break;
+                default:
+                    l.debug(O_BRACKET + statusCode.value() + C_BRACKET);
+                    l.debug(O_BRACKET + ex.getMessage()    + C_BRACKET);
             }
 
-            return new ResponseEntity<Object>(new Error(ERR_REQ_MALFORMED),
-                HttpStatus.BAD_REQUEST); // <== HTTP 400 Bad Request
+            return new ResponseEntity<Object>(body, headers, statusCode);
         }
 
         /**
          * The record defining the Error entity.
          *
-         * @version 0.3.6
+         * @version 0.3.7
          * @since   0.3.1
          */
         record Error (
