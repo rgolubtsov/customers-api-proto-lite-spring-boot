@@ -29,6 +29,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
+import org.springframework.beans.TypeMismatchException;
+
 import java.util.Map;
 import java.util.List;
 
@@ -77,6 +79,7 @@ public class ApiLiteController {
 
         _dbg(O_BRACKET + payload.get(DB_T_CUST_C_NAME) + C_BRACKET);
 
+        // Creating a new customer (putting customer data to the database).
         i_cust.execute(payload);
 
         var customer = c.sql(SQL_GET_ALL_CUSTOMERS + SQL_DESC_LIMIT_1)
@@ -134,17 +137,24 @@ public class ApiLiteController {
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request payload {customer_id}.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
-        var sql_query = EMPTY_STRING;
-
         // Parsing and validating a customer contact: phone or email.
         var contact_type = _parse_contact(customer_contact);
 
+        if (contact_type.isEmpty()) {
+            throw new TypeMismatchException(contact_type, null);
+        }
+
+        var sql_query = SQL_GET_CONTACTS_BY_TYPE[2];
+
+        // Creating a new contact (putting a contact regarding a given customer
+        // to the database).
                if (contact_type.compareToIgnoreCase(PHONE) == 0) {
             i_cont[0].execute(payload);
 
@@ -155,8 +165,6 @@ public class ApiLiteController {
 
             sql_query = SQL_GET_CONTACTS_BY_TYPE[1]
                       + SQL_ORDER_CONTACTS_BY_ID[1];
-        } else {
-            throw new NullPointerException(); // FIXME: Replace this!
         }
 
         var contact = c.sql(sql_query + SQL_DESC_LIMIT_1)
@@ -194,13 +202,10 @@ public class ApiLiteController {
      */
     @GetMapping
     public ResponseEntity<List> list_customers() {
+        // Retrieving all customer profiles from the database.
         var customers = c.sql(SQL_GET_ALL_CUSTOMERS)
                          .query(Customer.class)
                          .list();
-
-        if (customers.isEmpty()) {
-            customers.add(new Customer(0L, EMPTY_STRING));
-        }
 
         var resp = new ResponseEntity<List>(customers, HttpStatus.OK);
         var body = resp.getBody().get(0);
@@ -234,12 +239,14 @@ public class ApiLiteController {
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request path variable.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
+        // Retrieving profile details for a given customer from the database.
         var customer = c.sql(SQL_GET_CUSTOMER_BY_ID)
                         .param(cust_id)
                         .query(Customer.class)
@@ -285,12 +292,15 @@ public class ApiLiteController {
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request path variable.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
+        // Retrieving all contacts associated with a given customer
+        // from the database.
         var contacts = c.sql(SQL_GET_ALL_CONTACTS)
                         .param(cust_id) // <== For retrieving phones.
                         .param(cust_id) // <== For retrieving emails.
@@ -343,22 +353,23 @@ public class ApiLiteController {
 
         var cust_id = 0L;
 
+        // Trying to parse and validate the request path var {customer_id}.
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
-        var sql_query = EMPTY_STRING;
+        var sql_query = SQL_GET_CONTACTS_BY_TYPE[2];
 
                if (contact_type.compareToIgnoreCase(PHONE) == 0) {
             sql_query = SQL_GET_CONTACTS_BY_TYPE[0];
         } else if (contact_type.compareToIgnoreCase(EMAIL) == 0) {
             sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
-        } else {
-            sql_query = SQL_GET_CONTACTS_BY_TYPE[2];
         }
 
+        // Retrieving all contacts of a given type associated
+        // with a given customer from the database.
         var contacts = c.sql(sql_query)
                         .param(cust_id)
                         .query(Contact.class)
