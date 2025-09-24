@@ -62,6 +62,9 @@ public class ApiLiteHelper {
         + "Please check your inputs.";
     public static final String ERR_REQ_NOT_FOUND_2
         = "HTTP 404 Not Found: No such customer exists.";
+    public static final String ERR_REQ_NOT_FOUND_3
+        = "HTTP 404 Not Found: No contacts belonging to a given customer "
+        + "exist, or no such customer exists.";
     public static final String ERR_REQ_NOT_ALLOWED
         = "HTTP 405 Method Not Allowed: Bad HTTP method used. "
         + "Please check your inputs.";
@@ -106,6 +109,8 @@ public class ApiLiteHelper {
     // Regex patterns for customer and contacts REST URI paths.
     public static final String REST_URI_CUST_REGEX
         = "^\\/v1\\/customers\\/\\d+$";
+    public static final String REST_URI_CONT_REGEX
+        = "^\\/v1\\/customers\\/\\d+\\/contacts.*";
 
     // HTTP request path variable names.
     public static final String CUST_ID   = "customer_id";

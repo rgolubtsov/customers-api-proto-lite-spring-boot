@@ -137,8 +137,7 @@ public class ApiLiteController {
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
         var sql_query = EMPTY_STRING;
@@ -204,7 +203,6 @@ public class ApiLiteController {
         }
 
         var resp = new ResponseEntity<List>(customers, HttpStatus.OK);
-
         var body = resp.getBody().get(0);
 
         _dbg(O_BRACKET + ((Customer) body).id()
@@ -256,7 +254,6 @@ public class ApiLiteController {
         }
 
         var resp = new ResponseEntity<Customer>(customer, HttpStatus.OK);
-
         var body = resp.getBody();
 
         _dbg(O_BRACKET + body.id() + V_BAR + body.name() + C_BRACKET);
@@ -281,7 +278,8 @@ public class ApiLiteController {
      */
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS)
     public ResponseEntity<List> list_contacts(
-        @PathVariable String customer_id) {
+        @PathVariable String    customer_id,
+        final ServletWebRequest request) throws NoResourceFoundException {
 
         _dbg(CUST_ID + EQUALS + customer_id);
 
@@ -290,8 +288,7 @@ public class ApiLiteController {
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
         var contacts = c.sql(SQL_GET_ALL_CONTACTS)
@@ -301,11 +298,14 @@ public class ApiLiteController {
                         .list();
 
         if (contacts.isEmpty()) {
-            contacts.add(new Contact(EMPTY_STRING));
+            throw new NoResourceFoundException(request.getHttpMethod(),
+                                               SLASH + REST_VERSION
+                                             + SLASH + REST_PREFIX
+                                             + SLASH + cust_id
+                                             + SLASH + REST_CONTACTS);
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
-
         var body = resp.getBody().get(0);
 
         _dbg(O_BRACKET + ((Contact) body).contact() + C_BRACKET);
@@ -334,8 +334,9 @@ public class ApiLiteController {
     @GetMapping(SLASH + REST_CUST_ID + SLASH + REST_CONTACTS
                                      + SLASH + REST_CONT_TYPE)
     public ResponseEntity<List> list_contacts_by_type(
-        @PathVariable String customer_id,
-        @PathVariable String contact_type) {
+        @PathVariable String    customer_id,
+        @PathVariable String    contact_type,
+        final ServletWebRequest request) throws NoResourceFoundException {
 
         _dbg(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
            + CONT_TYPE + EQUALS + contact_type);
@@ -345,8 +346,7 @@ public class ApiLiteController {
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
         var sql_query = EMPTY_STRING;
@@ -365,11 +365,15 @@ public class ApiLiteController {
                         .list();
 
         if (contacts.isEmpty()) {
-            contacts.add(new Contact(EMPTY_STRING));
+            throw new NoResourceFoundException(request.getHttpMethod(),
+                                               SLASH + REST_VERSION
+                                             + SLASH + REST_PREFIX
+                                             + SLASH + cust_id
+                                             + SLASH + REST_CONTACTS
+                                             + SLASH + contact_type);
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
-
         var body = resp.getBody().get(0);
 
         _dbg(O_BRACKET + ((Contact) body).contact() + C_BRACKET);
@@ -417,8 +421,10 @@ public class ApiLiteController {
 
                         l.debug(O_BRACKET + path + C_BRACKET);
 
-                        if (path.matches(REST_URI_CUST_REGEX)) {
+                               if (path.matches(REST_URI_CUST_REGEX)) {
                             body = new Error(ERR_REQ_NOT_FOUND_2);
+                        } else if (path.matches(REST_URI_CONT_REGEX)) {
+                            body = new Error(ERR_REQ_NOT_FOUND_3);
                         } else {
                             body = new Error(ERR_REQ_NOT_FOUND_1);
                         }
