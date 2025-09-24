@@ -57,9 +57,11 @@ public class ApiLiteHelper {
     public static final String ERR_REQ_MALFORMED
         = "HTTP 400 Bad Request: Request is malformed. "
         + "Please check your inputs.";
-    public static final String ERR_REQ_NOT_FOUND
+    public static final String ERR_REQ_NOT_FOUND_1
         = "HTTP 404 Not Found: No such REST URI path exists. "
         + "Please check your inputs.";
+    public static final String ERR_REQ_NOT_FOUND_2
+        = "HTTP 404 Not Found: No such customer exists.";
     public static final String ERR_REQ_NOT_ALLOWED
         = "HTTP 405 Method Not Allowed: Bad HTTP method used. "
         + "Please check your inputs.";
@@ -100,6 +102,10 @@ public class ApiLiteHelper {
     public static final String REST_CONT_TYPE = "{contact_type}";
     public static final String PHONE          =  "phone";
     public static final String EMAIL          =  "email";
+
+    // Regex patterns for customer and contacts REST URI paths.
+    public static final String REST_URI_CUST_REGEX
+        = "^\\/v1\\/customers\\/\\d+$";
 
     // HTTP request path variable names.
     public static final String CUST_ID   = "customer_id";

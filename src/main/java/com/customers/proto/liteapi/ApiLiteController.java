@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import org.springframework.http.ResponseEntity;
@@ -227,7 +229,8 @@ public class ApiLiteController {
      */
     @GetMapping(SLASH + REST_CUST_ID)
     public ResponseEntity<Customer> get_customer(
-        @PathVariable String customer_id) {
+        @PathVariable String    customer_id,
+        final ServletWebRequest request) throws NoResourceFoundException {
 
         _dbg(CUST_ID + EQUALS + customer_id);
 
@@ -236,8 +239,7 @@ public class ApiLiteController {
         try {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
-            _dbg(O_BRACKET + O_BRACKET + customer_id
-               + C_BRACKET + C_BRACKET);
+            _dbg(O_BRACKET + customer_id + C_BRACKET);
         }
 
         var customer = c.sql(SQL_GET_CUSTOMER_BY_ID)
@@ -247,7 +249,10 @@ public class ApiLiteController {
                         .orElse(null);
 
         if (customer == null) {
-            customer = new Customer(0L, EMPTY_STRING);
+            throw new NoResourceFoundException(request.getHttpMethod(),
+                                               SLASH + REST_VERSION
+                                             + SLASH + REST_PREFIX
+                                             + SLASH + cust_id);
         }
 
         var resp = new ResponseEntity<Customer>(customer, HttpStatus.OK);
@@ -398,13 +403,26 @@ public class ApiLiteController {
             HttpStatusCode statusCode,
             WebRequest     request) {
 
+            l.debug(O_BRACKET + ex.getMessage() + C_BRACKET);
+
             switch (statusCode) {
                 case HttpStatus.BAD_REQUEST:        // 400
                     body = new Error(ERR_REQ_MALFORMED);
 
                     break;
                 case HttpStatus.NOT_FOUND:          // 404
-                    body = new Error(ERR_REQ_NOT_FOUND);
+                    if (ex instanceof NoResourceFoundException) {
+                        var path = ((NoResourceFoundException) ex)
+                            .getResourcePath();
+
+                        l.debug(O_BRACKET + path + C_BRACKET);
+
+                        if (path.matches(REST_URI_CUST_REGEX)) {
+                            body = new Error(ERR_REQ_NOT_FOUND_2);
+                        } else {
+                            body = new Error(ERR_REQ_NOT_FOUND_1);
+                        }
+                    }
 
                     break;
                 case HttpStatus.METHOD_NOT_ALLOWED: // 405
