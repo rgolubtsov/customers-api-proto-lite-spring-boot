@@ -142,16 +142,18 @@ public class ApiLiteController {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
+
+            throw new TypeMismatchException(customer_id, null);
         }
 
         // Parsing and validating a customer contact: phone or email.
         var contact_type = _parse_contact(customer_contact);
 
         if (contact_type.isEmpty()) {
-            throw new TypeMismatchException(contact_type, null);
+            throw new TypeMismatchException(customer_contact, null);
         }
 
-        var sql_query = SQL_GET_CONTACTS_BY_TYPE[2];
+        var sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
 
         // Creating a new contact (putting a contact regarding a given customer
         // to the database).
@@ -224,11 +226,13 @@ public class ApiLiteController {
      *
      * @param customer_id The customer ID used to retrieve
      *                    customer profile data.
+     * @param request     The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity</code> object with a specific
      *         HTTP status code provided, containing profile details
      *         for a given customer (in the response body
      *         in JSON representation).
+     *         May return client or server error depending on incoming request.
      */
     @GetMapping(SLASH + REST_CUST_ID)
     public ResponseEntity<Customer> get_customer(
@@ -244,6 +248,8 @@ public class ApiLiteController {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
+
+            throw new TypeMismatchException(customer_id, null);
         }
 
         // Retrieving profile details for a given customer from the database.
@@ -276,6 +282,7 @@ public class ApiLiteController {
      *
      * @param customer_id The customer ID used to retrieve contacts
      *                    which belong to this customer.
+     * @param request     The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity<List></code> object
      *         with the <code>200 OK</code> HTTP status code and the response
@@ -297,6 +304,8 @@ public class ApiLiteController {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
+
+            throw new TypeMismatchException(customer_id, null);
         }
 
         // Retrieving all contacts associated with a given customer
@@ -334,6 +343,7 @@ public class ApiLiteController {
      *                     which belong to this customer.
      * @param contact_type The particular type of contacts to retrieve
      *                     (e.g. phone, email, postal address, etc.).
+     * @param request      The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity<List></code> object
      *         with the <code>200 OK</code> HTTP status code and the response
@@ -358,9 +368,11 @@ public class ApiLiteController {
             cust_id = Long.parseLong(customer_id);
         } catch (NumberFormatException e) {
             _dbg(O_BRACKET + customer_id + C_BRACKET);
+
+            throw new TypeMismatchException(customer_id, null);
         }
 
-        var sql_query = SQL_GET_CONTACTS_BY_TYPE[2];
+        var sql_query = SQL_GET_CONTACTS_BY_TYPE[1];
 
                if (contact_type.compareToIgnoreCase(PHONE) == 0) {
             sql_query = SQL_GET_CONTACTS_BY_TYPE[0];
