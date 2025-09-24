@@ -398,12 +398,25 @@ public class ApiLiteController {
             HttpStatusCode statusCode,
             WebRequest     request) {
 
-            if (statusCode.value() == HttpStatus.METHOD_NOT_ALLOWED.value()) {
-                return new ResponseEntity<Object>(body, headers, statusCode);
+            switch (statusCode) {
+                case HttpStatus.BAD_REQUEST:        // 400
+                    body = new Error(ERR_REQ_MALFORMED);
+
+                    break;
+                case HttpStatus.NOT_FOUND:          // 404
+                    body = new Error(ERR_REQ_NOT_FOUND);
+
+                    break;
+                case HttpStatus.METHOD_NOT_ALLOWED: // 405
+                    body = new Error(ERR_REQ_NOT_ALLOWED);
+
+                    break;
+                default:
+                    l.debug(O_BRACKET + statusCode.value() + C_BRACKET);
+                    l.debug(O_BRACKET + ex.getMessage()    + C_BRACKET);
             }
 
-            return new ResponseEntity<Object>(new Error(ERR_REQ_MALFORMED),
-                HttpStatus.BAD_REQUEST); // <== HTTP 400 Bad Request
+            return new ResponseEntity<Object>(body, headers, statusCode);
         }
 
         /**

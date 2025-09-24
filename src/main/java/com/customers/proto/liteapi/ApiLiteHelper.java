@@ -57,6 +57,12 @@ public class ApiLiteHelper {
     public static final String ERR_REQ_MALFORMED
         = "HTTP 400 Bad Request: Request is malformed. "
         + "Please check your inputs.";
+    public static final String ERR_REQ_NOT_FOUND
+        = "HTTP 404 Not Found: No such REST URI path exists. "
+        + "Please check your inputs.";
+    public static final String ERR_REQ_NOT_ALLOWED
+        = "HTTP 405 Method Not Allowed: Bad HTTP method used. "
+        + "Please check your inputs.";
 
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
