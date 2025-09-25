@@ -86,7 +86,7 @@ $ make all  # <== Assembling JAR bundles of the microservice.
 
 ```
 $ # Pull the Azul Zulu JRE (based on Alpine Linux) image first, if not already there:
-$ sudo docker pull azul/zulu-openjdk-alpine:21-jre-latest
+$ sudo docker pull azul/zulu-openjdk-alpine:21-jre-headless-latest
 ...
 $ # Then build the microservice image:
 $ sudo docker build -tcustomersapi/api-lite .
