@@ -430,8 +430,6 @@ public class ApiLiteController {
             HttpStatusCode statusCode,
             WebRequest     request) {
 
-            l.debug(O_BRACKET + ex.getMessage() + C_BRACKET);
-
             switch (statusCode) {
                 case HttpStatus.BAD_REQUEST:        // 400
                     body = new Error(ERR_REQ_MALFORMED);
@@ -441,8 +439,6 @@ public class ApiLiteController {
                     if (ex instanceof NoResourceFoundException) {
                         var path = ((NoResourceFoundException) ex)
                             .getResourcePath();
-
-                        l.debug(O_BRACKET + path + C_BRACKET);
 
                                if (path.matches(REST_URI_CUST_REGEX)) {
                             body = new Error(ERR_REQ_NOT_FOUND_2);
