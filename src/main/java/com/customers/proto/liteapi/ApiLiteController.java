@@ -65,6 +65,7 @@ public class ApiLiteController {
      *                <br /><code>-H 'content-type: application/json' -d '{"name":"{customer_name}"}'</code>
      *                <br /><code>{customer_name}</code> is a name assigned
      *                to a newly created customer.
+     * @param request The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity<Customer></code> object
      *         with the <code>201 Created</code> HTTP status code,
@@ -75,8 +76,10 @@ public class ApiLiteController {
      */
     @PutMapping
     public ResponseEntity<Customer> add_customer(
-        @RequestBody Map<String,String> payload) throws URISyntaxException {
+        @RequestBody Map<String,String> payload,
+        final ServletWebRequest         request) throws URISyntaxException {
 
+        _dbg(O_BRACKET + request.getHttpMethod()       + C_BRACKET);
         _dbg(O_BRACKET + payload.get(DB_T_CUST_C_NAME) + C_BRACKET);
 
         // Creating a new customer (putting customer data to the database).
@@ -117,6 +120,7 @@ public class ApiLiteController {
      *                to associate a newly created contact with this customer.
      *                <br /><code>{customer_contact}</code> is a newly created
      *                contact (phone or email).
+     * @param request The incoming HTTP servlet request object.
      *
      * @return The <code>ResponseEntity<Contact></code> object
      *         with the <code>201 Created</code> HTTP status code,
@@ -127,7 +131,10 @@ public class ApiLiteController {
      */
     @PutMapping(SLASH + REST_CONTACTS)
     public ResponseEntity<Contact> add_contact(
-        @RequestBody Map<String,String> payload) throws URISyntaxException {
+        @RequestBody Map<String,String> payload,
+        final ServletWebRequest         request) throws URISyntaxException {
+
+        _dbg(O_BRACKET + request.getHttpMethod() + C_BRACKET);
 
         var customer_id      = payload.get(DB_T_CONT_C_CUST_ID);
         var customer_contact = payload.get(DB_T_CONT_C_CONTACT);
@@ -196,6 +203,8 @@ public class ApiLiteController {
      * <br />
      * <br />Retrieves from the database and lists all customer profiles.
      *
+     * @param request The incoming HTTP servlet request object.
+     *
      * @return The <code>ResponseEntity<List></code> object
      *         with the <code>200 OK</code> HTTP status code and the response
      *         body in JSON representation, containing a list of all customer
@@ -203,7 +212,11 @@ public class ApiLiteController {
      *         May return client or server error depending on incoming request.
      */
     @GetMapping
-    public ResponseEntity<List> list_customers() {
+    public ResponseEntity<List> list_customers(
+        final ServletWebRequest request) {
+
+        _dbg(O_BRACKET + request.getHttpMethod() + C_BRACKET);
+
         // Retrieving all customer profiles from the database.
         var customers = c.sql(SQL_GET_ALL_CUSTOMERS)
                          .query(Customer.class)
@@ -224,14 +237,13 @@ public class ApiLiteController {
      * <br />
      * <br />Retrieves profile details for a given customer from the database.
      *
-     * @param customer_id The customer ID used to retrieve
-     *                    customer profile data.
+     * @param customer_id The customer ID used to retrieve customer
+     *                    profile data.
      * @param request     The incoming HTTP servlet request object.
      *
-     * @return The <code>ResponseEntity</code> object with a specific
-     *         HTTP status code provided, containing profile details
-     *         for a given customer (in the response body
-     *         in JSON representation).
+     * @return The <code>ResponseEntity<Customer></code> object with a specific
+     *         HTTP status code, containing profile details for a given
+     *         customer (in the response body in JSON representation).
      *         May return client or server error depending on incoming request.
      */
     @GetMapping(SLASH + REST_CUST_ID)
@@ -239,6 +251,9 @@ public class ApiLiteController {
         @PathVariable String    customer_id,
         final ServletWebRequest request) throws NoResourceFoundException {
 
+        var method = request.getHttpMethod();
+
+        _dbg(O_BRACKET + method + C_BRACKET);
         _dbg(CUST_ID + EQUALS + customer_id);
 
         var cust_id = 0L;
@@ -260,10 +275,9 @@ public class ApiLiteController {
                         .orElse(null);
 
         if (customer == null) {
-            throw new NoResourceFoundException(request.getHttpMethod(),
-                                               SLASH + REST_VERSION
-                                             + SLASH + REST_PREFIX
-                                             + SLASH + cust_id);
+            throw new NoResourceFoundException(method, SLASH + REST_VERSION
+                                                     + SLASH + REST_PREFIX
+                                                     + SLASH + cust_id);
         }
 
         var resp = new ResponseEntity<Customer>(customer, HttpStatus.OK);
@@ -295,6 +309,9 @@ public class ApiLiteController {
         @PathVariable String    customer_id,
         final ServletWebRequest request) throws NoResourceFoundException {
 
+        var method = request.getHttpMethod();
+
+        _dbg(O_BRACKET + method + C_BRACKET);
         _dbg(CUST_ID + EQUALS + customer_id);
 
         var cust_id = 0L;
@@ -317,11 +334,10 @@ public class ApiLiteController {
                         .list();
 
         if (contacts.isEmpty()) {
-            throw new NoResourceFoundException(request.getHttpMethod(),
-                                               SLASH + REST_VERSION
-                                             + SLASH + REST_PREFIX
-                                             + SLASH + cust_id
-                                             + SLASH + REST_CONTACTS);
+            throw new NoResourceFoundException(method, SLASH + REST_VERSION
+                                                     + SLASH + REST_PREFIX
+                                                     + SLASH + cust_id
+                                                     + SLASH + REST_CONTACTS);
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
@@ -358,6 +374,9 @@ public class ApiLiteController {
         @PathVariable String    contact_type,
         final ServletWebRequest request) throws NoResourceFoundException {
 
+        var method = request.getHttpMethod();
+
+        _dbg(O_BRACKET + method + C_BRACKET);
         _dbg(CUST_ID   + EQUALS + customer_id + SPACE + V_BAR + SPACE
            + CONT_TYPE + EQUALS + contact_type);
 
@@ -388,12 +407,11 @@ public class ApiLiteController {
                         .list();
 
         if (contacts.isEmpty()) {
-            throw new NoResourceFoundException(request.getHttpMethod(),
-                                               SLASH + REST_VERSION
-                                             + SLASH + REST_PREFIX
-                                             + SLASH + cust_id
-                                             + SLASH + REST_CONTACTS
-                                             + SLASH + contact_type);
+            throw new NoResourceFoundException(method, SLASH + REST_VERSION
+                                                     + SLASH + REST_PREFIX
+                                                     + SLASH + cust_id
+                                                     + SLASH + REST_CONTACTS
+                                                     + SLASH + contact_type);
         }
 
         var resp = new ResponseEntity<List>(contacts, HttpStatus.OK);
