@@ -1,7 +1,7 @@
 /*
  * src/main/java/com/customers/proto/liteapi/ApiLiteController.java
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.7
+ * Customers API Lite microservice prototype. Version 0.3.8
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -46,7 +46,7 @@ import static com.customers.proto.liteapi.ApiLiteModel.*;
  * <br />
  * <br />&lt;HTTP request method&gt; <code>/v1/customers</code>.
  *
- * @version 0.3.7
+ * @version 0.3.8
  * @since   0.1.0
  */
 @RestController
@@ -435,7 +435,7 @@ public class ApiLiteController {
      * It is mainly dedicated to handle client errors and respond accordingly
      * with one of the <strong>4xx Client Error</strong> section's errors.
      *
-     * @version 0.3.7
+     * @version 0.3.8
      * @since   0.3.1
      */
     @ControllerAdvice
@@ -483,7 +483,7 @@ public class ApiLiteController {
         /**
          * The record defining the Error entity.
          *
-         * @version 0.3.7
+         * @version 0.3.8
          * @since   0.3.1
          */
         record Error (

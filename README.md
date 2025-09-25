@@ -105,14 +105,14 @@ $ ./gradlew -q bootRun; echo $?
 **Run** the microservice using its all-in-one JAR bundle, built previously by the `build` or `all` targets:
 
 ```
-$ java -jar build/libs/customers-api-lite-0.3.7.jar; echo $?
+$ java -jar build/libs/customers-api-lite-0.3.8.jar; echo $?
 ...
 ```
 
 To run the microservice as a *true* daemon, i.e. in the background, redirecting all the console output to `/dev/null`, the following form of invocation of its executable can be used:
 
 ```
-$ java -jar build/libs/customers-api-lite-0.3.7.jar > /dev/null 2>&1 &
+$ java -jar build/libs/customers-api-lite-0.3.8.jar > /dev/null 2>&1 &
 [1] <pid>
 ```
 
@@ -123,7 +123,7 @@ The daemonized microservice then can be stopped at any time by issuing the follo
 ```
 $ kill -SIGTERM <pid>
 $
-[1]+  Exit 143                java -jar build/libs/customers-api-lite-0.3.7.jar > /dev/null 2>&1
+[1]+  Exit 143                java -jar build/libs/customers-api-lite-0.3.8.jar > /dev/null 2>&1
 ```
 
 ### Running a Docker image
