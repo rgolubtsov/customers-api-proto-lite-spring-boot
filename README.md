@@ -138,7 +138,7 @@ $ sudo docker rm `sudo docker ps -aq`; \
 
 ### Exploring a Docker image payload
 
-The following is not necessary but might be considered somewhat interesting &mdash; to look up into the running container, and check out that the microservice's JAR layers, logfile, and accompanied SQLite database are at their expected places and in effect:
+The following is not necessary but might be considered somewhat interesting &mdash; to look up into the running container, and check out that the microservice's Java classes, configs, logfile, and accompanied SQLite database are at their expected places and in effect:
 
 ```
 $ sudo docker ps -a
@@ -146,69 +146,87 @@ CONTAINER ID   IMAGE                   COMMAND                    CREATED       
 <container_id> customersapi/api-lite   "java org.springfram..."   About a minute ago   Up About a minute   0.0.0.0:8765->8765/tcp, :::8765->8765/tcp   api-lite
 $
 $ sudo docker exec -it api-lite sh; echo $?
-/var/tmp $
-/var/tmp $ java --version
-openjdk 17.0.13 2024-10-15 LTS
-OpenJDK Runtime Environment Zulu17.54+21-CA (build 17.0.13+11-LTS)
-OpenJDK 64-Bit Server VM Zulu17.54+21-CA (build 17.0.13+11-LTS, mixed mode, sharing)
-/var/tmp $
-/var/tmp $ ls -al
-total 32
-drwxrwxrwt    1 root     root          4096 Jan 19 20:00 .
-drwxr-xr-x    1 root     root          4096 Jan  8 11:04 ..
-drwxr-xr-x    1 nobody   nobody        4096 Jan 19 19:50 BOOT-INF
-drwxr-xr-x    3 nobody   nobody        4096 Jan 19 19:50 META-INF
-drwxr-xr-x    1 daemon   daemon        4096 Jan 19 19:50 data
-drwxr-xr-x    2 daemon   daemon        4096 Jan 19 20:00 log
-drwxr-xr-x    3 nobody   nobody        4096 Jan 19 18:10 org
-/var/tmp $
-/var/tmp $ ls -al BOOT-INF/ BOOT-INF/classes/com/customers/proto/liteapi/ data/db/ log/
+/var/tmp/api-lite $
+/var/tmp/api-lite $ uname -a
+Linux <container_id> 6.8.0-79-generic #79-Ubuntu SMP PREEMPT_DYNAMIC Tue Aug 12 14:42:46 UTC 2025 x86_64 Linux
+/var/tmp/api-lite $
+/var/tmp/api-lite $ java --version
+openjdk 21.0.8 2025-07-15 LTS
+OpenJDK Runtime Environment Zulu21.44+17-CA (build 21.0.8+9-LTS)
+OpenJDK 64-Bit Server VM Zulu21.44+17-CA (build 21.0.8+9-LTS, mixed mode, sharing)
+/var/tmp/api-lite $
+/var/tmp/api-lite $ ls -al
+total 36
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 22:10 .
+drwxrwxrwt    1 root     root          4096 Sep 25 21:10 ..
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 BOOT-INF
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 META-INF
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 data
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 etc
+drwxr-xr-x    2 daemon   daemon        4096 Sep 25 22:10 log
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 org
+/var/tmp/api-lite $
+/var/tmp/api-lite $ ls -al BOOT-INF/ BOOT-INF/classes/ BOOT-INF/classes/com/customers/proto/liteapi/ data/db/ etc/ log/
 BOOT-INF/:
 total 24
-drwxr-xr-x    1 nobody   nobody        4096 Jan 19 19:50 .
-drwxrwxrwt    1 root     root          4096 Jan 19 20:00 ..
-drwxr-xr-x    3 nobody   nobody        4096 Jan 19 19:50 classes
--rw-r--r--    1 nobody   nobody        1907 Jan 19  2025 classpath.idx
--rw-r--r--    1 nobody   nobody         212 Jan 19  2025 layers.idx
-drwxr-xr-x    2 nobody   nobody        4096 Jan 19 18:10 lib
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 .
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 22:10 ..
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 classes
+-rw-r--r--    1 daemon   daemon        2312 Feb  1  1980 classpath.idx
+-rw-r--r--    1 daemon   daemon         212 Feb  1  1980 layers.idx
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 lib
+
+BOOT-INF/classes/:
+total 20
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 .
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 ..
+-rw-r--r--    1 daemon   daemon         894 Feb  1  1980 application.properties
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 com
+-rw-r--r--    1 daemon   daemon        2279 Feb  1  1980 log4j.properties
 
 BOOT-INF/classes/com/customers/proto/liteapi/:
-total 56
-drwxr-xr-x    2 nobody   nobody        4096 Jan 19 19:50 .
-drwxr-xr-x    3 nobody   nobody        4096 Jan 19 19:50 ..
--rw-r--r--    1 nobody   nobody        4458 Jan 19 19:50 CustomersApiLiteApp.class
--rw-r--r--    1 nobody   nobody        9931 Jan 19 19:50 CustomersApiLiteController.class
--rw-r--r--    1 nobody   nobody         668 Jan 19 19:50 CustomersApiLiteEntityContact.class
--rw-r--r--    1 nobody   nobody         869 Jan 19 19:50 CustomersApiLiteEntityCustomer.class
--rw-r--r--    1 nobody   nobody         654 Jan 19 19:50 CustomersApiLiteEntityError.class
--rw-r--r--    1 nobody   nobody        3067 Jan 19 19:50 CustomersApiLiteExceptionHandler.class
--rw-r--r--    1 nobody   nobody        4867 Jan 19 19:50 CustomersApiLiteHelper.class
--rw-r--r--    1 nobody   nobody        1692 Jan 19 19:50 CustomersApiLiteModel.class
+total 60
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 .
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 ..
+-rw-r--r--    1 daemon   daemon        1778 Feb  1  1980 ApiLiteController$ExceptionHandler$Error.class
+-rw-r--r--    1 daemon   daemon        4687 Feb  1  1980 ApiLiteController$ExceptionHandler.class
+-rw-r--r--    1 daemon   daemon       11489 Feb  1  1980 ApiLiteController.class
+-rw-r--r--    1 daemon   daemon        4385 Feb  1  1980 ApiLiteCore.class
+-rw-r--r--    1 daemon   daemon        5450 Feb  1  1980 ApiLiteHelper.class
+-rw-r--r--    1 daemon   daemon        1577 Feb  1  1980 ApiLiteModel$Contact.class
+-rw-r--r--    1 daemon   daemon        1716 Feb  1  1980 ApiLiteModel$Customer.class
+-rw-r--r--    1 daemon   daemon        1808 Feb  1  1980 ApiLiteModel.class
 
 data/db/:
 total 32
-drwxr-xr-x    1 daemon   daemon        4096 Jan 19 19:50 .
-drwxr-xr-x    1 daemon   daemon        4096 Jan 19 19:50 ..
--rw-rw-r--    1 daemon   daemon       24576 Jan 19 17:50 customers-api-lite.db
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 .
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 ..
+-rw-rw-r--    1 daemon   daemon       24576 Sep 25 19:25 customers-api-lite.db
+
+etc/:
+total 8
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 21:10 .
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 22:10 ..
+lrwxrwxrwx    1 daemon   daemon          42 Sep 25 21:10 settings.conf -> ../BOOT-INF/classes/application.properties
 
 log/:
 total 12
-drwxr-xr-x    2 daemon   daemon        4096 Jan 19 20:00 .
-drwxrwxrwt    1 root     root          4096 Jan 19 20:00 ..
--rw-r--r--    1 daemon   daemon        1183 Jan 19 20:00 customers-api-lite.log
-/var/tmp $
-/var/tmp $ netstat -plunt
+drwxr-xr-x    2 daemon   daemon        4096 Sep 25 22:10 .
+drwxr-xr-x    1 daemon   daemon        4096 Sep 25 22:10 ..
+-rw-r--r--    1 daemon   daemon        1109 Sep 25 22:10 customers-api-lite.log
+/var/tmp/api-lite $
+/var/tmp/api-lite $ netstat -plunt
 Active Internet connections (only servers)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
 tcp        0      0 :::8765                 :::*                    LISTEN      1/java
-/var/tmp $
-/var/tmp $ ps ax
+/var/tmp/api-lite $
+/var/tmp/api-lite $ ps aux
 PID   USER     TIME  COMMAND
     1 daemon    0:20 java org.springframework.boot.loader.launch.JarLauncher
-   28 daemon    0:00 sh
-   50 daemon    0:00 ps ax
-/var/tmp $
-/var/tmp $ exit # Or simply <Ctrl-D>.
+   26 daemon    0:00 sh
+   48 daemon    0:00 ps aux
+/var/tmp/api-lite $
+/var/tmp/api-lite $ exit # Or simply <Ctrl-D>.
 0
 ```
 
