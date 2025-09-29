@@ -109,7 +109,7 @@ $ java -jar build/libs/customers-api-lite-0.3.8.jar; echo $?
 ...
 ```
 
-To run the microservice as a *true* daemon, i.e. in the background, redirecting all the console output to `/dev/null`, the following form of invocation of its executable can be used:
+To run the microservice as a *true* daemon, i.e. in the background, redirecting all the console output to `/dev/null`, the following form of invocation of its executable JAR bundle can be used:
 
 ```
 $ java -jar build/libs/customers-api-lite-0.3.8.jar > /dev/null 2>&1 &
