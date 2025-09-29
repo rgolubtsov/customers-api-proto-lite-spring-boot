@@ -118,7 +118,7 @@ $ java -jar build/libs/customers-api-lite-0.3.8.jar > /dev/null 2>&1 &
 
 **Note:** This will suppress all the console output only; logging to a logfile and to the Unix syslog will remain unchanged.
 
-The daemonized microservice then can be stopped at any time by issuing the following command:
+The daemonized microservice then can be stopped gracefully at any time by issuing the following command:
 
 ```
 $ kill -SIGTERM <pid>
@@ -230,7 +230,7 @@ PID   USER     TIME  COMMAND
 0
 ```
 
-To stop a running container of the microservice at any time, simply issue the following command:
+To stop a running container of the microservice gracefully at any time, simply issue the following command:
 
 ```
 $ sudo docker stop api-lite; echo $?
