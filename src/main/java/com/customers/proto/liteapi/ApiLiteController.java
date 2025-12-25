@@ -241,9 +241,10 @@ public class ApiLiteController {
      *                    profile data.
      * @param request     The incoming HTTP servlet request object.
      *
-     * @return The <code>ResponseEntity<Customer></code> object with a specific
-     *         HTTP status code, containing profile details for a given
-     *         customer (in the response body in JSON representation).
+     * @return The <code>ResponseEntity<Customer></code> object
+     *         with the <code>200 OK</code> HTTP status code,
+     *         containing profile details for a given customer
+     *         (in the response body in JSON representation).
      *         May return client or server error depending on incoming request.
      */
     @GetMapping(SLASH + REST_CUST_ID)
