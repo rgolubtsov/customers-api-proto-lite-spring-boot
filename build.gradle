@@ -1,7 +1,7 @@
 /*
  * build.gradle
  * ============================================================================
- * Customers API Lite microservice prototype. Version 0.3.8
+ * Customers API Lite microservice prototype. Version 0.4.0
  * ============================================================================
  * A Spring Boot-based application, designed and intended to be run
  * as a microservice, implementing a special Customers API prototype
@@ -71,7 +71,7 @@ java {
 }
 
 group       = 'com.customers.proto'
-version     = '0.3.8'
+version     = '0.4.0'
 description = 'Customers API Lite microservice prototype.'
 
 // vim:set nu et ts=4 sw=4:
