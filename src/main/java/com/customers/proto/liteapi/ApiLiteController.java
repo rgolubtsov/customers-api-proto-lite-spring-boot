@@ -276,7 +276,8 @@ public class ApiLiteController {
                         .orElse(null);
 
         if (customer == null) {
-            throw new NoResourceFoundException(method, SLASH + REST_VERSION
+            throw new NoResourceFoundException(method, null,
+                                                       SLASH + REST_VERSION
                                                      + SLASH + REST_PREFIX
                                                      + SLASH + cust_id);
         }
@@ -335,7 +336,8 @@ public class ApiLiteController {
                         .list();
 
         if (contacts.isEmpty()) {
-            throw new NoResourceFoundException(method, SLASH + REST_VERSION
+            throw new NoResourceFoundException(method, null,
+                                                       SLASH + REST_VERSION
                                                      + SLASH + REST_PREFIX
                                                      + SLASH + cust_id
                                                      + SLASH + REST_CONTACTS);
@@ -408,7 +410,8 @@ public class ApiLiteController {
                         .list();
 
         if (contacts.isEmpty()) {
-            throw new NoResourceFoundException(method, SLASH + REST_VERSION
+            throw new NoResourceFoundException(method, null,
+                                                       SLASH + REST_VERSION
                                                      + SLASH + REST_PREFIX
                                                      + SLASH + cust_id
                                                      + SLASH + REST_CONTACTS
