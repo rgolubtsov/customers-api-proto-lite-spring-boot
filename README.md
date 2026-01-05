@@ -65,7 +65,7 @@ $ ./gradlew -q compileJava
 $
 $ ./gradlew -q build && \
 if [ -f data/db/customers-api-lite.db.xz ]; then \
-    unxz data/db/customers-api-lite.db.xz; \
+   unxz data/db/customers-api-lite.db.xz; \
 fi
 ```
 
