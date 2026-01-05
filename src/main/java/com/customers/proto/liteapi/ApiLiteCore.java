@@ -28,6 +28,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
+import java.sql.SQLException;
+
 import static com.customers.proto.liteapi.ApiLiteHelper.*;
 
 /**
@@ -43,7 +45,7 @@ public class ApiLiteCore implements DisposableBean {
      *
      * @param args An array of command-line arguments.
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws SQLException {
         // Opening the system logger.
         // Calling <syslog.h> openlog(NULL, LOG_CONS | LOG_PID, LOG_DAEMON);
         var cfg = new UnixSyslogConfig();
@@ -78,7 +80,7 @@ public class ApiLiteCore implements DisposableBean {
 
         var ds = (HikariDataSource) ctx.getBean(DATA_SOURCE);
 
-        _dbg(O_BRACKET + ds.getDriverClassName() + C_BRACKET);
+        _dbg(O_BRACKET + ds.getConnection() + C_BRACKET);
 
         c = JdbcClient.create(ds);
 
