@@ -397,35 +397,32 @@ The microservice has the ability to log messages to a logfile and to the Unix sy
 ```
 $ tail -f log/customers-api-lite.log
 ...
-[2025-09-25][23:15:50] [DEBUG] [Customers API Lite]
-[2025-09-25][23:15:50] [DEBUG] [org.sqlite.JDBC]
-[2025-09-25][23:15:50] [INFO ] Server started on port 8765
-[2025-09-25][23:20:50] [INFO ] Initializing Spring DispatcherServlet 'dispatcherServlet'
-[2025-09-25][23:20:50] [INFO ] Initializing Servlet 'dispatcherServlet'
-[2025-09-25][23:20:50] [INFO ] Completed initialization in 3 ms
-[2025-09-25][23:20:50] [DEBUG] [PUT]
-[2025-09-25][23:20:50] [DEBUG] [Saturday Sunday]
-[2025-09-25][23:20:50] [INFO ] HikariPool-1 - Starting...
-[2025-09-25][23:20:50] [INFO ] HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@848e88b
-[2025-09-25][23:20:50] [INFO ] HikariPool-1 - Start completed.
-[2025-09-25][23:20:50] [DEBUG] [5|Saturday Sunday]
-[2025-09-25][23:25:50] [DEBUG] [PUT]
-[2025-09-25][23:25:50] [DEBUG] customer_id=5
-[2025-09-25][23:25:50] [DEBUG] [Saturday.Sunday@example.com]
-[2025-09-25][23:25:50] [DEBUG] [email|Saturday.Sunday@example.com]
-[2025-09-25][23:30:00] [DEBUG] [GET]
-[2025-09-25][23:30:00] [DEBUG] customer_id=5
-[2025-09-25][23:30:00] [DEBUG] [5|Saturday Sunday]
-[2025-09-25][23:35:10] [DEBUG] [GET]
-[2025-09-25][23:35:10] [DEBUG] customer_id=5 | contact_type=email
-[2025-09-25][23:35:10] [DEBUG] [Saturday.Sunday@example.com]
-[2025-09-25][23:40:20] [INFO ] Commencing graceful shutdown. Waiting for active requests to complete
-[2025-09-25][23:40:20] [INFO ] Graceful shutdown complete
-[2025-09-25][23:40:20] [INFO ] stopping server: Undertow - 2.3.19.Final
-[2025-09-25][23:40:20] [INFO ] Destroying Spring FrameworkServlet 'dispatcherServlet'
-[2025-09-25][23:40:20] [INFO ] HikariPool-1 - Shutdown initiated...
-[2025-09-25][23:40:20] [INFO ] HikariPool-1 - Shutdown completed.
-[2025-09-25][23:40:20] [INFO ] Server stopped
+[2026-01-06][00:10:00] [DEBUG] [Customers API Lite]
+[2026-01-06][00:10:00] [INFO ] HikariPool-1 - Starting...
+[2026-01-06][00:10:00] [INFO ] HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@4eea94a4
+[2026-01-06][00:10:00] [INFO ] HikariPool-1 - Start completed.
+[2026-01-06][00:10:00] [DEBUG] [HikariProxyConnection@974631651 wrapping org.sqlite.jdbc4.JDBC4Connection@4eea94a4]
+[2026-01-06][00:10:00] [INFO ] Server started on port 8765
+[2026-01-06][00:10:30] [INFO ] Initializing Servlet 'dispatcherServlet'
+[2026-01-06][00:10:30] [INFO ] Completed initialization in 3 ms
+[2026-01-06][00:10:30] [DEBUG] [PUT]
+[2026-01-06][00:10:30] [DEBUG] [Saturday Sunday]
+[2026-01-06][00:10:30] [DEBUG] [5|Saturday Sunday]
+[2026-01-06][00:10:50] [DEBUG] [PUT]
+[2026-01-06][00:10:50] [DEBUG] customer_id=5
+[2026-01-06][00:10:50] [DEBUG] [Saturday.Sunday@example.com]
+[2026-01-06][00:10:50] [DEBUG] [email|Saturday.Sunday@example.com]
+[2026-01-06][00:11:10] [DEBUG] [GET]
+[2026-01-06][00:11:10] [DEBUG] customer_id=5
+[2026-01-06][00:11:10] [DEBUG] [5|Saturday Sunday]
+[2026-01-06][00:11:40] [DEBUG] [GET]
+[2026-01-06][00:11:40] [DEBUG] customer_id=5 | contact_type=email
+[2026-01-06][00:11:40] [DEBUG] [Saturday.Sunday@example.com]
+[2026-01-06][00:12:00] [INFO ] Commencing graceful shutdown. Waiting for active requests to complete
+[2026-01-06][00:12:00] [INFO ] Graceful shutdown complete
+[2026-01-06][00:12:00] [INFO ] HikariPool-1 - Shutdown initiated...
+[2026-01-06][00:12:00] [INFO ] HikariPool-1 - Shutdown completed.
+[2026-01-06][00:12:00] [INFO ] Server stopped
 ```
 
 Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
@@ -433,23 +430,23 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Sep 25 23:15:50 <hostname> java[<pid>]: [Customers API Lite]
-Sep 25 23:15:50 <hostname> java[<pid>]: [org.sqlite.JDBC]
-Sep 25 23:15:50 <hostname> java[<pid>]: Server started on port 8765
-Sep 25 23:20:50 <hostname> java[<pid>]: [PUT]
-Sep 25 23:20:50 <hostname> java[<pid>]: [Saturday Sunday]
-Sep 25 23:20:50 <hostname> java[<pid>]: [5|Saturday Sunday]
-Sep 25 23:25:50 <hostname> java[<pid>]: [PUT]
-Sep 25 23:25:50 <hostname> java[<pid>]: customer_id=5
-Sep 25 23:25:50 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
-Sep 25 23:25:50 <hostname> java[<pid>]: [email|Saturday.Sunday@example.com]
-Sep 25 23:30:00 <hostname> java[<pid>]: [GET]
-Sep 25 23:30:00 <hostname> java[<pid>]: customer_id=5
-Sep 25 23:30:00 <hostname> java[<pid>]: [5|Saturday Sunday]
-Sep 25 23:35:10 <hostname> java[<pid>]: [GET]
-Sep 25 23:35:10 <hostname> java[<pid>]: customer_id=5 | contact_type=email
-Sep 25 23:35:10 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
-Sep 25 23:40:20 <hostname> java[<pid>]: Server stopped
+Jan 06 00:10:00 <hostname> java[<pid>]: [Customers API Lite]
+Jan 06 00:10:00 <hostname> java[<pid>]: [HikariProxyConnection@974631651 wrapping org.sqlite.jdbc4.JDBC4Connection@4eea94a4]
+Jan 06 00:10:00 <hostname> java[<pid>]: Server started on port 8765
+Jan 06 00:10:30 <hostname> java[<pid>]: [PUT]
+Jan 06 00:10:30 <hostname> java[<pid>]: [Saturday Sunday]
+Jan 06 00:10:30 <hostname> java[<pid>]: [5|Saturday Sunday]
+Jan 06 00:10:50 <hostname> java[<pid>]: [PUT]
+Jan 06 00:10:50 <hostname> java[<pid>]: customer_id=5
+Jan 06 00:10:50 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
+Jan 06 00:10:50 <hostname> java[<pid>]: [email|Saturday.Sunday@example.com]
+Jan 06 00:11:10 <hostname> java[<pid>]: [GET]
+Jan 06 00:11:10 <hostname> java[<pid>]: customer_id=5
+Jan 06 00:11:10 <hostname> java[<pid>]: [5|Saturday Sunday]
+Jan 06 00:11:40 <hostname> java[<pid>]: [GET]
+Jan 06 00:11:40 <hostname> java[<pid>]: customer_id=5 | contact_type=email
+Jan 06 00:11:40 <hostname> java[<pid>]: [Saturday.Sunday@example.com]
+Jan 06 00:12:00 <hostname> java[<pid>]: Server stopped
 ```
 
 Inside the running container logs might be queried also by `tail`ing the `log/customers-api-lite.log` logfile:
