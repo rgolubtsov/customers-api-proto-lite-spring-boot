@@ -470,7 +470,9 @@ public class ApiLiteController {
 
                     break;
                 case HttpStatus.METHOD_NOT_ALLOWED: // 405
-                    body = new Error(ERR_REQ_NOT_ALLOWED);
+                    // Do not respond with a particular error message here,
+                    // let it be an empty reply with just headers sent off.
+                    // body = new Error(ERR_REQ_NOT_ALLOWED);
 
                     break;
                 default:

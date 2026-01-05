@@ -65,9 +65,9 @@ public class ApiLiteHelper {
     public static final String ERR_REQ_NOT_FOUND_3
         = "HTTP 404 Not Found: No contacts belonging to a given customer "
         + "exist, or no such customer exists.";
-    public static final String ERR_REQ_NOT_ALLOWED
-        = "HTTP 405 Method Not Allowed: Bad HTTP method used. "
-        + "Please check your inputs.";
+    // public static final String ERR_REQ_NOT_ALLOWED
+    //     = "HTTP 405 Method Not Allowed: Bad HTTP method used. "
+    //     + "Please check your inputs.";
 
     // Common notification messages.
     public static final String MSG_SERVER_STARTED = "Server started on port ";
